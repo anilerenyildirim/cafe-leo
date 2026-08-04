@@ -1,0 +1,69 @@
+---
+/* ============================================================
+   Kategori bölümü.
+
+   Başlık: logodan gelen "stem" (uzun ince dikey çubuk + dibinde ayrık
+   kare nokta) + italik Bodoni başlık + ince kural + adet.
+
+   Düzen iki modda:
+   · fotoğraf öncelikli — FOTO_VAR true ve kategori NO_PHOTO'da değil
+   · tipografik        — görsel kutusu hiç basılmaz
+
+   Tek fiyatlı kategori (ör. Frozenler: hepsi 250 ₺) fiyatı satır satır
+   tekrarlamaz; bir kez başlığın altında söyler.
+
+   Ekstralar ürün kartı değil: kategorinin altında tek satır şerit.
+
+   `data-reveal` (§9c): belirme KATEGORİ başına bir kez tetiklenir,
+   ürün başına değil — 116 öğe tek tek yanıp sönseydi kaydırma
+   rahatsız ederdi.
+   ============================================================ */
+import Item from './Item.astro';
+import { extrasFor, type Category } from '../data/menu';
+import { isPhotoCategory } from '../lib/config';
+
+interface Props {
+  cat: Category;
+}
+
+const { cat } = Astro.props;
+const extras = extrasFor(cat.id);
+const photo = isPhotoCategory(cat.id);
+
+const prices = new Set(cat.items.map((i) => i.price));
+const uniformPrice = prices.size === 1 ? cat.items[0]!.price : null;
+/* açıklamalı listeler geniş ekranda üç kolona çıkmaz — kolon daralınca
+   açıklama satırları kırılıyor */
+const hasDesc = cat.items.some((i) => i.desc);
+---
+
+<section class="sec" id={cat.id} aria-labelledby={`h-${cat.id}`} data-reveal>
+  <div class="sec-head">
+    <span class="stem" aria-hidden="true"></span>
+    <h2 id={`h-${cat.id}`}>{cat.title}</h2>
+    <span class="rule" aria-hidden="true"></span>
+    <span class="n" aria-hidden="true">{String(cat.items.length).padStart(2, '0')}</span>
+  </div>
+
+  {uniformPrice !== null && <p class="sec-note">Tümü {uniformPrice} ₺</p>}
+
+  <div class:list={['items', photo ? 'photo' : 'type', hasDesc && 'has-desc']}>
+    {cat.items.map((item) => (
+      <Item item={item} catId={cat.id} hidePrice={uniformPrice !== null} />
+    ))}
+  </div>
+
+  {extras.length > 0 && (
+    <p class="extras">
+      <span class="lbl">Ekstra</span>
+      {/* Astro ifade ile eleman arasındaki boşluğu yutuyor — ad ile fiyat
+          arasındaki ayrım &#32; ile açıkça basılıyor. */}
+      {extras.map((e, i) => (
+        <>
+          {i > 0 && <span class="sq" aria-hidden="true"></span>}
+          <span class="ex">{e.name}&#32;<b>{e.price}</b>&#32;₺</span>
+        </>
+      ))}
+    </p>
+  )}
+</section>

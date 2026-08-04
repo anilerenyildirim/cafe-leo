@@ -1,0 +1,50 @@
+---
+/* ============================================================
+   /menu — Cafe Leo menüsü. Masa QR'ları buraya gelir.
+   Ana sayfadan menüye ekstra dokunuş yok; bu sayfa kendi başına ayakta.
+   ============================================================ */
+import Base from '../layouts/Base.astro';
+import Bar from '../components/Bar.astro';
+import Masthead from '../components/Masthead.astro';
+import Hero from '../components/Hero.astro';
+import FeatureCard from '../components/FeatureCard.astro';
+import Featured from '../components/Featured.astro';
+import Rail from '../components/Rail.astro';
+import Section from '../components/Section.astro';
+import Foot from '../components/Foot.astro';
+import { VENUES, HERO_ITEM, itemBySlug, categoryOfSlug } from '../data/menu';
+
+const venue = VENUES.find((v) => v.key === 'cafe')!;
+const cats = [...(venue.categories ?? [])].sort((a, b) => a.order - b.order);
+const hero = itemBySlug(HERO_ITEM);
+const heroCat = categoryOfSlug(HERO_ITEM);
+---
+
+<Base
+  venue="cafe"
+  title="Cafe Leo — Menü"
+  description="Cafe Leo, Sinanoba Büyükçekmece. Kahve, tatlı, mutfak — güncel menü."
+>
+  <Bar venue="cafe" />
+
+  <h1 class="sr-only">{venue.name} menüsü</h1>
+
+  <div class="wrap">
+    <Masthead name={venue.name} />
+
+    <div class="stage">
+      <Hero venue={venue} />
+      {hero && heroCat && <FeatureCard item={hero} catId={heroCat.id} />}
+    </div>
+
+    <Featured />
+
+    <Rail cats={cats} />
+
+    <main id="menu">
+      {cats.map((c) => <Section cat={c} />)}
+    </main>
+
+    <Foot venue={venue} />
+  </div>
+</Base>

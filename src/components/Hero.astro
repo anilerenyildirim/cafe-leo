@@ -1,0 +1,74 @@
+---
+/* ============================================================
+   Menü sayfası hero'su: kimlik, açık/kapalı durumu, hızlı erişim.
+
+   İKON BUTON IZGARASI KALKTI. Dört kare çerçeveli ikon butonu
+   ekrandaki en şablon öğeydi. Yerine tek satır: harf aralıklı küçük
+   kapital metin linkleri, aralarında kare nokta. Çerçeve yok, ikon
+   yok, dolgu yok; alt hairline yalnız hover ve focus'ta.
+
+   VERİ DİSİPLİNİ: contact alanları null olabilir. null olan hiçbir şey
+   ekrana çıkmaz — yer tutucu metin de yazılmaz. Lounge'da telefon ve
+   Instagram null; o iki link hiç basılmaz. hours null olduğu için
+   açık/kapalı göstergesi de hiç görünmez ("bilinmiyor" da yazmaz).
+
+   eyebrow metnindeki "·" ayracı kare noktaya çevriliyor: ayraç
+   karakteri sistemde tek ve o kare.
+
+   Durum rozetinin JS'i buradan çıktı — tüm istemci davranışı tek
+   modülde (scripts/app.ts), çünkü ClientRouter altında bileşen
+   script'leri gezinmede yeniden çalışmaz.
+   ============================================================ */
+import type { Venue } from '../data/menu';
+
+interface Props {
+  venue: Venue;
+}
+
+const { venue } = Astro.props;
+const c = venue.contact;
+
+const brow = venue.eyebrow.split('·').map((s) => s.trim()).filter(Boolean);
+
+interface Lnk { href: string; label: string; ext?: boolean }
+const links: Lnk[] = [];
+if (c.mapsUrl) links.push({ href: c.mapsUrl, label: 'Konum', ext: true });
+if (c.phone) links.push({ href: `tel:${c.phone}`, label: 'Ara' });
+if (c.instagram) links.push({ href: c.instagram, label: 'Instagram', ext: true });
+if (venue.categories) links.push({ href: '#menu', label: 'Menü' });
+---
+
+<section class="hero">
+  <p class="eyebrow">
+    {brow.map((part, i) => (
+      <>
+        {i > 0 && <span class="sq" aria-hidden="true"></span>}
+        <span>{part}</span>
+      </>
+    ))}
+  </p>
+
+  <p class="tagline">{venue.tagline}</p>
+
+  {venue.hours && venue.hoursText && (
+    <p class="status" id="status" data-hours={JSON.stringify(venue.hours)}>
+      <span class="sq" aria-hidden="true"></span>
+      <span id="statusText">{venue.hoursText}</span>
+    </p>
+  )}
+
+  {links.length > 0 && (
+    <nav class="acts" aria-label="Hızlı erişim">
+      {links.map((l, i) => (
+        <>
+          {i > 0 && <span class="sq" aria-hidden="true"></span>}
+          <a
+            href={l.href}
+            target={l.ext ? '_blank' : undefined}
+            rel={l.ext ? 'noopener' : undefined}
+          >{l.label}</a>
+        </>
+      ))}
+    </nav>
+  )}
+</section>

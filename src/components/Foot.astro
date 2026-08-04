@@ -1,0 +1,25 @@
+---
+/* ============================================================
+   Alt bilgi.
+
+   Demo notu referanstaki gibi duruyor: fiyat ve içerik teyide tabi.
+   null contact alanları basılmaz — uydurma yok, yer tutucu yok.
+   ============================================================ */
+import type { Venue } from '../data/menu';
+
+interface Props {
+  venue: Venue;
+}
+
+const { venue } = Astro.props;
+const c = venue.contact;
+---
+
+<footer>
+  <p class="sig" aria-hidden="true">leo</p>
+  <p>
+    {c.address && <>{c.address}<br /></>}
+    {venue.hoursText && <>{venue.hoursText}<br /></>}
+  </p>
+  <p class="note">Demo — fiyatlar ve ürün listesi teyit bekliyor.</p>
+</footer>

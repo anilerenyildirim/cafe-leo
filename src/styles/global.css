@@ -1,0 +1,886 @@
+@import "tailwindcss";
+
+/* ============================================================
+   LEO — token katmanı + bileşen CSS'i
+
+   TASARIM DİLİ logodan türetildi (public/brand/leologo.jpg):
+     a) uzun, çıplak, ince dikey çubuk  → bölüm işareti, "stem"
+     b) ayrık KARE nokta                → sistemin tek ayraç karakteri
+     c) yüksek kontrastlı italik serif  → Bodoni Moda italik
+
+   Referans demonun imzaları BİLEREK atıldı: CurvedLoop marquee,
+   ShinyText altın rampa, noktalı leader, mono rakamlar, ✦ ayracı,
+   hap toggle, Fraunces+Karla. Motor (openState, spy, rAF şerit,
+   shot düşüş zinciri, slug) davranış olduğu için duruyor.
+
+   KART DEĞİL, EDİTORYAL BLOK. Dört tarafı saran kenarlık hiçbir yerde
+   yok; ayrım boşlukla ve TEK YÖNLÜ hairline ile yapılıyor. İkon buton
+   ızgarası, dolgulu rozet ve sistem yeşili de kalktı — bkz. §"aksiyon
+   satırı", §"rozet", §"durum".
+
+   RENK MORPH'U TEK YERDE. --bg … --gold-ink @property ile <color>
+   olarak kayıtlı ve :root üzerinde 0.7s transition ediyor. Bileşenlere
+   ayrıca `transition: color .7s` YAZILMIYOR: değişken zaten kare kare
+   yeni değeri veriyor, ikinci bir geçiş sadece gecikme eklerdi.
+   `prefers-reduced-motion` altında tek satır (:root transition: none)
+   bütün morph'u anında yapıyor.
+
+   Tailwind'in işi TOKEN KATMANI ile sınırlı: @theme isimlendirme ve
+   utility köprüsü kurar. Aşağıdaki bileşen CSS'i elle yontulmuş —
+   @property renk geçişleri, color-mix, variable font ayarları —
+   utility'ye çevrilmiyor.
+   ============================================================ */
+
+@theme static {
+  /* --- tipografi --- */
+  /* Bodoni Moda: Didone. Logonun yüksek kontrastlı italik serifinin
+     en yakın karşılığı. opsz ekseni var — büyük puntoda inceliyor. */
+  --font-display: "Bodoni Moda", "Didot", Georgia, serif;
+  /* Instrument Sans: dar, nötr, düşük kontrastlı grotesk. Didone'nin
+     karşıtı olarak duruyor; Manrope'un geometrik yuvarlaklığı bu
+     logoyla yarışırdı. */
+  --font-body: "Instrument Sans", system-ui, -apple-system, sans-serif;
+
+  /* --- marka sabiti --- */
+  --color-brand: #d8b523;
+
+  /* --- mekana göre değişen palet (aşağıda @property ile kayıtlı) --- */
+  /* Tailwind utility köprüsü: bg-surf, text-muted, border-line …
+     NOT: var() üzerinden geldikleri için opaklık kısayolu
+     (text-muted/50) ÇALIŞMAZ — yarı saydamlık gerekirse color-mix. */
+  --color-bg: var(--bg);
+  --color-surf: var(--surf);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-gold-leaf: var(--gold-leaf);
+  --color-gold-ink: var(--gold-ink);
+  --color-on-gold: var(--on-gold);
+  --color-line: var(--line);
+}
+
+/* ============================================================
+   PALET — @property kaydı
+   Kayıtlı özel özellikler <color> olarak tiplendiği için transition
+   edilebilirler; mekan değişince renkler morph eder (§6).
+   ============================================================ */
+
+@property --bg        { syntax: '<color>'; inherits: true; initial-value: #FCFBF9; }
+@property --surf      { syntax: '<color>'; inherits: true; initial-value: #F6F4F0; }
+@property --text      { syntax: '<color>'; inherits: true; initial-value: #17140F; }
+@property --muted     { syntax: '<color>'; inherits: true; initial-value: #6B6459; }
+@property --rule      { syntax: '<color>'; inherits: true; initial-value: #E4E0D8; }
+@property --gold-leaf { syntax: '<color>'; inherits: true; initial-value: #D8B523; }
+@property --gold-ink  { syntax: '<color>'; inherits: true; initial-value: #876712; }
+@property --on-gold   { syntax: '<color>'; inherits: true; initial-value: #17140F; }
+@property --line      { syntax: '<color>'; inherits: true; initial-value: rgba(23,20,15,.10); }
+
+/* ---------- Cafe Leo — beyaza yakın + altın ---------- */
+:root,
+:root[data-venue="cafe"] {
+  --bg: #FCFBF9;
+  --surf: #F6F4F0;        /* bg'den ancak fark edilir — dolgu değil, imâ */
+  --text: #17140F;
+  --muted: #6B6459;       /* bg 5.65:1 · surf 5.32:1 */
+  --rule: #E4E0D8;        /* hairline: bölüm kuralı, satır ayracı */
+
+  /* İKİ ALTIN TOKENI — BİRBİRİNİN YERİNE KULLANILMAZ.
+     --gold-leaf: SADECE dolgu (kare nokta, altı çizgi). Beyaza yakın
+                  zeminde 1.92:1 verir, metin olarak kullanılamaz.
+     --gold-ink:  metin ve ikon altını. #876712 → surf 4.80:1. */
+  --gold-leaf: #D8B523;
+  --gold-ink: #876712;    /* bg 5.10:1 · surf 4.80:1 */
+  --on-gold: #17140F;     /* altın dolgu üzerinde 9.23:1 */
+
+  --line: rgba(23, 20, 15, .10);
+  --line-soft: rgba(23, 20, 15, .06);
+}
+
+/* ---------- Leo Lounge — siyah + koyu ahşap ---------- */
+:root[data-venue="lounge"] {
+  --bg: #0B0907;
+  --surf: #17120D;
+  --text: #EDE6D8;
+  --muted: #8A8073;
+  --rule: #2A1E14;        /* koyu ahşap — aydınlıktaki hairline'ın karşılığı */
+
+  /* Koyu zeminde tek altın yeterli: #E3C244 siyah üzerinde 11.42:1. */
+  --gold-leaf: #E3C244;
+  --gold-ink: #E3C244;
+  --on-gold: #0B0907;
+
+  --line: rgba(237, 230, 216, .14);
+  --line-soft: rgba(237, 230, 216, .08);
+}
+
+/* ---------- ölçü ve biçim tokenları ---------- */
+:root {
+  --pad: 20px;
+  --page: 560px;
+  --bar-h: 56px;
+
+  --r: 0;                 /* köşeler kare — logonun geometrisi */
+  --sq: 4px;              /* ayrık kare nokta */
+  --shot-w: 116px;        /* liste satırı görseli */
+  --shot-ar: 3 / 2;       /* kaynaklar 1200×800 — kare kırpma yok */
+
+  /* Kare köşe kuralının TEK İSTİSNASI: fotoğraf kutuları.
+     Tipografi, çizgiler, kare nokta ve stem motifi kare kalıyor —
+     yuvarlaklık yalnız görselin kendi kenarında. */
+  --shot-r: 22px;
+
+  /* (a) MEKAN ANAHTARI MORPH — demonun imza anı.
+     ease-in-out yerine kendi eğrisi: ilk %20'de yavaş kalkıyor
+     (ışığın "düşme" hissi), ortada hızlanıyor, sonunda oturuyor.
+     0.7s iki palet arasındaki mesafe için ölçüldü — 0.5s'te sıçrama,
+     0.9s'te ağdalı okunuyor. */
+  transition:
+    --bg .7s cubic-bezier(.4, 0, .2, 1), --surf .7s cubic-bezier(.4, 0, .2, 1),
+    --text .7s cubic-bezier(.4, 0, .2, 1), --muted .7s cubic-bezier(.4, 0, .2, 1),
+    --rule .7s cubic-bezier(.4, 0, .2, 1), --gold-leaf .7s cubic-bezier(.4, 0, .2, 1),
+    --gold-ink .7s cubic-bezier(.4, 0, .2, 1), --on-gold .7s cubic-bezier(.4, 0, .2, 1),
+    --line .7s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ============================================================
+   TABAN
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; overflow-x: clip; scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+  padding-bottom: 72px;
+}
+
+/* Aydınlık temada üstten altın hâle YOK: beyaza yakın zeminde tek
+   başına sayfayı kreme çeviren şey oydu. Loşta duruyor — orada
+   ışık kaynağı okuması doğru. */
+:root[data-venue="lounge"] body::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(120% 55% at 50% -12%,
+    color-mix(in srgb, var(--gold-leaf) 9%, transparent), transparent 62%);
+}
+
+a { color: inherit; }
+img { max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; }
+
+.wrap { position: relative; z-index: 1; max-width: var(--page); margin: 0 auto; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+
+/* Odak halkası öğenin KENDİ köşesini takip eder: metin linklerinde kare,
+   fotoğraf kutusunda yuvarlak. Burada bir zamanlar `border-radius: 0`
+   vardı — kare köşe dilini halkaya da dayatıyordu; fotoğraf kutuları
+   yuvarlandığı için artık odaklanan görseli kareye çevirme riski
+   taşıyordu. */
+:where(a, button):focus-visible {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: 3px;
+}
+
+/* ---------- kare nokta: sistemin tek ayracı ----------
+   Referanstaki "·" ve "✦" karakterlerinin ikisinin de yerine geçer.
+   Boyut em'e bağlı değil: her yerde aynı 4px kare olmalı ki motif
+   tekrarlansın, tipografik boyutla ölçeklenmesin. */
+.sq {
+  display: inline-block; flex: none;
+  width: var(--sq); height: var(--sq);
+  background: currentColor;
+  vertical-align: .18em;
+}
+.sq-gold { background: var(--gold-leaf); }
+
+/* ---------- stem: uzun, çıplak, ince dikey çubuk ----------
+   Logonun "l"si. Bölüm başlığının solunda, başlıktan taşarak durur;
+   dibinde logodaki ayrık kare nokta. */
+.stem {
+  position: absolute; left: 0; top: -9px; bottom: -14px;
+  width: 1px; background: var(--text);
+}
+.stem::after {
+  content: ""; position: absolute; left: 4px; bottom: -1px;
+  width: var(--sq); height: var(--sq);
+  background: var(--gold-leaf);
+}
+
+/* ============================================================
+   ÜST BAR
+   ============================================================ */
+
+.bar {
+  position: sticky; top: 0; z-index: 30;
+  padding: 11px 0;
+  padding-top: max(11px, env(safe-area-inset-top));
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.bar-in {
+  max-width: var(--page); margin: 0 auto;
+  padding-inline: var(--pad);
+  display: flex; align-items: center; gap: 12px; min-height: 32px;
+}
+
+/* Gerçek logo küçük harf, italik, yüksek kontrastlı serif. Bodoni Moda
+   italik onun tipografik eşdeğeri. leologo.jpg opak beyaz zeminli JPG
+   olduğu için loş temada beyaz kutu olarak durur — şeffaf SVG gelince
+   görsele döneriz. */
+.mark { display: inline-flex; align-items: baseline; text-decoration: none; }
+.wordmark {
+  font-family: var(--font-display); font-style: italic;
+  font-variation-settings: "opsz" 48;
+  font-weight: 500; font-size: 27px; line-height: 1;
+  color: var(--text);
+}
+
+/* ---------- mekan anahtarı ----------
+   Hap toggle ve altın gradyan dolgu kalktı. Yerine: iki metin, aralarında
+   kare nokta, aktif olanın altında altın hairline. Basınca sayfa
+   değişmiyor gibi görünür — ClientRouter aynı belgede içeriği takas
+   ediyor, palet 0.7s morph ediyor (§6). */
+.seg { margin-left: auto; display: flex; align-items: center; gap: 11px; }
+.seg a {
+  text-decoration: none;
+  font: 500 10.5px/1 var(--font-body);
+  letter-spacing: .17em; text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 5px;
+  border-bottom: 1px solid transparent;
+  transition: color .25s ease, border-color .25s ease;
+}
+.seg a[aria-current="page"] { color: var(--text); border-bottom-color: var(--gold-leaf); }
+@media (hover: hover) { .seg a:hover { color: var(--text); } }
+.seg .sq { color: var(--rule); transform: translateY(-2px); }
+
+/* ============================================================
+   MASTHEAD — marquee'nin yerine.
+   Sabit, büyük, italik mekan adı + ince kural çizgisi. Hareketsiz.
+   ============================================================ */
+
+.masthead {
+  padding: 34px var(--pad) 0;
+  display: flex; align-items: baseline; gap: 16px;
+}
+.mh-name {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 96;
+  font-size: clamp(40px, 13vw, 58px);
+  line-height: .95; letter-spacing: -.01em;
+  color: var(--text);
+}
+.mh-rule {
+  flex: 1; height: 1px; min-width: 12px;
+  background: var(--rule);
+  transform: translateY(-.42em);
+}
+.masthead .sq { color: var(--gold-leaf); transform: translateY(-.42em); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.stage { padding: 20px var(--pad) 0; }
+
+.eyebrow {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  font: 500 10px/1 var(--font-body);
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted);
+}
+.eyebrow .sq { color: var(--gold-leaf); }
+
+.tagline {
+  margin-top: 14px; max-width: 34ch;
+  color: var(--text); font-size: 16px; line-height: 1.55;
+}
+
+/* ---------- durum ----------
+   Sistem yeşili (--ok) tamamen kaldırıldı: paletin dışındaydı ve tek
+   başına duruyordu. Açık/kapalı artık RENKLE değil TONLA söyleniyor —
+   metin her iki halde de --text, ayrım kare noktanın tonunda:
+   açıkken --gold-leaf, kapalıyken --muted. */
+.status {
+  display: flex; align-items: center; gap: 9px; margin-top: 18px;
+  font: 500 12.5px/1.4 var(--font-body); letter-spacing: .01em;
+  color: var(--text);
+}
+.status .sq { width: 5px; height: 5px; background: var(--muted); }
+.status.open .sq { background: var(--gold-leaf); }
+.status.shut .sq { background: var(--muted); }
+.status small { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+.status .sep { background: var(--rule); margin: 0 8px; width: var(--sq); height: var(--sq); }
+
+/* ---------- aksiyon satırı ----------
+   İKON BUTON IZGARASI KALKTI. Kare çerçeve, ikon ve dolgu ekrandaki en
+   şablon öğeydi; hiçbir lüks marka ikon butonu kullanmaz. Yerine tek
+   satır harf aralıklı küçük kapital metin linki, aralarında kare nokta.
+   Alt hairline yalnız hover ve focus'ta belirir. */
+.acts {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 11px; margin-top: 24px;
+}
+.acts a {
+  text-decoration: none; color: var(--text);
+  font: 500 10.5px/1 var(--font-body);
+  letter-spacing: .19em; text-transform: uppercase;
+  padding-bottom: 5px;
+  border-bottom: 1px solid transparent;
+  transition: border-color .25s ease;
+}
+.acts .sq { color: var(--rule); transform: translateY(-1px); }
+@media (hover: hover) { .acts a:hover { border-bottom-color: var(--gold-leaf); } }
+.acts a:focus-visible { border-bottom-color: var(--gold-leaf); }
+@media (max-width: 359px) { .acts { gap: 9px; } .acts a { letter-spacing: .14em; } }
+
+#menu { scroll-margin-top: calc(var(--bar-h) + 46px); }
+
+/* ============================================================
+   ÖNE ÇIKAN ÜRÜN (HERO_ITEM)
+
+   Dört tarafı saran kenarlık kalktı. Görsel kendi kenarını çiziyor,
+   metin altında nefes alıyor; ayrım yalnız boşlukla.
+   ============================================================ */
+
+.feature {
+  position: relative;
+  margin: 34px var(--pad) 0;
+  display: flex; flex-direction: column;
+}
+.feature .body { padding-top: 16px; }
+.feature .name {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 40;
+  font-size: 27px; line-height: 1.1;
+}
+.feature .price { font-size: 15px; }
+.feature .pick-badge { align-self: flex-start; margin-bottom: 12px; }
+.feature .desc { max-width: 46ch; }
+
+/* ============================================================
+   ÖNE ÇIKANLAR ŞERİDİ (§7)
+
+   Kart neredeyse tamamen görsel: 4:5 dikey kırpım, altında küçük
+   kapital ad ve sessiz fiyat. Kart bir düğme — fotoğrafa dokunmak
+   büyük görünümü açar (§8).
+
+   Akış: masaüstünde CSS animasyonu (hover'da duraklar), dokunmatikte
+   rAF + scrollLeft. Liste iki kez basılır, ikinci kopya aria-hidden —
+   sarma böyle dikişsiz.
+   ============================================================ */
+
+.reco { padding: 40px 0 6px; }
+.reco-head {
+  position: relative;
+  display: flex; align-items: baseline; gap: 14px;
+  padding: 0 var(--pad) 0 calc(var(--pad) + 22px);
+  margin-bottom: 20px;
+}
+.reco-head .stem { left: var(--pad); }
+.reco-head h2 {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 30;
+  font-size: 22px; letter-spacing: -.005em; line-height: 1;
+}
+.reco-head .rule { flex: 1; height: 1px; background: var(--rule); transform: translateY(-.3em); }
+
+.reco-view {
+  overflow-x: clip;
+  padding-inline: var(--pad); padding-block: 2px;
+}
+.reco-track { display: flex; width: max-content; }
+
+.reco-card {
+  display: block; text-align: left;
+  flex: none; width: 164px; margin-right: 14px;
+  text-decoration: none; color: inherit; cursor: zoom-in;
+}
+.reco-card .shot { aspect-ratio: 4 / 5; margin-bottom: 12px; }
+/* şeritte görselsiz kart olmamalı (FEATURED küratörlü) ama bir slug
+   düşerse kart yıkılmasın: yerine nefes payı ve üst hairline */
+.reco-card.no-shot { padding-top: 14px; border-top: 1px solid var(--rule); cursor: default; }
+.reco-card .rn {
+  display: block;
+  font: 500 10.5px/1.45 var(--font-body);
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--text);
+}
+.reco-card .rp {
+  display: block; margin-top: 6px;
+  font-size: 12.5px; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* masaüstü: 60s'lik tur ≈ 24 px/sn — dokunmatikteki rAF hızıyla aynı tempo */
+@media (hover: hover) and (pointer: fine) {
+  .reco-track { animation: reco-slide 60s linear infinite; }
+  .reco-view:hover .reco-track { animation-play-state: paused; }
+  /* Klavye odağı: duraklatmak yetmez — kaymış transform'da odaklanan
+     kart clip'in dışında (görünmez) kalır. Odak girince animasyon
+     sıfırlanır, şerit kaydırılabilir olur, tarayıcı kartı görünüme
+     getirir; kopya da odak sırasından tamamen düşer. */
+  .reco-view:focus-within { overflow-x: auto; scrollbar-width: none; }
+  .reco-view:focus-within::-webkit-scrollbar { display: none; }
+  .reco-view:focus-within .reco-track { animation: none; }
+  .reco-view:focus-within .reco-dup { display: none; }
+}
+@keyframes reco-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+@media (hover: none), (pointer: coarse) {
+  .reco-view {
+    overflow-x: auto; scrollbar-width: none;
+    -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+  }
+  .reco-view::-webkit-scrollbar { display: none; }
+  /* akış CSS transform'la değil JS ile scrollLeft üzerinden sürülür:
+     transform + native scroll bileşimi uçlarda boşluk gösteriyor,
+     scrollLeft göstermiyor. */
+  .reco-track { animation: none; }
+}
+
+/* ============================================================
+   KATEGORİ RAYI (§5 — scroll spy scripts/app.ts içinde)
+   ============================================================ */
+
+.rail {
+  position: sticky; top: var(--bar-h); z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
+  overflow-x: auto; scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+.rail::-webkit-scrollbar { display: none; }
+.rail ul { display: flex; gap: 20px; list-style: none; padding: 13px var(--pad); position: relative; }
+.rail li { position: relative; z-index: 1; }
+.rail a {
+  display: block; white-space: nowrap; text-decoration: none;
+  font: 500 10.5px/1 var(--font-body);
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted);
+  padding-bottom: 5px; border-bottom: 1px solid transparent;
+  transition: color .25s ease, border-color .25s ease;
+}
+.rail a[aria-current="true"] { color: var(--text); border-bottom-color: var(--gold-leaf); }
+@media (hover: hover) { .rail a:hover { color: var(--text); } }
+
+/* ============================================================
+   BÖLÜMLER
+   ============================================================ */
+
+.sec { padding: 50px var(--pad) 0; scroll-margin-top: calc(var(--bar-h) + 54px); }
+
+.sec-head {
+  position: relative;
+  padding-left: 22px;
+  display: flex; align-items: baseline; gap: 14px;
+  margin-bottom: 8px;
+}
+.sec-head h2 {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 40;
+  font-size: 27px; letter-spacing: -.008em; line-height: 1;
+}
+.sec-head .rule { flex: 1; height: 1px; min-width: 10px; background: var(--rule); transform: translateY(-.32em); }
+.sec-head .n {
+  font: 500 10px/1 var(--font-body); letter-spacing: .16em;
+  color: var(--muted); font-variant-numeric: tabular-nums;
+  transform: translateY(-.2em);
+}
+
+/* tek fiyatlı kategoriler (ör. Frozenler: hepsi 250 ₺) fiyatı satır
+   satır tekrarlamaz — bir kez burada söylenir */
+.sec-note {
+  margin: 0 0 4px 22px;
+  font: 500 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gold-ink);
+}
+
+/* ============================================================
+   ÜRÜN SATIRI
+
+   İki düzen:
+   · .items.photo  → fotoğraf öncelikli (FOTO_VAR true, kategori
+                     NO_PHOTO'da değilse). Görsel ana malzeme.
+   · .items.type   → tipografik. Görsel kutusu YOK — boş kutu, kırık
+                     ikon ya da devasa yer tutucu harf de yok. Ad
+                     büyür, satır nefes alır, liste kendi başına durur.
+
+   TİP ÖLÇEĞİ: devasa display (58px) ile gövde (15px) arasındaki boşluk
+   ürün adıyla dolduruldu — 19/20/21px. Ağırlık merkezi artık ortada.
+   ============================================================ */
+
+.item {
+  position: relative;
+  padding: 17px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.items.type > .item:first-child { border-top: 0; }
+
+.items.photo .item {
+  display: grid; grid-template-columns: var(--shot-w) 1fr;
+  gap: 16px; align-items: start;
+}
+/* Dosyası olmayan ürün DOĞUŞTAN tipografik gelir — build zamanı
+   manifestosu karar veriyor, sonradan çöken bir düzen değil.
+   .shot-failed runtime emniyet ağı: dosya var ama çözülemiyorsa
+   aynı yere düşer. */
+.items.photo .item.no-shot,
+.items.photo .item.shot-failed { display: block; }
+.items.photo .item.shot-failed .shot { display: none; }
+
+.items.type .item { padding: 15px 0; }
+.items.type .name { font-size: 17px; }
+
+.meta { min-width: 0; display: flex; flex-direction: column; }
+.row { display: flex; align-items: baseline; gap: 11px; }
+.name { font-size: 19px; font-weight: 500; letter-spacing: -.006em; line-height: 1.25; }
+
+/* Noktalı leader kalktı. Yerine: adla fiyat arasında boşluk, fiyatın
+   hemen solunda tek kare nokta. Satırları alt hairline ayırıyor.
+
+   Kare fiyatın ::before'unda, ayrı bir flex çocuğu DEĞİL: ad iki satıra
+   sardığında ayrı çocuk satırın ortasına kayıyordu. Burada fiyatın
+   kendi taban çizgisine bağlı, her zaman hizalı. */
+.gap { flex: 1; min-width: 14px; }
+
+.price {
+  font: 400 14.5px/1 var(--font-body);
+  font-variant-numeric: tabular-nums;
+  color: var(--text); white-space: nowrap;
+}
+.price::before {
+  content: ""; display: inline-block;
+  width: var(--sq); height: var(--sq);
+  background: var(--rule);
+  margin-right: 11px; vertical-align: .1em;
+}
+.desc {
+  margin-top: 7px; max-width: 56ch;
+  font-size: 13.5px; color: var(--muted); line-height: 1.6;
+}
+
+/* ---------- Leo'nun tercihi rozeti ----------
+   DOLGU KALKTI. Altın kutu indirim etiketi gibi duruyordu; rozet artık
+   fısıldıyor: dolgusuz, --gold-ink renginde 9px harf aralıklı küçük
+   kapital, solunda tek kare nokta. Konum (sağ üst) doğruydu, ağırlık
+   yanlıştı. */
+.pick-badge, .tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font: 600 9px/1 var(--font-body);
+  letter-spacing: .17em; text-transform: uppercase;
+  color: var(--gold-ink); background: none; padding: 0;
+  white-space: nowrap;
+}
+.pick-badge::before {
+  content: ""; flex: none;
+  width: var(--sq); height: var(--sq);
+  background: var(--gold-leaf);
+}
+.tag { color: var(--muted); }
+.meta > .pick-badge { align-self: flex-end; margin-bottom: 8px; }
+
+/* ---------- fotoğraf kutusu ----------
+   Yalnız FOTO_VAR true iken ve fotoğraflı kategorilerde basılır.
+   Metin fotoğrafın üstüne binmiyor, gradyan overlay yok.
+   Düğme olduğunda tıklanınca büyük görünüm açılır (§8).
+
+   Köşeler yuvarlak (--shot-r): sistemdeki tek yuvarlaklık burada.
+   `overflow: hidden` zaten vardı, görsel kutunun köşesine kırpılıyor —
+   img'ye ayrıca yarıçap vermeye gerek yok, hover'daki 1.02 ölçek de
+   köşeden taşmıyor. */
+.shot {
+  position: relative; display: block; width: 100%;
+  aspect-ratio: var(--shot-ar); border-radius: var(--shot-r);
+  overflow: hidden; background: var(--surf);
+}
+.shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+button.shot { cursor: zoom-in; padding: 0; }
+
+/* (e) hover — yalnız ince işaretçide, yalnız fotoğrafta.
+   Kartta gölge, kalkma, renk değişimi yok. */
+@media (hover: hover) and (pointer: fine) {
+  button.shot img, .reco-card .shot img { transition: transform .3s ease; }
+  button.shot:hover img,
+  .reco-card:hover .shot img { transform: scale(1.02); }
+}
+
+/* ---------- ekstralar şeridi ----------
+   Ürün kartı değil: kategorinin altında tek satır. */
+.extras {
+  margin-top: 20px; padding-top: 14px;
+  border-top: 1px solid var(--rule);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px;
+  font-size: 13px; color: var(--muted); line-height: 1.7;
+}
+.extras .lbl {
+  font: 500 9px/1 var(--font-body); letter-spacing: .17em; text-transform: uppercase;
+  color: var(--gold-ink); margin-right: 4px;
+}
+.extras .ex { white-space: nowrap; }
+.extras b { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+.extras .sq { color: var(--rule); }
+
+/* ============================================================
+   /lounge — menü verisi gelene kadarki ekran (§6)
+
+   İskelet değil, TASARLANMIŞ ekran: mekan kimliği, tek cümlelik tanım
+   (display puntosunda — sayfanın tek büyük tipografik olayı), konum,
+   ve menünün hazırlanmakta olduğunu söyleyen sakin bir durum.
+   Lorem yok, gri kutu yok, iskelet loader yok. Boşluk sessizlik gibi
+   okunmalı, unutulmuşluk gibi değil — bu yüzden nefes payları
+   /menu'dekinden geniş.
+   ============================================================ */
+
+.stage.intro { padding-top: 30px; }
+.stage.intro .tagline {
+  margin-top: 26px; max-width: 15ch;
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 72;
+  font-size: clamp(29px, 8.6vw, 44px); line-height: 1.08; letter-spacing: -.012em;
+}
+.stage.intro .acts { margin-top: 34px; }
+
+.soon {
+  position: relative;
+  margin: 74px var(--pad) 0; padding: 26px 0 0 22px;
+  border-top: 1px solid var(--rule);
+}
+.soon .stem { top: 26px; bottom: auto; height: 58px; }
+.soon .kicker {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 16px;
+  font: 500 9.5px/1 var(--font-body); letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted);
+}
+.soon .kicker .sq { color: var(--gold-leaf); }
+.soon h2 {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 40;
+  font-size: 26px; line-height: 1.1; margin-bottom: 14px;
+}
+.soon p { font-size: 13.5px; color: var(--muted); max-width: 40ch; line-height: 1.65; }
+
+/* ============================================================
+   BÜYÜK GÖRÜNÜM (§8)
+
+   Tam ekran değil: ortada duran editoryal blok. Zemin --bg'nin yüksek
+   opaklıklı hali + hafif blur — siyah %80 overlay klişesi yok.
+   Çerçeve yok, gölge yok. <dialog>: focus trap ve Esc yerleşik.
+   ============================================================ */
+
+.lb {
+  position: fixed; inset: 0;
+  width: 100%; max-width: 100%; height: 100%; max-height: 100%;
+  margin: 0; padding: 0; border: 0;
+  background: color-mix(in srgb, var(--bg) 93%, transparent);
+  backdrop-filter: blur(12px);
+  color: var(--text);
+  overflow: hidden;
+}
+.lb[open] { display: flex; align-items: center; justify-content: center; }
+.lb::backdrop { background: transparent; }
+
+/* (d) açılış 220ms, kapanış 160ms. Görsel 0.98→1 + opacity; başka
+   hiçbir şey ölçeklenmez, bounce/spring/rotate yok. */
+.lb { opacity: 0; transition: opacity .16s ease; }
+.lb.is-open { opacity: 1; transition: opacity .22s ease; }
+.lb .lb-shot { transform: scale(.98); transition: transform .16s ease; }
+.lb.is-open .lb-shot { transform: none; transition: transform .22s cubic-bezier(.2, 0, .2, 1); }
+
+/* Panel genişliği yüksekliğe de bağlı: 3:2 görsel hiçbir zaman ekranı
+   taşmasın, metin de görselin tam altında hizalı kalsın. */
+.lb-panel {
+  width: min(calc(100vw - 2 * var(--pad)), 640px, calc(58dvh * 1.5));
+  max-height: 100dvh; overflow-y: auto;
+  padding: 20px 0;
+}
+/* Büyük görünüm aynı fotoğrafın büyütülmüş hali — köşesi de aynı dili
+   konuşuyor. Yarıçap sabit kalıyor, kutuyla ölçeklenmiyor: 586px'lik
+   kutuda 22px zaten oransal olarak sönük duruyor, doğru okuma bu. */
+.lb-shot {
+  position: relative; aspect-ratio: var(--shot-ar);
+  border-radius: var(--shot-r);
+  overflow: hidden; background: var(--surf);
+}
+.lb-shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lb-body { padding-top: 18px; }
+.lb-body .pick-badge { margin-bottom: 12px; }
+.lb-body .name {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 40;
+  font-size: 27px; line-height: 1.1; letter-spacing: -.01em;
+}
+.lb-body .price { font-size: 15px; }
+.lb-body .desc { max-width: none; margin-top: 10px; }
+
+/* köşede sade kapat işareti — çerçevesiz, dolgusuz */
+.lb-x {
+  position: absolute; top: 0; right: 0; z-index: 2;
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  cursor: pointer; color: var(--muted);
+  transition: color .25s ease;
+}
+.lb-x svg { width: 16px; height: 16px; stroke: currentColor; stroke-width: 1.2; fill: none; }
+@media (hover: hover) { .lb-x:hover { color: var(--text); } }
+
+/* açıkken arka plan kilitli (body overflow — localStorage yok) */
+body.lb-lock { overflow: hidden; }
+
+/* ============================================================
+   (c) BÖLÜM BELİRMESİ
+
+   Kategori başına BİR KEZ, ürün başına değil: 116 öğe tek tek yanıp
+   sönerse kaydırma rahatsız eder. Başlangıç durumu CSS'te ve
+   `html.rv` sınıfına bağlı — sınıfı <head>'deki tek satırlık inline
+   script koyuyor, böylece JS yoksa (veya reduced-motion açıksa)
+   içerik hiç gizlenmez, görünmez içerik riski sıfır.
+   ============================================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html.rv [data-reveal] { opacity: 0; transform: translateY(8px); }
+  html.rv [data-reveal].rv-in {
+    opacity: 1; transform: none;
+    transition: opacity .5s ease-out, transform .5s ease-out;
+  }
+}
+
+/* ============================================================
+   ALT
+   ============================================================ */
+
+footer {
+  margin-top: 60px; padding: 28px var(--pad) 0;
+  border-top: 1px solid var(--line-soft);
+}
+footer .sig {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-variation-settings: "opsz" 30;
+  color: var(--text); font-size: 22px; line-height: 1; margin-bottom: 14px;
+}
+footer p { font-size: 12px; color: var(--muted); line-height: 1.8; }
+footer .note { margin-top: 12px; }
+
+/* ============================================================
+   KIRILIM NOKTALARI
+   ============================================================ */
+
+@media (min-width: 520px) {
+  :root { --shot-w: 156px; }
+  .name { font-size: 20px; }
+  .items.type .name { font-size: 18px; }
+
+  /* Görselsiz satır, fotoğraf kolonu kadar içeriden başlar: bölümdeki
+     TÜM adlar ve fiyatlar tek hizada durur, fotoğraf kolonu boş kaldığı
+     yerde sessiz bir cendere olur. 520px altında uygulanmıyor — orada
+     girinti ada 90px bırakıp adı dört satıra kırıyordu. */
+  .items.photo .item.no-shot,
+  .items.photo .item.shot-failed { padding-left: calc(var(--shot-w) + 16px); }
+}
+
+@media (min-width: 720px) {
+  :root { --page: 720px; --pad: 26px; --shot-w: 182px; }
+  .masthead { padding-top: 40px; }
+  .desc { font-size: 14px; }
+  /* Tipografik liste iki kolona çıkar — orada görsel kolonu yok,
+     ada bütün genişlik kalıyor. Fotoğraflı liste 1100px'e kadar TEK
+     KOLON: iki kolona bölününce ada düşen genişlik ~90px'e iniyor ve
+     "Double Türk Kahvesi" üç satıra kırılıyor. Ad artık 20px; ölçek
+     dengesi kolon içinde kuruluyor, ekran genişliğinde değil. */
+  .items.type { display: grid; grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .items.type > .item:nth-child(2) { border-top: 0; }
+
+  .stage.intro .tagline { max-width: 13ch; }
+  .soon { margin-top: 92px; }
+}
+
+@media (min-width: 1100px) {
+  :root { --page: 1080px; --pad: 32px; --shot-w: 192px; }
+  .stage {
+    display: grid; grid-template-columns: minmax(0, 1fr) 420px;
+    gap: 48px; align-items: center; padding-top: 26px;
+  }
+  .stage.intro { display: block; padding-top: 44px; }
+  .stage.intro .tagline { font-size: 52px; max-width: 12ch; }
+
+  /* Fotoğraflı liste burada ızgara DEĞİL, kolon akışı. Izgarada satır
+     yüksekliği en uzun hücreye kilitleniyor: fotoğraflı bir satırın
+     yanındaki görselsiz satır 200px'lik delik bırakıyordu. Kolon
+     akışında öğeler dikey akar, delik oluşmaz. Okuma sırası da
+     basılı menüdeki gibi: önce sol kolon, sonra sağ. */
+  .items.photo { columns: 2; column-gap: 44px; }
+  .items.photo .item { break-inside: avoid; }
+  .tagline { font-size: 17px; max-width: 38ch; }
+  .feature { margin: 0; }
+  .feature .name { font-size: 31px; }
+  .reco { padding-top: 56px; }
+  .reco-card { width: 200px; }
+  .reco-head h2 { font-size: 25px; }
+  .sec { padding-top: 62px; }
+  .sec-head h2 { font-size: 31px; }
+  .name { font-size: 21px; }
+  .lb-body .name { font-size: 31px; }
+  footer { margin-top: 80px; }
+}
+
+/* Üç kolon yalnız açıklamasız kategorilerde (Frozenler, Milkshakeler,
+   Kokteyller, Meşrubat…). Açıklamalı listede kolon 300px'in altına
+   inip satırlar kırılıyordu. */
+@media (min-width: 1300px) {
+  .items.type:not(.has-desc) { grid-template-columns: 1fr 1fr 1fr; }
+  .items.type:not(.has-desc) > .item:nth-child(3) { border-top: 0; }
+}
+
+/* ============================================================
+   HAREKETİ AZALT (§11)
+
+   Her hareketli bileşen için durum AYRICA tasarlandı; hiçbir yerde
+   "animation: none" yazıp geçilmedi. Sayfa sakin ve kasıtlı görünür,
+   boş alan / görünmez içerik / yarım kalmış geçiş kalmaz.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  /* (a) mekan anahtarı: renk değişimi ANINDA olur — @property
+     geçişleri tek satırda düşüyor, çünkü morph başka hiçbir yerde
+     tanımlı değil. Etkileşim geçişleri de anında. */
+  :root { transition: none; }
+  .seg a, .rail a, .acts a, .lb-x { transition: none; }
+  html, .rail { scroll-behavior: auto; }
+
+  /* (b) şerit: akış durur, kaydırılabilir kalır, scroll-snap devreye
+     girer, duplike kopya tamamen gizlenir (odak sırasından da düşer).
+     rAF motoru da bu sorguyu okuyup hiç başlamıyor. */
+  .reco-view {
+    overflow-x: auto; scrollbar-width: none;
+    scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad);
+    overscroll-behavior-x: contain;
+  }
+  .reco-view::-webkit-scrollbar { display: none; }
+  .reco-track { animation: none; width: max-content; }
+  .reco-card { scroll-snap-align: start; }
+  .reco-dup { display: none; }
+
+  /* (c) bölüm belirmesi tamamen kapalı: `html.rv` sınıfı hiç
+     konmuyor, üstelik kural da media sorgusuyla düşüyor — içerik
+     baştan görünür. */
+
+  /* (d) büyük görünüm: yalnız opacity, ölçek yok. */
+  .lb .lb-shot, .lb.is-open .lb-shot { transform: none; transition: none; }
+
+  /* (e) fotoğraf hover'ı kapalı. */
+  button.shot img, .reco-card .shot img,
+  button.shot:hover img, .reco-card:hover .shot img { transform: none; transition: none; }
+}

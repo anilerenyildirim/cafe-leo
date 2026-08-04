@@ -1,0 +1,83 @@
+---
+/* ============================================================
+   / — tanıtım sayfası. TEK EKRAN: marka, iki mekan, ikişer bağlantı.
+
+   QR kodları /menu'ye gidiyor; bu sayfa web'den gelen ziyaretçi için.
+   Dil menü sayfalarıyla aynı: aynı eyebrow, aynı stem, aynı kare
+   nokta, aynı metin-link satırı. Fazlası bugünün işi değil — burada
+   ne fotoğraf var ne şerit; sayfanın işi yön vermek.
+
+   Lounge'un menüsü olmadığı için bağlantı adı da onu söylüyor
+   ("Menü yakında"). Uydurma saat, telefon veya adres yok; null olan
+   alan hiç basılmıyor.
+   ============================================================ */
+import Base from '../layouts/Base.astro';
+import { VENUES } from '../data/menu';
+---
+
+<Base
+  venue="cafe"
+  title="Leo — Cafe Leo & Leo Lounge, Sinanoba"
+  description="Cafe Leo ve Leo Lounge — Sinanoba, Büyükçekmece. Menüler, konum ve iletişim."
+>
+  <div class="wrap home">
+    <p class="home-mark" aria-hidden="true">leo</p>
+    <p class="eyebrow">
+      <span>Sinanoba</span><span class="sq" aria-hidden="true"></span><span>Büyükçekmece</span>
+    </p>
+
+    <h1 class="sr-only">Cafe Leo ve Leo Lounge</h1>
+
+    <div class="home-venues">
+      {VENUES.map((v) => (
+        <section class="home-venue">
+          <span class="stem" aria-hidden="true"></span>
+          <h2>{v.name}</h2>
+          <p class="tagline">{v.tagline}</p>
+          <nav class="acts" aria-label={`${v.name} bağlantıları`}>
+            <a href={v.key === 'cafe' ? '/menu' : '/lounge'}>
+              {v.categories ? 'Menü' : 'Menü yakında'}
+            </a>
+            {v.contact.mapsUrl && (
+              <>
+                <span class="sq" aria-hidden="true"></span>
+                <a href={v.contact.mapsUrl} target="_blank" rel="noopener">Konum</a>
+              </>
+            )}
+          </nav>
+        </section>
+      ))}
+    </div>
+
+    <footer>
+      <p class="note">Demo — fiyatlar ve ürün listesi teyit bekliyor.</p>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .home { padding: 0 var(--pad); }
+  .home-mark {
+    font-family: var(--font-display); font-style: italic; font-weight: 500;
+    font-variation-settings: "opsz" 96;
+    font-size: clamp(58px, 20vw, 96px); line-height: .9;
+    margin-top: 9vh;
+  }
+  .home .eyebrow { margin-top: 20px; }
+  .home-venues { margin-top: 13vh; display: grid; gap: 52px; }
+  .home-venue { position: relative; padding-left: 22px; }
+  .home-venue h2 {
+    font-family: var(--font-display); font-style: italic; font-weight: 500;
+    font-variation-settings: "opsz" 40;
+    font-size: 30px; line-height: 1;
+  }
+  .home-venue .tagline { margin-top: 10px; max-width: 30ch; }
+  .home footer { margin-top: 13vh; text-align: left; }
+
+  @media (min-width: 720px) {
+    .home-venues { grid-template-columns: 1fr 1fr; gap: 56px; }
+  }
+  @media (min-width: 1100px) {
+    .home-venue h2 { font-size: 34px; }
+  }
+</style>

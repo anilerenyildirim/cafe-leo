@@ -1,0 +1,37 @@
+---
+/* ============================================================
+   HERO_ITEM — tam genişlik kart.
+
+   Görsel üstte, ad ve açıklama ALTINDA. Metin görselin üstüne
+   binmiyor, gradyan overlay yok. Sayfanın LCP adayı olduğu için
+   eager + fetchpriority=high.
+
+   Dört tarafı saran kenarlık kalktı: blok kendi kenarını görselle
+   çiziyor, ayrım yalnız boşlukla. Rozet artık akışın içinde —
+   mutlak konumlu altın kutu yok.
+   ============================================================ */
+import Shot from './Shot.astro';
+import { itemHasPhoto } from '../lib/config';
+import type { CategoryId, MenuItem } from '../data/menu';
+
+interface Props {
+  item: MenuItem;
+  catId: CategoryId;
+}
+
+const { item, catId } = Astro.props;
+const photo = itemHasPhoto(item.slug, catId, true);
+---
+
+<article class:list={['feature', !photo && 'no-shot']}>
+  {photo && <Shot slug={item.slug} name={item.name} eager trigger />}
+  <div class="body">
+    {item.leoPick && <span class="pick-badge">Leo'nun tercihi</span>}
+    <div class="row">
+      <span class="name">{item.name}</span>
+      <span class="gap" aria-hidden="true"></span>
+      <span class="price">{item.price} ₺</span>
+    </div>
+    {item.desc && <p class="desc">{item.desc}</p>}
+  </div>
+</article>

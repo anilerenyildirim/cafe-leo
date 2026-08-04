@@ -1,0 +1,28 @@
+---
+/* ============================================================
+   Kategori rayı — sticky, bar'ın hemen altında (top: var(--bar-h),
+   yüksekliği çalışma anında ölçülüyor).
+
+   Scroll spy scripts/app.ts'te: kaydırdıkça aktif kategori
+   aria-current="true" alıyor ve çip görünüme kayıyor. İşaret renk
+   değil, altındaki altın hairline.
+
+   WebGL specular çipler kapalı kalıyor (config.ts → SPECULAR = false);
+   anahtar duruyor ama bu iskelete bağlı bir şey yok.
+   ============================================================ */
+import type { Category } from '../data/menu';
+
+interface Props {
+  cats: Category[];
+}
+
+const { cats } = Astro.props;
+---
+
+<nav class="rail" aria-label="Kategoriler">
+  <ul id="rail">
+    {cats.map((c) => (
+      <li><a href={`#${c.id}`}>{c.title}</a></li>
+    ))}
+  </ul>
+</nav>

@@ -1,0 +1,52 @@
+---
+/* ============================================================
+   Fotoğraf kutusu.
+
+   Yalnız dosyası GERÇEKTEN var olan ürünler için basılır (build
+   zamanı manifestosu, lib/photos.ts). Eksik dosya için <img> hiç
+   üretilmez — 404 yok, konsol temiz, düzen sıçraması yok.
+
+   Kaynaklar 1200×800 (3:2). Liste kutusu da 3:2 — kare kırpımda
+   tabak kenarları kesiliyordu, burada hiç kırpma yok. Şeritte kutu
+   4:5'e dönüyor (CSS), orada kırpım kasıtlı.
+
+   `trigger`: kutu <button> olur, tıklanınca büyük görünüm açılır
+   (§8). O durumda img alt'ı BOŞ ve erişilebilir ad düğmede: aksi
+   halde ekran okuyucu ürün adını iki kez okurdu.
+
+   `eager`: hero kartı ve şeridin ilk karesi için. Gerisi lazy.
+   ============================================================ */
+import { FOTO_EXT } from '../lib/config';
+
+interface Props {
+  slug: string;
+  name: string;
+  eager?: boolean;
+  /** kutuyu tıklanabilir düğmeye çevir (§8) */
+  trigger?: boolean;
+  /** şerit kartında görsel dekoratif: erişilebilir ad kartın kendisinde */
+  decorative?: boolean;
+  class?: string;
+}
+
+const {
+  slug, name, eager = false, trigger = false, decorative = false, class: cls = '',
+} = Astro.props;
+
+const Tag = trigger ? 'button' : 'div';
+const extra = trigger
+  ? { type: 'button' as const, 'data-lb': slug, 'aria-label': `${name} — görseli büyüt` }
+  : {};
+---
+
+<Tag class:list={['shot', cls]} {...extra}>
+  <img
+    src={`/foto/${slug}.${FOTO_EXT}`}
+    alt={trigger || decorative ? '' : name}
+    width="1200"
+    height="800"
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : 'auto'}
+    decoding="async"
+  />
+</Tag>

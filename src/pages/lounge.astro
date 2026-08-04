@@ -1,0 +1,75 @@
+---
+/* ============================================================
+   /lounge — Leo Lounge.
+
+   Menü verisi henüz yok (menu.ts → VENUES[lounge].categories = null).
+   Sayfa YAPISAL OLARAK /menu ile aynı iskelette: aynı Base, aynı Bar,
+   aynı Hero, aynı Foot. Veri geldiğinde tek yapılacak menu.ts'i
+   doldurmak; buradaki koşul kendiliğinden menüye döner.
+
+   AMA İSKELET DEĞİL, TASARLANMIŞ EKRAN (§6). Sunumda anahtara
+   basılacak; karşıya boş sayfa çıkarsa an ölür. Ekranda dört şey var
+   ve hepsi gerçek veri:
+
+     · mekan kimliği      → masthead + eyebrow (Lounge · Ünlüsoy Cd.)
+     · tek cümlelik tanım → tagline, sayfanın tek büyük tipografik
+                            olayı olarak display puntosunda
+     · konum              → tek link (telefon ve Instagram null, hiç
+                            basılmıyor)
+     · sakin bir durum    → menünün hazırlanmakta olduğu
+
+   Lorem yok, gri kutu yok, iskelet loader yok, sayaç yok. Boşluk
+   sessizlik gibi okunsun diye nefes payları /menu'dekinden geniş.
+   Çalışma saati null olduğu için açık/kapalı göstergesi hiç yok.
+   ============================================================ */
+import Base from '../layouts/Base.astro';
+import Bar from '../components/Bar.astro';
+import Masthead from '../components/Masthead.astro';
+import Hero from '../components/Hero.astro';
+import Rail from '../components/Rail.astro';
+import Section from '../components/Section.astro';
+import Foot from '../components/Foot.astro';
+import { VENUES } from '../data/menu';
+
+const venue = VENUES.find((v) => v.key === 'lounge')!;
+const cats = venue.categories ? [...venue.categories].sort((a, b) => a.order - b.order) : null;
+---
+
+<Base
+  venue="lounge"
+  title="Leo Lounge — Sinanoba"
+  description="Leo Lounge, Sinanoba Büyükçekmece. Menü hazırlanıyor."
+>
+  <Bar venue="lounge" />
+
+  <h1 class="sr-only">{venue.name}</h1>
+
+  <div class="wrap">
+    <Masthead name={venue.name} />
+
+    <div class="stage intro">
+      <Hero venue={venue} />
+    </div>
+
+    {cats ? (
+      <>
+        <Rail cats={cats} />
+        <main id="menu">
+          {cats.map((c) => <Section cat={c} />)}
+        </main>
+      </>
+    ) : (
+      <main id="menu">
+        <section class="soon" aria-labelledby="soonTitle" data-reveal>
+          <span class="stem" aria-hidden="true"></span>
+          <p class="kicker"><span class="sq" aria-hidden="true"></span>Hazırlanıyor</p>
+          <h2 id="soonTitle">Menü yakında</h2>
+          <p>Leo Lounge listesi yayına alındığında bu sayfada görünecek —
+             masa QR'ları değişmeden.</p>
+        </section>
+      </main>
+    )}
+
+    <Foot venue={venue} />
+  </div>
+</Base>

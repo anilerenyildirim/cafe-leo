@@ -1,0 +1,25 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# ortam
+.env
+.env.production
+
+# ortağın tek dosyalık demosu — referans, kaynak değil, build'e girmez
+reference/
+
+# iç çalışma notları — brief'ler, durum notu, kapsam raporu.
+# Repo public; bunlar müşteri değerlendirmesi ve teyit bekleyen veri
+# içeriyor, depoda değil yerelde duruyorlar.
+CODE-PROMPT.md
+DEVAM-PROMPT.md
+DURUM.md
+FOTO-LISTESI.md
+
+# os
+.DS_Store
+Thumbs.db

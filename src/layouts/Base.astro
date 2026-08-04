@@ -1,0 +1,109 @@
+---
+/* ============================================================
+   Ortak iskelet.
+
+   data-venue <html>'de basılı geliyor: sayfa boyanmadan önce doğru
+   palet yerinde olur, ilk karede aydınlıktan loşa sıçrama olmaz.
+
+   MEKAN ANAHTARI MORPH'U (§6) buradan çıkıyor. ClientRouter /menu ↔
+   /lounge geçişini AYNI BELGEDE yapıyor: içerik anında takas oluyor,
+   <html data-venue> değişiyor, @property ile kayıtlı palet 0.7s
+   morph ediyor. Belge yenilenseydi yeni sayfa zaten loş boyanırdı,
+   morph diye bir an olmazdı — demonun imza anı da olmazdı.
+
+   Kök view-transition animasyonu bilerek kapalı: içerik çözülerek
+   değil kesme ile geçiyor, sahnedeki tek hareket ışığın kısılması
+   oluyor. fallback="swap" → View Transitions API'si olmayan
+   tarayıcıda da (Safari 16.4) takas anında, morph yine çalışıyor.
+
+   Dış istek yalnız Google Fonts:
+   · Bodoni Moda (ital + opsz) — display. opsz ekseni gerekiyor:
+     masthead 58px'te ince, bölüm başlığı 27px'te gövdeli olmalı.
+   · Instrument Sans (ital + wght) — gövde. Mono yok; fiyatlar
+     tabular-nums ile hizalanıyor.
+   ============================================================ */
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  venue: 'cafe' | 'lounge';
+}
+
+const { title, description, venue } = Astro.props;
+const themeColor = venue === 'lounge' ? '#0B0907' : '#FCFBF9';
+---
+
+<!doctype html>
+<html lang="tr" data-venue={venue}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content={themeColor} />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap"
+    rel="stylesheet"
+  />
+
+  <ClientRouter fallback="swap" />
+
+  <style is:global>
+    /* Kök geçişi kapalı — içerik kesme ile takas oluyor, ışık 0.7s'te
+       kısılıyor. Çapraz çözülme eklenseydi aynı anda iki hareket olur,
+       morph'un okunurluğu düşerdi. */
+    ::view-transition-old(root),
+    ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+  </style>
+
+  <script is:inline>
+    /* (§9c) Belirme kuralının anahtarı. Tek satır, senkron, <head>'de:
+       ilk boyamadan önce konması gerekiyor, yoksa içerik önce görünür
+       sonra gizlenir. JS kapalıysa sınıf hiç konmaz ve [data-reveal]
+       blokları baştan görünür — görünmez içerik riski yok. */
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+      document.documentElement.classList.add('rv');
+  </script>
+</head>
+<body>
+  <slot />
+
+  {/* (§8) Büyük görünüm — içerik JS ile dolduruluyor, kaynağı menünün
+      kendi DOM'u (ayrı bir JSON basılmıyor). <dialog> focus trap'i ve
+      Esc'i tarayıcıdan getiriyor; role ve aria-modal açıkça yazıldı. */}
+  <dialog class="lb" id="lb" role="dialog" aria-modal="true" aria-labelledby="lbName">
+    <button class="lb-x" type="button" data-lb-close aria-label="Kapat">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M5 5 19 19M19 5 5 19" stroke-linecap="round" />
+      </svg>
+    </button>
+    <div class="lb-panel">
+      <figure class="lb-shot">
+        {/* src YOK: src="" tarayıcıda geçerli bir istek sayılır ve
+            sayfanın kendisi görsel olarak indirilmeye çalışılır.
+            Kaynağı açılışta JS yazıyor. */}
+        <img id="lbImg" alt="" width="1200" height="800" decoding="async" />
+      </figure>
+      <div class="lb-body">
+        <p class="pick-badge" id="lbPick" hidden>Leo'nun tercihi</p>
+        <div class="row">
+          <h2 class="name" id="lbName"></h2>
+          <span class="gap" aria-hidden="true"></span>
+          <span class="price" id="lbPrice"></span>
+        </div>
+        <p class="desc" id="lbDesc"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    import '../scripts/app';
+  </script>
+</body>
+</html>

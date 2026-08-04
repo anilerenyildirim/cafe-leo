@@ -1,0 +1,22 @@
+---
+/* ============================================================
+   Masthead — CurvedLoop marquee'nin yerine.
+
+   Sabit, büyük, italik mekan adı + ince kural çizgisi, ucunda kare
+   nokta. Hareketsiz: sürüklenmiyor, kaymıyor, ölçülmüyor. Marquee'nin
+   getirdiği rAF döngüsü, font yüklenme yeniden ölçümü ve pointer
+   yakalama tamamen düştü.
+   ============================================================ */
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+---
+
+<div class="masthead">
+  <p class="mh-name">{name}</p>
+  <span class="mh-rule" aria-hidden="true"></span>
+  <span class="sq" aria-hidden="true"></span>
+</div>

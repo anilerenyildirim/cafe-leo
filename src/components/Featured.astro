@@ -3,8 +3,18 @@
    Öne çıkanlar / haftanın tercihleri şeridi (§7).
 
    Kart neredeyse tamamen GÖRSEL: 4:5 dikey kırpım, altında küçük
-   kapital ad ve sessiz fiyat. Çıplak metin kartları bu bölümün
-   amacını kaçırıyordu — burada iş görselin.
+   kapital ad. Çıplak metin kartları bu bölümün amacını kaçırıyordu —
+   burada iş görselin.
+
+   FİYAT YOK. Gerekçe hero kartındakiyle aynı: burası bir vitrin,
+   fiyat listesi değil. Fiyat menü listesinde ve büyük görünümde
+   yaşıyor; karta dokunulunca zaten görünüyor.
+
+   BAŞLIK kendi stilini üretmiyor: menüdeki ana kategori başlığının
+   ta kendisi (.cat-head). Eskiden sol dikey çubuk + yatay kural
+   taşıyordu — hero kartından kaldırdığımız donanımın aynısı — ve o
+   yüzden sayfanın --pad hizasından sağa kaymıştı. Artık sayfada tek
+   bir başlık dili var: bant + sol altın kenar.
 
    Kart bir <button>: dokunmak büyük görünümü açar (§8). Şerit bir
    gezinme aracı değil bir vitrin — kategori gezinmesini ray yapıyor.
@@ -19,7 +29,7 @@
    burada görselini gösterebilir. Slug bulunamazsa sessizce atlanır.
    ============================================================ */
 import Shot from './Shot.astro';
-import { formatPrice, itemBySlug } from '../data/menu';
+import { itemBySlug } from '../data/menu';
 import { hasPhoto } from '../lib/config';
 
 interface Props {
@@ -42,8 +52,7 @@ const passes = [false, true] as const;
 
 {cards.length > 0 && (
   <section class="reco" aria-labelledby="recoTitle">
-    <div class="reco-head">
-      <span class="stem" aria-hidden="true"></span>
+    <div class="cat-head">
       <h2 id="recoTitle">Leo'nun Önerdikleri</h2>
       <span class="rule" aria-hidden="true"></span>
     </div>
@@ -66,7 +75,6 @@ const passes = [false, true] as const;
                   <Shot slug={item.slug} name={item.name} decorative eager={!dup && i < 2} />
                 )}
                 <span class="rn">{item.name}</span>
-                <span class="rp">{formatPrice(item.price)}</span>
               </Tag>
             );
           }),

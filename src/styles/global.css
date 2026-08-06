@@ -540,23 +540,36 @@ button { font: inherit; color: inherit; background: none; border: 0; }
    sarma böyle dikişsiz.
    ============================================================ */
 
-.reco { padding: 40px 0 6px; }
-.reco-head {
-  position: relative;
-  display: flex; align-items: baseline; gap: 14px;
-  padding: 0 var(--pad) 0 calc(var(--pad) + 22px);
-  margin-bottom: 20px;
-}
-.reco-head .stem { left: var(--pad); }
-.reco-head h2 {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 30;
-  font-size: 22px; letter-spacing: -.005em; line-height: 1;
-}
-.reco-head .rule { flex: 1; height: 1px; background: var(--rule); transform: translateY(-.3em); }
+/* BÖLÜM KENDİ ZEMİNİNE OTURUYOR. Eskiden kartlar sayfada serbestçe
+   duruyor gibiydi; üstündeki tercih kartından ve altındaki menü
+   listesinden ayrışmıyordu. Artık başlık + şerit tek bir yapı:
+   kenardan kenara uzanan çok soluk bir kahve zemin.
 
+   Ton kart yüzeylerinden bir tık daha soluk ve başlık bandının kahve
+   tonuyla akraba (#8B6F47, %8) — aynı aileden, daha alçak sesle.
+   Hairline eklenmedi: zemin farkı ayrımı zaten söylüyor, çizgi
+   eklemek bu turda azaltmaya çalıştığımız katman sayısını artırırdı.
+
+   Zemin .wrap kenarına kadar uzanıyor, içerik --pad'e giriyor —
+   menüdeki başlık bantlarıyla aynı kural.
+
+   Başlığın kendi stili YOK: .cat-head kullanılıyor (Featured.astro).
+   Sol dikey çubuk + yatay kural kombinasyonu buradan da kalktı;
+   sayfada tek başlık dili kaldı. */
+.reco {
+  margin: 46px 0 40px;
+  padding: 30px var(--pad) 32px;
+  background: color-mix(in oklch, #8B6F47 8%, transparent);
+}
+:root[data-venue="lounge"] .reco {
+  background: color-mix(in oklch, #C9A03C 8%, transparent);
+}
+
+/* Şerit bölümün dolgusunu aşıp kenara kadar akıyor — kartlar zeminin
+   ucunda kesiliyor, ortada asılı kalmıyorlar. */
 .reco-view {
   overflow-x: clip;
+  margin-inline: calc(var(--pad) * -1);
   padding-inline: var(--pad); padding-block: 2px;
 }
 .reco-track { display: flex; width: max-content; }
@@ -570,16 +583,13 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 /* şeritte görselsiz kart olmamalı (FEATURED küratörlü) ama bir slug
    düşerse kart yıkılmasın: yerine nefes payı ve üst hairline */
 .reco-card.no-shot { padding-top: 14px; border-top: 1px solid var(--rule); cursor: default; }
+/* Kartta kalan iki şey: fotoğraf ve ad. Fiyat kaldırıldı — burası
+   vitrin, fiyat listesi değil. */
 .reco-card .rn {
   display: block;
   font: 500 10.5px/1.45 var(--font-body);
   letter-spacing: .16em; text-transform: uppercase;
   color: var(--text);
-}
-.reco-card .rp {
-  display: block; margin-top: 6px;
-  font-size: 12.5px; color: var(--muted);
-  font-variant-numeric: tabular-nums;
 }
 
 /* masaüstü: 60s'lik tur ≈ 24 px/sn — dokunmatikteki rAF hızıyla aynı tempo */
@@ -693,21 +703,29 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .cat-head {
   display: flex; align-items: baseline; gap: 14px;
   margin-inline: calc(var(--pad) * -1);
-  background: linear-gradient(90deg,
-    color-mix(in oklch, #8B6F47 14%, transparent) 0%,
-    color-mix(in oklch, #8B6F47 4%, transparent) 100%);
-  border-left: 3px solid var(--gold-leaf);
+  /* Sol altın çubuk KENARLIK DEĞİL, ZEMİN KATMANI.
+     `border-left: 3px` + `padding-left: calc(var(--pad) - 3px)`
+     denendi ve tam sayı olmayan piksel oranlarında kırılıyordu:
+     devicePixelRatio 1.25'te tarayıcı kenarlığı 2.4px'e yuvarlıyor
+     ama dolgu 3px varsaymaya devam ediyor, başlık 0.6px sola kayıyor.
+     Zemin katmanı kutu modeline girmediği için hiza her cihazda tam. */
+  background:
+    linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+    linear-gradient(90deg,
+      color-mix(in oklch, #8B6F47 14%, transparent) 0%,
+      color-mix(in oklch, #8B6F47 4%, transparent) 100%);
   border-radius: 0 8px 8px 0;
-  /* sol: 3px kenar + kalanı = tam --pad, başlık bölümün hizasında */
-  padding: 12px var(--pad) 12px calc(var(--pad) - 3px);
+  padding: 12px var(--pad);
   margin-bottom: 18px;
 }
 /* Loş temada aynı bandın koyu karşılığı. Açık kahve (#8B6F47) siyah
    üzerinde çamura dönüyordu; oradaki doğru sıcaklık amber. */
 :root[data-venue="lounge"] .cat-head {
-  background: linear-gradient(90deg,
-    color-mix(in oklch, #C9A03C 26%, transparent) 0%,
-    color-mix(in oklch, #C9A03C 6%, transparent) 100%);
+  background:
+    linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+    linear-gradient(90deg,
+      color-mix(in oklch, #C9A03C 26%, transparent) 0%,
+      color-mix(in oklch, #C9A03C 6%, transparent) 100%);
 }
 
 .cat-head h2 {
@@ -1142,9 +1160,8 @@ footer .note { margin-top: 12px; }
   .items.photo .item { break-inside: avoid; }
   .tagline { font-size: 17px; max-width: 38ch; }
   .pick-card .name { font-size: 31px; }
-  .reco { padding-top: 56px; }
+  .reco { margin-top: 56px; padding-block: 38px 40px; }
   .reco-card { width: 200px; }
-  .reco-head h2 { font-size: 25px; }
   .sec { padding-top: 62px; }
   .cat-head h2 { font-size: 31px; }
   .sub-head h3 { font-size: 21px; }

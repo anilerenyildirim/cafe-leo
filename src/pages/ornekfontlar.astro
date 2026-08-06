@@ -269,12 +269,15 @@ const FACES: Face[] = [
       font-family: var(--ff); font-style: normal; font-weight: 500;
       font-variation-settings: var(--fv);
       font-size: 27px; line-height: 1; letter-spacing: -.006em;
-      padding: 12px var(--pad) 12px calc(var(--pad) - 3px);
+      padding: 12px var(--pad);
       margin-inline: calc(var(--pad) * -1);
-      background: linear-gradient(90deg,
-        color-mix(in oklch, #8B6F47 14%, transparent) 0%,
-        color-mix(in oklch, #8B6F47 4%, transparent) 100%);
-      border-left: 3px solid var(--gold-leaf);
+      /* sol altın çubuk zemin katmanında — kutu modeline girmiyor,
+         tam sayı olmayan piksel oranlarında hiza kaymıyor */
+      background:
+        linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+        linear-gradient(90deg,
+          color-mix(in oklch, #8B6F47 14%, transparent) 0%,
+          color-mix(in oklch, #8B6F47 4%, transparent) 100%);
       border-radius: 0 8px 8px 0;
     }
     /* Alt kategori — BANT YOK (yeni hiyerarşi): harf aralıklı büyük

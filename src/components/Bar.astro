@@ -2,11 +2,22 @@
 /* ============================================================
    Üst bar: marka + mekan anahtarı.
 
-   Hap toggle, altın gradyan dolgu ve lamba kalktı. Anahtar artık iki
-   metin, aralarında kare nokta, aktif olanın altında altın hairline.
+   C1 — bar artık gövdeyle AYNI DÜZLEMDE DEĞİL: zemini bir ton
+   farklı, altında hairline, sayfa kaydırıldığında (`.is-stuck`,
+   scripts/app.ts) hafif gölge biniyor.
+
+   C2 — müşteri bu kontrolün fark edilmediğini söyledi, haklıydı:
+   iki metin bağlantısı gibi duruyordu. İki şey değişti:
+     · aktif segment dolgulu kapsül oldu (altın zemin + --on-gold),
+     · PASİF segmentin üzerinden 4 saniyede bir parıltı geçiyor.
+   Parıltı bilerek pasifte: aktif zaten belli, keşfedilmesi gereken
+   diğerinin tıklanabilir olduğu. Parıltıya yaslanılmıyor — kapsül
+   reduced-motion altında da kontrolü belirgin bırakıyor.
+
    /menu ve /lounge ayrı rotalar olduğu için <a> + aria-current="page"
    (aria-pressed bir link üzerinde geçersiz olurdu).
    ============================================================ */
+import Logo from './Logo.astro';
 import { VENUES } from '../data/menu';
 
 interface Props {
@@ -21,17 +32,16 @@ const label: Record<'cafe' | 'lounge', string> = { cafe: 'Cafe', lounge: 'Lounge
 <header class="bar">
   <div class="bar-in">
     <a class="mark" href="/" aria-label="Leo — ana sayfa">
-      <span class="wordmark" aria-hidden="true">leo</span>
+      <Logo size="sm" />
     </a>
 
     <nav class="seg" aria-label="Mekan seç">
-      {VENUES.map((v, i) => (
-        <>
-          {i > 0 && <span class="sq" aria-hidden="true"></span>}
-          <a href={href[v.key]} aria-current={v.key === venue ? 'page' : undefined}>
-            {label[v.key]}
-          </a>
-        </>
+      {/* Kare nokta ayracı kalktı: iki kapsül arasında ayıracak bir
+          şey yok, nokta yalnız gürültü olurdu. */}
+      {VENUES.map((v) => (
+        <a href={href[v.key]} aria-current={v.key === venue ? 'page' : undefined}>
+          <span class="seg-t">{label[v.key]}</span>
+        </a>
       ))}
     </nav>
   </div>

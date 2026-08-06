@@ -1,0 +1,486 @@
+---
+/* ============================================================
+   /ornekfontlar — GEÇİCİ ROTA. Seçim yapıldıktan sonra SİLİNECEK.
+
+   Adres müşteriye doğrudan gönderiliyor
+   (cafe-leo.onlinemenu-qr.com/ornekfontlar), o yüzden okunur bir slug.
+   `noindex, nofollow` duruyor: bağlantı paylaşılan bir sayfa, aranan
+   bir sayfa değil.
+
+   ŞİKÂYET NETLEŞTİ: sorun eğim değil, GÖVDE KONTRASTI. İncelip
+   kalınlaşan, dolma kalem basıncı gibi modüle olan serifler okumayı
+   zorlaştırıyor. Bu teşhis önceki listeyi geçersiz kıldı — Cormorant
+   Garamond ve Libre Caslon Display de yüksek kontrastlıydı, aynı
+   sorunu taşıyorlardı. Yeni liste gövde kalınlığı yatay ve dikeyde
+   birbirine yakın ailelerden kuruldu. Marcellus önceki listeden
+   kalan tek isim.
+
+   Sorun KÜÇÜK PUNTODA ortaya çıkıyor, o yüzden her ürün adı iki kez
+   render ediliyor: 27px (başlık ölçeği) ve 15px (listede gerçekten
+   okunan ölçek). Kontrast farkı ikincisinde görülüyor.
+
+   4b — İKİ FONTLU DÜZEN ayrı bir seçenek olarak en altta. Gerekçe:
+   okunabilirlik sorunu LİSTEDE, logoda değil. `leo` ve mekan adı tek
+   kelimede okunuyor; menü listesi yüz kez, karanlıkta, telefondan.
+   Mevcut zarif font logoda kalıp liste düşük kontrastlıya geçebilir.
+
+   ────────────────────────────────────────────────────────────
+   NEDEN BU SAYFA KENDİ KENDİNE YETİYOR
+
+   Base.astro'yu KULLANMIYOR ve global.css'e BAĞLI DEĞİL; bütün stili
+   aşağıda `is:inline` gömülü. Sebebi somut bir hata: sayfa müşteriye
+   dosya olarak gönderiliyor ve normal build çıktısı siteyi
+   `<link href="/_astro/…css">` ile, yani KÖK YOLLA çağırıyor. Dosya
+   çift tıklanıp açıldığında (file://) o yol dosya sisteminin köküne
+   çözülüyor, CSS hiç yüklenmiyor ve bütün bloklar tarayıcının
+   varsayılan serif'ine düşüyor — hepsi aynı görünüyor.
+
+   Google Fonts mutlak https adresi olduğu için o yükleniyordu; bu
+   yüzden "fontlar yüklendi" kontrolü yanıltıcı biçimde yeşil
+   veriyordu. YÜKLENMEK ile UYGULANMAK aynı şey değil.
+
+   CSS değerlerinde TEK TIRNAK: çift tırnak satır içi style
+   niteliğinde `&#34;` olarak kaçırılıyor. Tarayıcı ayrıştırma anında
+   geri çözdüğü için çalışıyor ama kaynağa bakan insan için okunaksız.
+
+   İÇERİK UYDURMA DEĞİL: gerçek logo, gerçek mekan adı, gerçek
+   tagline, gerçek kategori başlığı (bandın üzerinde) ve menu.json'dan
+   gelen gerçek ürün satırları.
+
+   SİLİNİRKEN: yalnız bu dosya gider.
+   ============================================================ */
+import Logo from '../components/Logo.astro';
+import { VENUES, formatPrice, itemBySlug } from '../data/menu';
+
+const venue = VENUES.find((v) => v.key === 'cafe')!;
+
+/* gerçek satırlar: biri kısa adlı, biri uzun açıklamalı, biri
+   diyakritik yoğun */
+const rows = ['leo-burger', 'kahvalti-tabagi', 'san-sebastian']
+  .map((s) => itemBySlug(s))
+  .filter((i): i is NonNullable<typeof i> => i !== undefined);
+
+interface Face {
+  name: string;
+  /** CSS font-family — TEK TIRNAK */
+  stack: string;
+  /** değişken font eksenleri; yoksa normal */
+  vars: string;
+  contrast: string;
+  why: string;
+}
+
+const FACES: Face[] = [
+  {
+    name: 'Marcellus',
+    stack: "'Marcellus', Georgia, serif",
+    vars: 'normal',
+    contrast: 'Düşük',
+    why: 'Roma yazıtı, oyulmuş tabela. Altın kimlikle en uyumlusu. Önceki listeden kalan tek isim; şikâyeti karşılıyor.',
+  },
+  {
+    name: 'Alegreya',
+    stack: "'Alegreya', Georgia, serif",
+    vars: 'normal',
+    contrast: 'Düşük',
+    why: 'Hümanist, sıcak, uzun okuma için tasarlandı. Türkçe diyakritikleri çok iyi.',
+  },
+  {
+    name: 'Literata',
+    stack: "'Literata', Georgia, serif",
+    vars: "'opsz' 36",
+    contrast: 'Düşük',
+    why: 'Ekranda okuma için tasarlanmış. Sağlam, sıcak, gösterişsiz.',
+  },
+  {
+    name: 'Vollkorn',
+    stack: "'Vollkorn', Georgia, serif",
+    vars: 'normal',
+    contrast: 'Düşük',
+    why: 'Tok gövdeli, samimi, hafif karakterli. Kalabalık listede yorulmuyor.',
+  },
+  {
+    name: 'Zilla Slab',
+    stack: "'Zilla Slab', Georgia, serif",
+    vars: 'normal',
+    contrast: 'Neredeyse sıfır',
+    why: 'Slab serif. Mevcut seçimden en uzak olan. Modern ve kendinden emin.',
+  },
+];
+---
+
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Leo — font alternatifleri</title>
+  <meta name="description" content="Beş düşük kontrastlı display font alternatifi, gerçek menü içeriğiyle." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#FCFBF9" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Alegreya:wght@400;500;600&family=Bodoni+Moda:ital,opsz,wght@1,6..96,400..600&family=Instrument+Sans:wght@400..700&family=Literata:opsz,wght@7..72,300..700&family=Marcellus&family=Vollkorn:wght@400;500;600&family=Zilla+Slab:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <style is:inline>
+    /* --- palet: global.css'ten donmuş kopya (bkz. dosya başı) --- */
+    :root {
+      --bg: #FCFBF9;
+      --surf: #F6F4F0;
+      --text: #17140F;
+      --muted: #6B6459;
+      --rule: #E4E0D8;
+      --gold-leaf: #D8B523;
+      --gold-ink: #876712;
+      --on-gold: #17140F;
+      --line: rgba(23, 20, 15, .10);
+      --line-soft: rgba(23, 20, 15, .06);
+
+      --pad: 20px;
+      --page: 560px;
+      --sq: 4px;
+      --font-body: 'Instrument Sans', system-ui, -apple-system, sans-serif;
+      --font-old: 'Bodoni Moda', Didot, Georgia, serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 64px;
+    }
+    img { max-width: 100%; }
+
+    .wrap { max-width: var(--page); margin: 0 auto; padding: 0 var(--pad); }
+
+    .sq {
+      display: inline-block; flex: none;
+      width: var(--sq); height: var(--sq);
+      background: currentColor; vertical-align: .18em;
+    }
+    .eyebrow {
+      display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+      font: 500 10px/1 var(--font-body);
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .eyebrow .sq { color: var(--gold-leaf); }
+
+    .logo {
+      --logo-ar: 1.35;
+      display: grid; place-items: center start;
+      width: calc(var(--logo-h) * var(--logo-ar));
+      height: var(--logo-h);
+    }
+    .logo-mark { line-height: 1; color: var(--text); }
+
+    .gap { flex: 1; min-width: 14px; }
+    .price {
+      font: 400 14.5px/1 var(--font-body);
+      font-variant-numeric: tabular-nums;
+      color: var(--text); white-space: nowrap;
+    }
+    .price::before {
+      content: ""; display: inline-block;
+      width: var(--sq); height: var(--sq);
+      background: var(--rule);
+      margin-right: 11px; vertical-align: .1em;
+    }
+    .desc {
+      margin-top: 7px; max-width: 56ch;
+      font-size: 13.5px; color: var(--muted); line-height: 1.6;
+    }
+
+    /* ---------------- sayfa düzeni ---------------- */
+
+    .fp-head { padding-top: 7vh; max-width: 62ch; }
+    .fp-head .eyebrow { margin-bottom: 18px; }
+    .fp-head h1 {
+      font-size: clamp(28px, 7vw, 40px); line-height: 1.1;
+      font-weight: 600; letter-spacing: -.015em;
+    }
+    .fp-lead { margin-top: 18px; font-size: 14.5px; color: var(--muted); line-height: 1.7; }
+    .fp-lead b { color: var(--text); font-weight: 600; }
+    .fp-note b { color: var(--text); font-weight: 500; letter-spacing: .04em; }
+
+    .fp-block { margin-top: 60px; }
+
+    .fp-tag {
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .fp-tag .n {
+      font: 500 10px/1 var(--font-body); letter-spacing: .18em;
+      color: var(--gold-ink); font-variant-numeric: tabular-nums;
+    }
+    .fp-tag h2 {
+      font: 500 11px/1 var(--font-body);
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--text);
+    }
+    .fp-tag .k {
+      font: 500 9.5px/1 var(--font-body);
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 5px 9px;
+    }
+    .fp-tag .rule { flex: 1; height: 1px; min-width: 10px; background: var(--rule); }
+
+    .fp-why {
+      margin-top: 12px; max-width: 62ch;
+      font-size: 13px; color: var(--muted); line-height: 1.65;
+    }
+
+    /* --- örneklem: bu bloktaki HER display öğesi --ff ile geliyor --- */
+    .fp-demo { margin-top: 30px; }
+
+    .fp-demo .fp-logo { --logo-h: clamp(52px, 15vw, 78px); }
+    .fp-demo .fp-logo .logo-mark {
+      font-family: var(--ff); font-style: normal; font-weight: 500;
+      font-variation-settings: var(--fv);
+      font-size: calc(var(--logo-h) * .9);
+    }
+
+    .fp-venue {
+      margin-top: 22px;
+      font-family: var(--ff); font-style: normal; font-weight: 500;
+      font-variation-settings: var(--fv);
+      font-size: clamp(30px, 8vw, 42px); line-height: 1.05; letter-spacing: -.008em;
+    }
+    .fp-tagline {
+      margin-top: 12px; max-width: 34ch;
+      font-size: 16px; line-height: 1.55; color: var(--text);
+    }
+
+    /* Ana kategori bandı — menüdeki .cat-head ile aynı kurallar. */
+    .fp-cat {
+      margin-top: 34px;
+      font-family: var(--ff); font-style: normal; font-weight: 500;
+      font-variation-settings: var(--fv);
+      font-size: 27px; line-height: 1; letter-spacing: -.006em;
+      padding: 12px var(--pad) 12px calc(var(--pad) - 3px);
+      margin-inline: calc(var(--pad) * -1);
+      background: linear-gradient(90deg,
+        color-mix(in oklch, #8B6F47 14%, transparent) 0%,
+        color-mix(in oklch, #8B6F47 4%, transparent) 100%);
+      border-left: 3px solid var(--gold-leaf);
+      border-radius: 0 8px 8px 0;
+    }
+    /* Alt kategori — BANT YOK (yeni hiyerarşi): harf aralıklı büyük
+       harf, altın, 11px, altında hairline. Ana başlık "bölüm", bu
+       "ayraç". */
+    .fp-sub {
+      margin-top: 20px; padding-bottom: 9px;
+      border-bottom: 1px solid var(--line);
+      font: 600 11px/1 var(--font-body);
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold-ink);
+    }
+
+    .fp-items { margin-top: 6px; }
+    .fp-item { padding: 15px 0; border-top: 1px solid var(--line-soft); }
+    .fp-item:first-child { border-top: 0; }
+    .fp-row { display: flex; align-items: baseline; gap: 11px; }
+    .fp-name {
+      font-family: var(--ff); font-style: normal; font-weight: 500;
+      font-variation-settings: var(--fv);
+      font-size: 21px; line-height: 1.25; letter-spacing: -.004em;
+    }
+
+    /* KONTRAST ÖRNEKLEMİ — sorun küçük puntoda ortaya çıkıyor.
+       Aynı ad iki ölçekte yan yana. */
+    .fp-scale {
+      margin-top: 24px; padding: 16px var(--pad);
+      margin-inline: calc(var(--pad) * -1);
+      background: var(--surf);
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 22px;
+    }
+    .fp-scale .lbl {
+      flex: 1 0 100%;
+      font: 500 9.5px/1 var(--font-body);
+      letter-spacing: .18em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .fp-scale span {
+      font-family: var(--ff); font-style: normal; font-weight: 500;
+      font-variation-settings: var(--fv);
+      letter-spacing: -.004em;
+    }
+    .fp-scale .big { font-size: 27px; line-height: 1.1; }
+    .fp-scale .small { font-size: 15px; line-height: 1.3; }
+
+    /* --- 4b · iki fontlu düzen --- */
+    .fp-pair { margin-top: 26px; }
+    .fp-pair-top {
+      padding-bottom: 26px; border-bottom: 1px solid var(--line);
+    }
+    .fp-pair-top .logo { --logo-h: clamp(52px, 15vw, 78px); }
+    .fp-pair-top .logo-mark {
+      font-family: var(--font-old); font-style: italic; font-weight: 500;
+      font-variation-settings: 'opsz' 96;
+      font-size: calc(var(--logo-h) * .9);
+    }
+    .fp-pair-top .fp-venue {
+      font-family: var(--font-old); font-style: italic;
+      font-variation-settings: 'opsz' 96;
+    }
+    .fp-pair-note {
+      margin-top: 10px;
+      font: 500 9.5px/1.5 var(--font-body);
+      letter-spacing: .16em; text-transform: uppercase; color: var(--gold-ink);
+    }
+    .fp-pair-list { margin-top: 30px; }
+    .fp-pair-list h3 {
+      font: 500 10px/1 var(--font-body);
+      letter-spacing: .2em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    footer {
+      margin-top: 70px; padding-top: 28px;
+      border-top: 1px solid var(--line-soft);
+    }
+    footer .note { font-size: 12px; color: var(--muted); line-height: 1.8; }
+
+    @media (min-width: 720px) {
+      :root { --page: 720px; --pad: 26px; }
+      .fp-block { margin-top: 76px; }
+      .fp-demo { margin-top: 36px; }
+      .desc { font-size: 14px; }
+    }
+    @media (min-width: 1100px) {
+      :root { --page: 860px; --pad: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap fontpage">
+    <header class="fp-head">
+      <p class="eyebrow">
+        <span>Geçici</span><span class="sq" aria-hidden="true"></span><span>Font seçimi</span>
+      </p>
+      <h1>Beş alternatif — ikinci liste</h1>
+      <p class="fp-lead">
+        Şikâyet netleşti: sorun eğim değil, <b>gövde kontrastı</b>. İncelip
+        kalınlaşan, dolma kalem basıncı gibi modüle olan serifler okumayı
+        zorlaştırıyor. Bu teşhis ilk listeyi geçersiz kıldı — Cormorant
+        Garamond ve Libre Caslon Display de yüksek kontrastlıydı.
+      </p>
+      <p class="fp-lead">
+        Aşağıdakilerin beşinde de gövde kalınlığı yatay ve dikeyde birbirine
+        yakın. Beşi de dik, beşinde de tam Türkçe desteği var. Sorun
+        <b>küçük puntoda</b> ortaya çıktığı için her ürün adı iki ölçekte
+        gösteriliyor.
+      </p>
+      <p class="fp-lead fp-note">
+        Diyakritik kontrolü: <b>ÇĞİÖŞÜ çğıöşü</b> — beşinde de tam.
+      </p>
+    </header>
+
+    {FACES.map((f, i) => (
+      <section class="fp-block" style={`--ff: ${f.stack}; --fv: ${f.vars};`}>
+        <div class="fp-tag">
+          <span class="n">{String(i + 1).padStart(2, '0')}</span>
+          <h2>{f.name}</h2>
+          <span class="k">Kontrast: {f.contrast}</span>
+          <span class="rule" aria-hidden="true"></span>
+        </div>
+
+        <p class="fp-why">{f.why}</p>
+
+        <div class="fp-demo">
+          <Logo size="lg" class="fp-logo" />
+
+          <p class="fp-venue">{venue.name}</p>
+          <p class="fp-tagline">{venue.tagline}</p>
+
+          <div class="fp-scale">
+            <span class="lbl">Aynı ad, iki ölçek — fark küçükte çıkar</span>
+            <span class="big">Kahvaltı Tabağı</span>
+            <span class="small">Kahvaltı Tabağı</span>
+          </div>
+
+          <p class="fp-cat">Yiyecekler</p>
+          <p class="fp-sub">Ana Yemekler</p>
+
+          <div class="fp-items">
+            {rows.map((it) => (
+              <div class="fp-item">
+                <div class="fp-row">
+                  <span class="fp-name">{it.name}</span>
+                  <span class="gap" aria-hidden="true"></span>
+                  <span class="price">{formatPrice(it.price)}</span>
+                </div>
+                {it.desc && <p class="desc">{it.desc}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    ))}
+
+    {/* ---------- 4b · ayrı bir seçenek: iki fontlu düzen ---------- */}
+    <section class="fp-block">
+      <div class="fp-tag">
+        <span class="n">4b</span>
+        <h2>İki fontlu düzen</h2>
+        <span class="k">Ayrı seçenek</span>
+        <span class="rule" aria-hidden="true"></span>
+      </div>
+
+      <p class="fp-why">
+        Okunabilirlik sorunu <b>listede</b> yaşanıyor, logoda değil.
+        <span>&#32;</span><i>leo</i> logosu ve mekan adı tek kelimede, seyrek
+        okunuyor; menü listesi yüz kez, karanlıkta, telefondan okunuyor.
+        Bu yüzden ikisini ayırmak mümkün: mevcut zarif font logoda kalır,
+        liste düşük kontrastlı bir aileye geçer. Hem beğenilen zarafet hem
+        istenen okunabilirlik birlikte alınır.
+      </p>
+
+      <div class="fp-pair">
+        <div class="fp-pair-top">
+          <Logo size="lg" />
+          <p class="fp-venue">{venue.name}</p>
+          <p class="fp-pair-note">Mevcut font — Bodoni Moda italik, değişmiyor</p>
+        </div>
+
+        {FACES.map((f) => (
+          <div class="fp-pair-list" style={`--ff: ${f.stack}; --fv: ${f.vars};`}>
+            <h3>Liste: {f.name}</h3>
+            <p class="fp-sub">Ana Yemekler</p>
+            <div class="fp-items">
+              {rows.slice(0, 2).map((it) => (
+                <div class="fp-item">
+                  <div class="fp-row">
+                    <span class="fp-name">{it.name}</span>
+                    <span class="gap" aria-hidden="true"></span>
+                    <span class="price">{formatPrice(it.price)}</span>
+                  </div>
+                  {it.desc && <p class="desc">{it.desc}</p>}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <footer>
+      <p class="note">
+        Geçici sayfa — seçim yapıldıktan sonra bu rota silinecek.
+      </p>
+    </footer>
+  </div>
+</body>
+</html>

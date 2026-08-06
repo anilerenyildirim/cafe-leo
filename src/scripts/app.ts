@@ -6,7 +6,9 @@
    her yıkım `astro:before-swap`'e. Kurulumların hepsi idempotent.
 
    İçindekiler:
-     1  ölçüm      — bar yüksekliği → sticky ray ve scroll-margin
+     1  ölçüm      — bar + ray yüksekliği → sticky ray ve scroll-margin
+     1b bar gölgesi— yalnız sayfa kaydırılmışken
+     1c kenar maskesi — yatay şeritlerin kaydırılabilirlik işareti
      2  durum      — açık/kapalı, İstanbul saatiyle (§ hours.ts)
      3  emniyet ağı— dosya var ama çözülemiyorsa satır tipografiye düşer
      4  scroll spy — kategori rayı (§5)
@@ -35,13 +37,82 @@ const onTeardown = (fn: () => void) => cleanups.push(fn);
 
 /* ============================================================
    1 — ÖLÇÜM
-   Bar yüksekliği fontlar yüklenince değişiyor; ray onun altına
-   yapışıyor ve scroll-margin ondan türüyor.
+   Bar ve ray yüksekliği fontlar yüklenince değişiyor; ray bar'ın
+   altına yapışıyor, bütün scroll-margin'ler ikisinin toplamından
+   türüyor. Sabit sayı yazılsaydı kategori ve alt kategori başlıkları
+   atlandığında rayın altında kalırdı.
    ============================================================ */
 
-function measureBar(): void {
+function measureChrome(): void {
+  const root = document.documentElement.style;
   const bar = document.querySelector<HTMLElement>('.bar');
-  document.documentElement.style.setProperty('--bar-h', `${bar ? bar.offsetHeight : 56}px`);
+  const rail = document.querySelector<HTMLElement>('.rail');
+  root.setProperty('--bar-h', `${bar ? bar.offsetHeight : 56}px`);
+  root.setProperty('--rail-h', `${rail ? rail.offsetHeight : 0}px`);
+}
+
+/* ============================================================
+   1b — BAR GÖLGESİ (C1)
+   Gölge yalnız sayfa kaydırılmışken. Tepede dururken bar bir katman
+   değil, sayfanın kendi başı — orada gölge yalan söylerdi.
+   ============================================================ */
+
+function barShadow(): void {
+  const bar = document.querySelector<HTMLElement>('.bar');
+  if (!bar) return;
+
+  const paint = () => bar.classList.toggle('is-stuck', window.scrollY > 0);
+  paint();
+  window.addEventListener('scroll', paint, { passive: true });
+  onTeardown(() => {
+    window.removeEventListener('scroll', paint);
+    bar.classList.remove('is-stuck');
+  });
+}
+
+/* ============================================================
+   1c — KENAR MASKESİ (D2 · rev5 §2)
+
+   Yatay kaydırılabilir bir şeridin kaydırılabilir OLDUĞUNU söyleyen
+   solma. Maske SABİT DEĞİL: içerik geniş ekranda zaten sığıyorsa
+   kalıcı bir solma hata gibi okunur. Kutu gerçekten taşıyorsa ve o
+   yönde gidilecek yer varsa açılıyor.
+
+   Aynı mekanizma iki yerde: ana kategori rayı ve her bölümün alt
+   kategori çip satırı.
+   ============================================================ */
+
+function edgeMask(host: HTMLElement, box: HTMLElement): void {
+  const paint = () => {
+    const over = box.scrollWidth - box.clientWidth;
+    /* 2px tolerans: alt piksel yuvarlamaları uçlarda maskeyi
+       titretiyordu. */
+    host.classList.toggle('edge-l', over > 2 && box.scrollLeft > 2);
+    host.classList.toggle('edge-r', over > 2 && box.scrollLeft < over - 2);
+  };
+
+  paint();
+  box.addEventListener('scroll', paint, { passive: true });
+  window.addEventListener('resize', paint, { passive: true });
+  /* Fontlar yüklenince çip genişlikleri değişiyor — taşma kararı
+     yeniden veriliyor. */
+  document.fonts?.ready.then(paint);
+  onTeardown(() => {
+    box.removeEventListener('scroll', paint);
+    window.removeEventListener('resize', paint);
+    host.classList.remove('edge-l', 'edge-r');
+  });
+}
+
+function edges(): void {
+  const rail = document.querySelector<HTMLElement>('.rail');
+  const railBox = document.querySelector<HTMLElement>('.rail-scroll');
+  if (rail && railBox) edgeMask(rail, railBox);
+
+  for (const nav of document.querySelectorAll<HTMLElement>('.subcats')) {
+    const box = nav.querySelector<HTMLElement>('.subcats-scroll');
+    if (box) edgeMask(nav, box);
+  }
 }
 
 /* ============================================================
@@ -85,7 +156,7 @@ function status(): void {
 function shotNet(): void {
   for (const img of document.querySelectorAll<HTMLImageElement>('.shot img')) {
     const fail = () => {
-      img.closest('.item, .feature, .reco-card')?.classList.add('shot-failed');
+      img.closest('.item, .pick-card, .reco-card')?.classList.add('shot-failed');
       img.closest('.shot')?.remove();
     };
     if (img.complete && img.naturalWidth === 0) fail();
@@ -280,36 +351,57 @@ function lightbox(): void {
   const descEl = document.getElementById('lbDesc')!;
   const pickEl = document.getElementById('lbPick')!;
 
-  /** slug → menüdeki ürün satırı (adın, fiyatın, açıklamanın kaynağı) */
-  const rows = new Map<string, HTMLElement>();
-  for (const el of document.querySelectorAll<HTMLElement>('.item[data-slug]')) {
-    rows.set(el.dataset['slug']!, el);
-  }
+  /* AYNI SLUG BİRDEN FAZLA BÖLÜMDE OLABİLİR: "İmza Ürünler" ürünleri
+     kendi kategorilerinden referansla çekiyor, yani Leo Pizza hem
+     İmza'da hem Ana Yemekler'de bir satır. Bu yüzden satırlar
+     yalnız slug'la değil BÖLÜM + SLUG ile anahtarlanıyor; yoksa
+     harita son satırda kalır ve okla gezinme yanlış kategoriye
+     düşerdi. */
+  const key = (secId: string, slug: string): string => `${secId}/${slug}`;
 
-  /** kategori → o kategorideki FOTOĞRAFLI slug'lar, DOM sırasında */
+  /** bölüm+slug → ürün satırı (adın, fiyatın, açıklamanın kaynağı) */
+  const rows = new Map<string, HTMLElement>();
+  /** slug → İLK satır. Bölümü olmayan tetikler (hero kartı, öneri
+      şeridi) buradan besleniyor. */
+  const anyRow = new Map<string, HTMLElement>();
+  /** bölüm → o bölümdeki FOTOĞRAFLI slug'lar, DOM sırasında */
   const groups = new Map<string, string[]>();
+  /** menünün HERHANGİ bir yerinde rozet taşıyan slug'lar.
+      Seçki bölümünde (İmza Ürünler) rozet basılmıyor; büyük görünüm
+      satırdan okusaydı oradan açılınca rozet düşerdi. Rozet ürünün
+      özelliği, satırın değil — bu yüzden slug bazında tutuluyor. */
+  const picks = new Set<string>();
+
   for (const sec of document.querySelectorAll<HTMLElement>('main .sec')) {
     const list: string[] = [];
     for (const it of sec.querySelectorAll<HTMLElement>('.item[data-slug]')) {
-      if (it.querySelector('.shot img')) list.push(it.dataset['slug']!);
+      const s = it.dataset['slug']!;
+      rows.set(key(sec.id, s), it);
+      if (!anyRow.has(s)) anyRow.set(s, it);
+      if (it.querySelector('.pick-badge')) picks.add(s);
+      if (it.querySelector('.shot img')) list.push(s);
     }
     if (list.length) groups.set(sec.id, list);
   }
-  const groupOf = (slug: string): string[] => {
-    const sec = rows.get(slug)?.closest('.sec');
-    const list = sec ? groups.get(sec.id) : undefined;
-    return list && list.includes(slug) ? list : [slug];
-  };
+
+  /** Tetiğin ait olduğu bölüm. Menü içindeyse kendi bölümü; hero ve
+      şerit için ürünün menüdeki ilk satırının bölümü — böylece
+      oradan da okla gezinilebiliyor. */
+  const secOf = (trigger: HTMLElement, s: string): string =>
+    trigger.closest('.sec')?.id ?? anyRow.get(s)?.closest('.sec')?.id ?? '';
 
   let opener: HTMLElement | null = null;
   let slug = '';
+  let curSec = '';
   let closing = 0;
 
-  const fill = (s: string, fallbackSrc?: string): boolean => {
-    const row = rows.get(s);
+  const fill = (s: string, secId: string, fallbackSrc?: string): boolean => {
+    const row = rows.get(key(secId, s)) ?? anyRow.get(s);
     const src =
       row?.querySelector<HTMLImageElement>('.shot img')?.getAttribute('src') ?? fallbackSrc;
     if (!src) return false;
+
+    curSec = secId;
 
     slug = s;
     img.src = src;
@@ -325,14 +417,14 @@ function lightbox(): void {
     descEl.textContent = desc;
     descEl.hidden = !desc;
 
-    pickEl.hidden = !row?.querySelector('.pick-badge');
+    pickEl.hidden = !picks.has(s);
     return true;
   };
 
   const open = (trigger: HTMLElement) => {
     const s = trigger.dataset['lb']!;
     const src = trigger.querySelector<HTMLImageElement>('img')?.getAttribute('src') ?? undefined;
-    if (!fill(s, src)) return;
+    if (!fill(s, secOf(trigger, s), src)) return;
 
     opener = trigger;
     clearTimeout(closing);
@@ -366,12 +458,13 @@ function lightbox(): void {
     closing = window.setTimeout(finish, RM.matches ? 0 : 160);
   };
 
-  /** aynı kategoride sağa/sola. Sınırda durur, döngü yapmaz. */
+  /** AYNI BÖLÜMDE sağa/sola. Sınırda durur, döngü yapmaz. */
   const step = (dir: 1 | -1) => {
-    const list = groupOf(slug);
+    const list = groups.get(curSec);
+    if (!list) return;
     const i = list.indexOf(slug) + dir;
     if (i < 0 || i >= list.length) return;
-    fill(list[i]!);
+    fill(list[i]!, curSec);
   };
 
   const onClick = (e: MouseEvent) => {
@@ -484,7 +577,9 @@ function morph(): void {
 
 function init(): void {
   morph();
-  measureBar();
+  measureChrome();
+  barShadow();
+  edges();
   status();
   shotNet();
   spy();
@@ -510,7 +605,7 @@ document.addEventListener('astro:after-swap', () => {
   }
 });
 
-/* Fontlar yüklenince bar yüksekliği değişir; ray ve scroll-margin
-   ondan türediği için yeniden ölçülür. */
-document.fonts?.ready.then(measureBar);
-window.addEventListener('resize', measureBar, { passive: true });
+/* Fontlar yüklenince bar ve ray yüksekliği değişir; bütün
+   scroll-margin'ler ikisinden türediği için yeniden ölçülür. */
+document.fonts?.ready.then(measureChrome);
+window.addEventListener('resize', measureChrome, { passive: true });

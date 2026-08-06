@@ -1,0 +1,36 @@
+---
+/* ============================================================
+   LEO logosu — TEK DEĞİŞTİRME NOKTASI.
+
+   Şu an tipografik: gerçek logo (public/brand/leologo.jpg) opak beyaz
+   zeminli bir JPG, loş temada beyaz kutu olarak durur. Bodoni Moda
+   italik onun tipografik eşdeğeri.
+
+   GERÇEK LOGOYA GEÇİŞ tek dosyada, üç satırda olur:
+     1. aşağıdaki <span class="logo-mark">leo</span> yerine
+        <img src="/brand/leo.svg" alt="" />
+     2. global.css → .logo { --logo-ar: … }  değerini varlığın
+        gerçek en/boy oranına çek
+     3. başka hiçbir yere dokunma
+
+   Yerleşim kaymaması için kutu ŞİMDİDEN sabit: yüksekliği `--logo-h`,
+   genişliği `--logo-h * --logo-ar`. İçerik ne olursa olsun kutu aynı
+   yeri kaplar; metinden görsele geçişte sayfa oynamaz.
+
+   Erişilebilir ad BURADA DEĞİL: logo her zaman kendisini saran
+   öğenin (bar'daki <a>, ana sayfadaki sr-only <h1>) adının içinde
+   kalır. İki kez okunmasın diye burası aria-hidden.
+   ============================================================ */
+
+interface Props {
+  /** lg: ana sayfa hero'su · sm: üst bar */
+  size?: 'lg' | 'sm';
+  class?: string;
+}
+
+const { size = 'sm', class: cls = '' } = Astro.props;
+---
+
+<span class:list={['logo', `logo-${size}`, cls]} aria-hidden="true">
+  <span class="logo-mark">leo</span>
+</span>

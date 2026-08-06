@@ -94,6 +94,15 @@
 
   --line: rgba(23, 20, 15, .10);
   --line-soft: rgba(23, 20, 15, .06);
+
+  /* Mekan anahtarındaki parıltının tepe rengi (C2). Aydınlıkta altın
+     mürekkep — pasif segmentin üzerinden sıcak bir dalga geçiyor.
+     @property'ye KAYITLI DEĞİL: morph edilmesi gereken bir palet
+     rengi değil, animasyonun tepe noktası.
+     --shine-0 aynı rengin ALFA 0 hâli; `transparent` yazılmıyor
+     (o şeffaf SİYAHtır ve araya gri bir halka sokar). */
+  --shine: #876712;
+  --shine-0: rgba(135, 103, 18, 0);
 }
 
 /* ---------- Leo Lounge — siyah + koyu ahşap ---------- */
@@ -111,13 +120,25 @@
 
   --line: rgba(237, 230, 216, .14);
   --line-soft: rgba(237, 230, 216, .08);
+
+  /* Loşta parıltı sıcak beyaz. rgba(255,246,216,·) ailesinden —
+     saf beyaz burada soğuk ve keskin duruyordu. */
+  --shine: #FFF6D8;
+  --shine-0: rgba(255, 246, 216, 0);
 }
 
 /* ---------- ölçü ve biçim tokenları ---------- */
 :root {
   --pad: 20px;
   --page: 560px;
+
+  /* İkisi de ÇALIŞMA ANINDA ölçülüyor (scripts/app.ts § ölçüm) —
+     buradakiler yalnız ilk boyama için makul başlangıç. Kategori
+     rayının yapışma noktası ve bütün scroll-margin'ler bu ikisinden
+     türüyor; sabit sayı yazılsaydı font yüklenince başlıklar rayın
+     altında kalırdı. */
   --bar-h: 56px;
+  --rail-h: 48px;
 
   --r: 0;                 /* köşeler kare — logonun geometrisi */
   --sq: 4px;              /* ayrık kare nokta */
@@ -221,50 +242,143 @@ button { font: inherit; color: inherit; background: none; border: 0; }
    ÜST BAR
    ============================================================ */
 
+/* C1 — bar altındaki içerikten NET AYRILIYOR. Önceki halinde ikisi
+   aynı düzlemde duruyordu: zemin --bg'nin şeffaflaştırılmışıydı,
+   hairline de en soluk çizgiydi. Üç şey değişti:
+     · zemin --surf'ten türüyor, yani gövdeden bir ton farklı
+     · alt hairline --line-soft değil --line
+     · sayfa kaydırıldığında (.is-stuck, scripts/app.ts) gölge biniyor
+   Gölge tepede YOK: orada bar bir katman değil, sayfanın kendi başı. */
 .bar {
   position: sticky; top: 0; z-index: 30;
   padding: 11px 0;
   padding-top: max(11px, env(safe-area-inset-top));
-  background: color-mix(in srgb, var(--bg) 90%, transparent);
+  background: color-mix(in srgb, var(--surf) 92%, transparent);
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line);
+  transition: box-shadow .25s ease;
 }
+.bar.is-stuck { box-shadow: 0 6px 20px -14px rgba(60, 44, 12, .55); }
+:root[data-venue="lounge"] .bar.is-stuck { box-shadow: 0 6px 22px -14px rgba(0, 0, 0, .9); }
 .bar-in {
   max-width: var(--page); margin: 0 auto;
   padding-inline: var(--pad);
   display: flex; align-items: center; gap: 12px; min-height: 32px;
 }
 
-/* Gerçek logo küçük harf, italik, yüksek kontrastlı serif. Bodoni Moda
-   italik onun tipografik eşdeğeri. leologo.jpg opak beyaz zeminli JPG
-   olduğu için loş temada beyaz kutu olarak durur — şeffaf SVG gelince
-   görsele döneriz. */
-.mark { display: inline-flex; align-items: baseline; text-decoration: none; }
-.wordmark {
-  font-family: var(--font-display); font-style: italic;
-  font-variation-settings: "opsz" 48;
-  font-weight: 500; font-size: 27px; line-height: 1;
+/* ---------- LOGO KUTUSU (A1) ----------
+   Logo tek bileşende (components/Logo.astro) ve SABİT KUTUDA.
+
+   Gerçek logo küçük harf, italik, yüksek kontrastlı serif; Bodoni
+   Moda italik onun tipografik eşdeğeri. leologo.jpg opak beyaz
+   zeminli JPG olduğu için loş temada beyaz kutu olarak durur —
+   şeffaf SVG gelince görsele döneriz.
+
+   O gün geldiğinde yerleşim OYNAMASIN diye kutu şimdiden ölçülü:
+   yüksekliği --logo-h, genişliği --logo-h * --logo-ar. İçerik metinden
+   görsele dönerken kutu aynı yeri kaplar. Değişecek tek sayı --logo-ar
+   (yeni varlığın en/boy oranı). */
+.logo {
+  --logo-ar: 1.35;
+  display: grid; place-items: center;
+  width: calc(var(--logo-h) * var(--logo-ar));
+  height: var(--logo-h);
+}
+.logo-sm { --logo-h: 30px; place-items: center start; }
+.logo-lg { --logo-h: clamp(64px, 21vw, 106px); }
+
+.logo-mark {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: calc(var(--logo-h) * .9); line-height: 1;
   color: var(--text);
 }
+.logo-sm .logo-mark { font-variation-settings: "opsz" 48; }
+.logo-lg .logo-mark { font-variation-settings: "opsz" 96; }
 
-/* ---------- mekan anahtarı ----------
-   Hap toggle ve altın gradyan dolgu kalktı. Yerine: iki metin, aralarında
-   kare nokta, aktif olanın altında altın hairline. Basınca sayfa
-   değişmiyor gibi görünür — ClientRouter aynı belgede içeriği takas
-   ediyor, palet 0.7s morph ediyor (§6). */
-.seg { margin-left: auto; display: flex; align-items: center; gap: 11px; }
+/* Görsele geçişte gereken tek kural — şimdiden burada duruyor. */
+.logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.mark { display: inline-flex; align-items: center; text-decoration: none; }
+
+/* ---------- mekan anahtarı (C2) ----------
+   Müşteri bu kontrolün fark edilmediğini söyledi. Haklıydı: iki metin
+   ve altın bir hairline, iki normal bağlantıdan ayırt edilemiyordu.
+
+   Aktif segment artık DOLGULU KAPSÜL. Kare köşe kuralının ikinci
+   istisnası (ilki fotoğraf kutuları): kapsül burada bilinçli — bir
+   ANAHTAR olduğunu söyleyen biçim o. Altın zemin üzerinde --on-gold
+   9.23:1.
+
+   Basınca sayfa değişmiyor gibi görünür — ClientRouter aynı belgede
+   içeriği takas ediyor, palet 0.7s morph ediyor (§6). */
+.seg { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 .seg a {
   text-decoration: none;
   font: 500 10.5px/1 var(--font-body);
   letter-spacing: .17em; text-transform: uppercase;
   color: var(--muted);
-  padding-bottom: 5px;
-  border-bottom: 1px solid transparent;
-  transition: color .25s ease, border-color .25s ease;
+  padding: 8px 13px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: color .25s ease, background-color .25s ease, border-color .25s ease;
 }
-.seg a[aria-current="page"] { color: var(--text); border-bottom-color: var(--gold-leaf); }
-@media (hover: hover) { .seg a:hover { color: var(--text); } }
-.seg .sq { color: var(--rule); transform: translateY(-2px); }
+.seg a[aria-current="page"] { background: var(--gold-leaf); color: var(--on-gold); }
+.seg a:not([aria-current]) { border-color: var(--line); }
+@media (hover: hover) {
+  .seg a:not([aria-current]):hover { color: var(--text); border-color: var(--gold-leaf); }
+  /* İşaretçi üzerindeyken parıltının işi bitti: keşif zaten oldu.
+     Dalga durur, metin düz hover rengine döner. */
+  .seg a:not([aria-current]):hover .seg-t {
+    animation-play-state: paused;
+    background-image: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: var(--text);
+  }
+}
+
+/* Parıltı — 4 saniyede bir soldan sağa, YALNIZ PASİF segmentte.
+   Aktif zaten belli; keşfedilmesi gereken diğerinin tıklanabilir
+   olduğu. Kontrolün görünürlüğü buna yaslanmıyor: kapsül parıltı
+   olmadan da (reduced-motion) anahtarı anahtar gibi gösteriyor.
+
+   ÜÇ TUZAK, üçünden de kaçınıldı:
+
+   · Gradyanda `transparent` YOK — `transparent` şeffaf SİYAHtır ve
+     renkli bir stop'tan ona interpolasyon gri bir halka bırakır.
+     Uçlarda aynı rengin alfa-0 hâli (--shine-0) duruyor.
+
+   · İKİ KATMAN. Tek katman denendi ve pasif segment GÖRÜNMEZ oldu:
+     dalga kutunun dışına çıktığı bekleme fazında boyanacak hiçbir
+     şey kalmıyor, `color: transparent` de metni yok ediyordu. Alttaki
+     ikinci katman düz --muted dolgusu — parıltı nerede olursa olsun
+     metin her karede basılı.
+
+   · Bekleme fazı KEYFRAME YÜZDESİNDE, `animation-delay` ile değil.
+     animation-delay yalnız ilk turda çalışır; sonraki turlarda
+     parıltılar arka arkaya gelirdi. %22'de dalga bitiyor, %100'e
+     kadar aynı yerde bekliyor.
+
+   Yön: %160 → -%60 soldan sağa. (Konum yüzdesi kutu ile görüntü
+   farkına oranlıdır; 220% boyutta %160 kutunun soluna, -%60 sağına
+   düşüyor.) */
+.seg a:not([aria-current]) .seg-t {
+  background-image:
+    linear-gradient(100deg, var(--shine-0) 42%, var(--shine) 50%, var(--shine-0) 58%),
+    linear-gradient(var(--muted), var(--muted));
+  background-size: 220% 100%, 100% 100%;
+  background-position: 160% center, 0 0;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: toggle-shine 4s ease-in-out infinite;
+}
+@keyframes toggle-shine {
+  0%   { background-position: 160% center, 0 0; }
+  22%  { background-position: -60% center, 0 0; }
+  100% { background-position: -60% center, 0 0; }
+}
 
 /* ============================================================
    MASTHEAD — marquee'nin yerine.
@@ -346,29 +460,73 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .acts a:focus-visible { border-bottom-color: var(--gold-leaf); }
 @media (max-width: 359px) { .acts { gap: 9px; } .acts a { letter-spacing: .14em; } }
 
-#menu { scroll-margin-top: calc(var(--bar-h) + 46px); }
+#menu { scroll-margin-top: calc(var(--bar-h) + var(--rail-h) + 8px); }
 
 /* ============================================================
-   ÖNE ÇIKAN ÜRÜN (HERO_ITEM)
+   "LEO'NUN TERCİHİ" — BÖLÜM DEĞİL, KART
 
-   Dört tarafı saran kenarlık kalktı. Görsel kendi kenarını çiziyor,
-   metin altında nefes alıyor; ayrım yalnız boşlukla.
+   Etiket bir turluk "bölüm başlığı ağırlığında" denendi ve yanlıştı:
+   bölüm başlığının bütün donanımını (sol dikey çubuk + yatay kural)
+   alınca hemen altındaki ürün adıyla iki başlık üst üste yığıldı,
+   üstelik aşağıdaki "Leo'nun Önerdikleri" bölümüyle karıştı.
+
+   Şimdi tek bir nesne: yüzey + üst bant. Dil açılış sayfasındaki
+   Cafe/Lounge kartlarıyla aynı.
+
+   HİZA: kartın sol kenarı --pad çizgisinde. Eski kırıklığın sebebi
+   ÇİFT DOLGUYDU — .stage zaten var(--pad) veriyor, karta bir kez
+   daha yatay margin yazılmıştı; üstüne 22px'lik stem oluğu biniyordu.
+   İkisi de kalktı.
    ============================================================ */
 
-.feature {
+.pick-card {
   position: relative;
-  margin: 34px var(--pad) 0;
-  display: flex; flex-direction: column;
+  margin-top: 34px;
+  border-radius: 14px;
+  overflow: hidden;              /* bant köşeleri kartın köşesine uysun */
+  background:
+    linear-gradient(158deg,
+      color-mix(in oklch, var(--surf) 92%, transparent) 0%,
+      color-mix(in oklch, var(--surf) 55%, transparent) 100%);
+  border: 1px solid color-mix(in oklch, var(--text) 10%, transparent);
+  box-shadow:
+    0 1px 2px rgba(60, 44, 12, .05),
+    0 10px 28px -12px rgba(60, 44, 12, .20);
+  transition: transform .3s ease;
 }
-.feature .body { padding-top: 16px; }
-.feature .name {
+
+/* Üst bant. Dolgu CAFE anahtarıyla AYNI token — sayfada iki farklı
+   altın dolgu tonu bulunmuyor. --on-gold üzerinde 9.23:1.
+   Etiket tipografisi: 12px, harf aralıklı, büyük harf. */
+.pick-band {
+  background: var(--gold-leaf);
+  color: var(--on-gold);
+  font: 600 12px/1 var(--font-body);
+  letter-spacing: .18em; text-transform: uppercase;
+  padding: 12px var(--pad);
+}
+
+.pick-body { padding: 20px var(--pad) 22px; }
+.pick-card .name {
+  display: block;
   font-family: var(--font-display); font-style: italic; font-weight: 500;
   font-variation-settings: "opsz" 40;
   font-size: 27px; line-height: 1.1;
+  margin-bottom: 16px;
 }
-.feature .price { font-size: 15px; }
-.feature .pick-badge { align-self: flex-start; margin-bottom: 12px; }
-.feature .desc { max-width: 46ch; }
+.pick-card .desc { max-width: 46ch; margin-top: 16px; }
+
+/* Tetik yalnız fotoğraf (başlığı <button> içine almak geçersiz HTML
+   olurdu) ama GERİ BİLDİRİM kartın tamamında: halka da yükselme de
+   kartı sarıyor, böylece tıklanan şeyin "kart" olduğu okunuyor. */
+.pick-card button.shot:focus-visible { outline: none; }
+.pick-card:has(button.shot:focus-visible) {
+  outline: 2px solid var(--gold-ink);
+  outline-offset: 4px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pick-card:has(button.shot:hover) { transform: translateY(-2px); }
+}
 
 /* ============================================================
    ÖNE ÇIKANLAR ŞERİDİ (§7)
@@ -455,56 +613,214 @@ button { font: inherit; color: inherit; background: none; border: 0; }
    KATEGORİ RAYI (§5 — scroll spy scripts/app.ts içinde)
    ============================================================ */
 
+/* Kaydırma kutusu AYRI bir katman: maske kaymayan .rail'e bağlı,
+   içerikle birlikte sürüklenmiyor. */
 .rail {
   position: sticky; top: var(--bar-h); z-index: 20;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(14px);
-  border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft);
-  overflow-x: auto; scrollbar-width: none;
-  scroll-behavior: smooth;
+  border-top: 1px solid var(--line-soft);
+  /* D2 — şerit ile altındaki içerik arasında NET ayrım: alt hairline
+     artık en soluk çizgi değil, tam --line. */
+  border-bottom: 1px solid var(--line);
 }
-.rail::-webkit-scrollbar { display: none; }
-.rail ul { display: flex; gap: 20px; list-style: none; padding: 13px var(--pad); position: relative; }
-.rail li { position: relative; z-index: 1; }
+.rail-scroll { overflow-x: auto; scrollbar-width: none; scroll-behavior: smooth; }
+.rail-scroll::-webkit-scrollbar { display: none; }
+
+/* D2 — şeridin kaydırılabilir olduğu kenardaki maskeyle söyleniyor.
+   Gradyan yerine MASKE kullanılıyor: maske yalnız alfayı interpole
+   eder, gradyanın "şeffaf siyaha kaçıp gri halka bırakma" sorunu
+   burada hiç doğmaz ve maske herhangi bir zemin üzerinde çalışır.
+
+   Maske sabit değil: scripts/app.ts § railEdges kutunun gerçekten
+   kaydırılabilir olup olmadığına bakıp edge-l / edge-r sınıflarını
+   koyuyor. Beş çip 1080px'te zaten sığıyor; orada kalıcı bir solma
+   hata gibi okunurdu. */
+.rail.edge-l .rail-scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34px);
+          mask-image: linear-gradient(90deg, transparent 0, #000 34px);
+}
+.rail.edge-r .rail-scroll {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent 100%);
+          mask-image: linear-gradient(90deg, #000 calc(100% - 34px), transparent 100%);
+}
+.rail.edge-l.edge-r .rail-scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 34px,
+                                             #000 calc(100% - 34px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 34px,
+                                             #000 calc(100% - 34px), transparent 100%);
+}
+
+.rail ul { display: flex; gap: 7px; list-style: none; padding: 10px var(--pad); }
+
+/* D2 — punto 1px büyüdü (10.5 → 11.5): mobilde çok küçüktü.
+   Aktif kategori artık alt çizgiyle değil DOLGULU zeminle
+   belirtiliyor — mekan anahtarıyla aynı dil, aynı kapsül. */
 .rail a {
   display: block; white-space: nowrap; text-decoration: none;
-  font: 500 10.5px/1 var(--font-body);
-  letter-spacing: .15em; text-transform: uppercase;
+  font: 500 11.5px/1 var(--font-body);
+  letter-spacing: .13em; text-transform: uppercase;
   color: var(--muted);
-  padding-bottom: 5px; border-bottom: 1px solid transparent;
-  transition: color .25s ease, border-color .25s ease;
+  padding: 9px 13px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: color .25s ease, background-color .25s ease, border-color .25s ease;
 }
-.rail a[aria-current="true"] { color: var(--text); border-bottom-color: var(--gold-leaf); }
-@media (hover: hover) { .rail a:hover { color: var(--text); } }
+.rail a[aria-current="true"] { background: var(--gold-leaf); color: var(--on-gold); }
+@media (hover: hover) {
+  .rail a:not([aria-current]):hover { color: var(--text); border-color: var(--line); }
+}
 
 /* ============================================================
    BÖLÜMLER
    ============================================================ */
 
-.sec { padding: 50px var(--pad) 0; scroll-margin-top: calc(var(--bar-h) + 54px); }
+.sec { padding: 50px var(--pad) 0; scroll-margin-top: calc(var(--bar-h) + var(--rail-h) + 12px); }
+.sub { scroll-margin-top: calc(var(--bar-h) + var(--rail-h) + 18px); }
+.sub + .sub { margin-top: 44px; }
 
-.sec-head {
-  position: relative;
-  padding-left: 22px;
+/* ---------- başlık bantları (D3) ----------
+   Başlıklar artık çıplak değil: açık kahve bir zemin bandının
+   üzerinde duruyorlar. Kaydırırken bölümlerin nerede başlayıp
+   nerede bittiği bandın kendisinden okunuyor — müşterinin
+   "ayrımlar belirgin değil" şikâyetinin liste içindeki karşılığı bu.
+
+   Negatif margin bandı .wrap'in kenarına kadar taşıyor; sol kenardaki
+   3px altın çubuk kaldırılan "stem" motifinin bant içindeki hâli.
+
+   HİYERARŞİ TONLA: alt başlığın zemini daha soluk, tipografisi daha
+   küçük, altın kenarı yok. İki seviye aynı bandın iki gücü. */
+.cat-head {
   display: flex; align-items: baseline; gap: 14px;
-  margin-bottom: 8px;
+  margin-inline: calc(var(--pad) * -1);
+  background: linear-gradient(90deg,
+    color-mix(in oklch, #8B6F47 14%, transparent) 0%,
+    color-mix(in oklch, #8B6F47 4%, transparent) 100%);
+  border-left: 3px solid var(--gold-leaf);
+  border-radius: 0 8px 8px 0;
+  /* sol: 3px kenar + kalanı = tam --pad, başlık bölümün hizasında */
+  padding: 12px var(--pad) 12px calc(var(--pad) - 3px);
+  margin-bottom: 18px;
 }
-.sec-head h2 {
+/* Loş temada aynı bandın koyu karşılığı. Açık kahve (#8B6F47) siyah
+   üzerinde çamura dönüyordu; oradaki doğru sıcaklık amber. */
+:root[data-venue="lounge"] .cat-head {
+  background: linear-gradient(90deg,
+    color-mix(in oklch, #C9A03C 26%, transparent) 0%,
+    color-mix(in oklch, #C9A03C 6%, transparent) 100%);
+}
+
+.cat-head h2 {
   font-family: var(--font-display); font-style: italic; font-weight: 500;
   font-variation-settings: "opsz" 40;
   font-size: 27px; letter-spacing: -.008em; line-height: 1;
 }
-.sec-head .rule { flex: 1; height: 1px; min-width: 10px; background: var(--rule); transform: translateY(-.32em); }
-.sec-head .n {
+.cat-head .rule {
+  flex: 1; height: 1px; min-width: 10px;
+  background: color-mix(in srgb, var(--text) 16%, transparent);
+  transform: translateY(-.32em);
+}
+/* Sayaç bandın üzerinde okunur kalmalı: aydınlıkta --muted bant
+   üzerinde 4.75:1, loşta 3.3:1'e düşüyordu — orada altın kullanılıyor
+   (7.4:1). */
+.cat-head .n {
   font: 500 10px/1 var(--font-body); letter-spacing: .16em;
   color: var(--muted); font-variant-numeric: tabular-nums;
   transform: translateY(-.2em);
 }
+:root[data-venue="lounge"] .cat-head .n { color: var(--gold-ink); }
 
-/* tek fiyatlı kategoriler (ör. Frozenler: hepsi 250 ₺) fiyatı satır
+/* ---------- alt kategori başlığı: BANT YOK ----------
+   Üç kat donanım üst üste geliyordu: ana kategori bandı → çip satırı
+   → alt kategori bandı. Aynı görsel dilin üç kez tekrarı kafa
+   karıştırıyordu.
+
+   Bant yalnız ANA kategoride kaldı. Alt kategori artık "bölüm" değil
+   "AYRAÇ" olarak okunuyor: harf aralıklı büyük harf, altın, 11px,
+   altında ince hairline. Bakışta ana başlıkla karışmıyor. */
+.sub-head {
+  display: flex; align-items: baseline; gap: 12px;
+  padding-bottom: 9px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.sub-head h3 {
+  font: 600 11px/1 var(--font-body);
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-ink);        /* --bg üzerinde 5.10:1 */
+}
+.sub-head .n {
+  font: 500 10px/1 var(--font-body); letter-spacing: .16em;
+  color: var(--muted); font-variant-numeric: tabular-nums;
+}
+
+/* ---------- alt kategori çipleri (D1) ----------
+   YAPIŞKAN DEĞİL. Bölüm başlığının hemen altında bir kez basılır ve
+   yerinde kalır: bölüm içinde atlama sağlar, kalıcı dikey alan
+   tüketmez, kaydırırken içeriği değişmez.
+
+   SARMA KALDIRILDI. Çipler ikinci satıra taşıyınca başlıkla liste
+   arasında dağınık bir blok oluşuyordu; artık tek satır ve yatay
+   kaydırılabilir. Kaydırma bir animasyon değil, bir hareket biçimi —
+   reduced-motion altında davranış aynı kalıyor.
+
+   Sarmalayıcı `overflow-x: clip`: çipler ekran kenarına kadar
+   uzanabiliyor ama sayfaya yatay taşma üretmiyorlar. Kenar maskesi
+   ana kategori rayıyla AYNI mekanizma (scripts/app.ts § edgeMask) —
+   yalnız gerçekten taşıyorsa açılıyor. */
+.subcats {
+  position: relative;
+  overflow-x: clip;
+  margin: -6px calc(var(--pad) * -1) 26px;
+}
+.subcats-scroll {
+  display: flex; flex-wrap: nowrap; gap: 8px;
+  padding-inline: var(--pad);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  /* ZORUNLU: snap dolguyu bilmezse ilk çipi kutunun kenarına yapıştırır
+     ve --pad girintisini kaydırıp yer. Şerit daha açılırken 20px
+     kaymış geliyordu; ilk çip ekran kenarına dayanıyor, üstelik
+     kenar maskesi onu soluklaştırıyordu. */
+  scroll-padding-inline: var(--pad);
+  scrollbar-width: none;
+}
+.subcats-scroll::-webkit-scrollbar { display: none; }
+.subcats-scroll > * { flex: 0 0 auto; scroll-snap-align: start; }
+
+.subcats.edge-l .subcats-scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30px);
+          mask-image: linear-gradient(90deg, transparent 0, #000 30px);
+}
+.subcats.edge-r .subcats-scroll {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 30px), transparent 100%);
+          mask-image: linear-gradient(90deg, #000 calc(100% - 30px), transparent 100%);
+}
+.subcats.edge-l.edge-r .subcats-scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30px,
+                                             #000 calc(100% - 30px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 30px,
+                                             #000 calc(100% - 30px), transparent 100%);
+}
+
+.subcats a {
+  text-decoration: none; white-space: nowrap;
+  font: 500 10.5px/1 var(--font-body);
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: color .25s ease, border-color .25s ease;
+}
+@media (hover: hover) {
+  .subcats a:hover { color: var(--text); border-color: var(--gold-leaf); }
+}
+
+/* tek fiyatlı gruplar (ör. Frozenler: hepsi 250 ₺) fiyatı satır
    satır tekrarlamaz — bir kez burada söylenir */
 .sec-note {
-  margin: 0 0 4px 22px;
+  margin: 0 0 8px;
   font: 500 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
   color: var(--gold-ink);
 }
@@ -766,11 +1082,9 @@ footer {
   margin-top: 60px; padding: 28px var(--pad) 0;
   border-top: 1px solid var(--line-soft);
 }
-footer .sig {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 30;
-  color: var(--text); font-size: 22px; line-height: 1; margin-bottom: 14px;
-}
+/* İmza da logo kutusunun kendisi (Logo.astro), yalnız daha küçük. */
+footer .sig { --logo-h: 24px; margin-bottom: 14px; }
+footer .sig .logo-mark { font-variation-settings: "opsz" 30; }
 footer p { font-size: 12px; color: var(--muted); line-height: 1.8; }
 footer .note { margin-top: 12px; }
 
@@ -809,11 +1123,14 @@ footer .note { margin-top: 12px; }
 
 @media (min-width: 1100px) {
   :root { --page: 1080px; --pad: 32px; --shot-w: 192px; }
-  .stage {
-    display: grid; grid-template-columns: minmax(0, 1fr) 420px;
-    gap: 48px; align-items: center; padding-top: 26px;
-  }
-  .stage.intro { display: block; padding-top: 44px; }
+  /* Sahne masaüstünde de TEK KOLON. Eskiden iki kolondu ve tercih
+     kartı sağdaki 420px'lik kolona düşüyordu — o zaman kartın sol
+     kenarı sayfanın sol çizgisinden kopuyordu. Hizanın 360px'te
+     olduğu gibi 1280px'te de tutması için kolon düzeni bırakıldı.
+     Kart geniş ekranda sınırlanıyor ki fotoğraf balonlaşmasın. */
+  .stage { padding-top: 26px; }
+  .pick-card { max-width: 640px; }
+  .stage.intro { padding-top: 44px; }
   .stage.intro .tagline { font-size: 52px; max-width: 12ch; }
 
   /* Fotoğraflı liste burada ızgara DEĞİL, kolon akışı. Izgarada satır
@@ -824,13 +1141,13 @@ footer .note { margin-top: 12px; }
   .items.photo { columns: 2; column-gap: 44px; }
   .items.photo .item { break-inside: avoid; }
   .tagline { font-size: 17px; max-width: 38ch; }
-  .feature { margin: 0; }
-  .feature .name { font-size: 31px; }
+  .pick-card .name { font-size: 31px; }
   .reco { padding-top: 56px; }
   .reco-card { width: 200px; }
   .reco-head h2 { font-size: 25px; }
   .sec { padding-top: 62px; }
-  .sec-head h2 { font-size: 31px; }
+  .cat-head h2 { font-size: 31px; }
+  .sub-head h3 { font-size: 21px; }
   .name { font-size: 21px; }
   .lb-body .name { font-size: 31px; }
   footer { margin-top: 80px; }
@@ -857,8 +1174,27 @@ footer .note { margin-top: 12px; }
      geçişleri tek satırda düşüyor, çünkü morph başka hiçbir yerde
      tanımlı değil. Etkileşim geçişleri de anında. */
   :root { transition: none; }
-  .seg a, .rail a, .acts a, .lb-x { transition: none; }
-  html, .rail { scroll-behavior: auto; }
+  .seg a, .rail a, .subcats a, .acts a, .lb-x, .bar { transition: none; }
+  html, .rail-scroll { scroll-behavior: auto; }
+  /* Alt kategori çipleri KAYDIRILABİLİR KALIYOR: bu bir animasyon
+     değil, bir hareket biçimi. Kapatmak erişimi bozardı. */
+
+  /* (f) mekan anahtarı parıltısı DURUR — ama kontrol belirgin kalır.
+     Dolgulu kapsül parıltıdan bağımsız; burada yalnız dalga düşüyor.
+     background-clip: text geri alınmazsa metin şeffaf kalır ve pasif
+     segment görünmez olurdu — bu yüzden üç satır birden. */
+  .seg a:not([aria-current]) .seg-t {
+    animation: none;
+    background-image: none;
+    -webkit-background-clip: border-box;
+    background-clip: border-box;
+    color: var(--muted);
+  }
+
+  /* (g) öne çıkan kartın yükselmesi kapalı; odak halkası ve imleç
+     duruyor — tıklanabilirlik hâlâ söyleniyor. */
+  .pick-card { transition: none; }
+  .pick-card:has(button.shot:hover) { transform: none; }
 
   /* (b) şerit: akış durur, kaydırılabilir kalır, scroll-snap devreye
      girer, duplike kopya tamamen gizlenir (odak sırasından da düşer).

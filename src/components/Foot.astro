@@ -5,6 +5,7 @@
    Demo notu referanstaki gibi duruyor: fiyat ve içerik teyide tabi.
    null contact alanları basılmaz — uydurma yok, yer tutucu yok.
    ============================================================ */
+import Logo from './Logo.astro';
 import type { Venue } from '../data/menu';
 
 interface Props {
@@ -16,7 +17,9 @@ const c = venue.contact;
 ---
 
 <footer>
-  <p class="sig" aria-hidden="true">leo</p>
+  {/* Alttaki imza da logonun kendisi: gerçek varlık geldiğinde
+      Logo.astro'yu değiştirmek üç görünümü birden çevirir. */}
+  <Logo size="sm" class="sig" />
   <p>
     {c.address && <>{c.address}<br /></>}
     {venue.hoursText && <>{venue.hoursText}<br /></>}

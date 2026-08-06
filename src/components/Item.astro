@@ -2,9 +2,11 @@
 /* ============================================================
    Ürün satırı.
 
-   Görsel kararı ÜRÜN bazında: kategori fotoğraf düzeninde olsa bile
+   Görsel kararı ÜRÜN bazında: grup fotoğraf düzeninde olsa bile
    dosyası olmayan ürün `.no-shot` alıp tipografik satır olarak gelir.
-   Sonradan çöken bir düzen değil — doğuştan öyle basılıyor.
+   Sonradan çöken bir düzen değil — doğuştan öyle basılıyor. (İmza
+   Ürünler'deki iki mokteyl şu an bu durumda: fotoğrafları gelince
+   `public/foto/`'ya dosyayı koymak yetiyor, koda dokunulmuyor.)
 
    leoPick rozeti kartın sağ üstünde. Fiyatın solundaki kare nokta
    .price::before'da: ad iki satıra sardığında ayrı bir flex çocuğu
@@ -12,32 +14,36 @@
 
    `data-slug` büyük görünümün (§8) tek veri kaynağı: ad, fiyat,
    açıklama ve rozet zaten burada duruyor, ikinci bir JSON basılmıyor.
+   Aynı ürün iki grupta görünebildiği için (İmza Ürünler referansları)
+   büyük görünüm satırı SLUG + BÖLÜM ile buluyor.
    ============================================================ */
 import Shot from './Shot.astro';
 import { itemHasPhoto } from '../lib/config';
-import type { CategoryId, MenuItem } from '../data/menu';
+import { formatPrice, type MenuItem } from '../data/menu';
 
 interface Props {
   item: MenuItem;
-  catId: CategoryId;
+  /** alt kategori slug'ı — fotoğraf düzeni kararının anahtarı */
+  group: string;
   hidePrice?: boolean;
+  /** Seçki bölümlerinde (İmza Ürünler) rozet basılmaz — bkz. Section.astro */
+  showPick?: boolean;
 }
 
-const { item, catId, hidePrice = false } = Astro.props;
-const photo = itemHasPhoto(item.slug, catId);
+const { item, group, hidePrice = false, showPick = true } = Astro.props;
+const photo = itemHasPhoto(item.slug, group);
 ---
 
 <div class:list={['item', !photo && 'no-shot']} data-slug={item.slug}>
   {photo && <Shot slug={item.slug} name={item.name} trigger />}
   <div class="meta">
-    {item.leoPick && <span class="pick-badge">Leo'nun tercihi</span>}
+    {showPick && item.leoPick && <span class="pick-badge">Leo'nun tercihi</span>}
     <div class="row">
       <span class="name">{item.name}</span>
-      {item.tag && <span class="tag">{item.tag}</span>}
       {!hidePrice && (
         <>
           <span class="gap" aria-hidden="true"></span>
-          <span class="price">{item.price} ₺</span>
+          <span class="price">{formatPrice(item.price)}</span>
         </>
       )}
     </div>

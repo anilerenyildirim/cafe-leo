@@ -1,37 +1,59 @@
 ---
 /* ============================================================
-   HERO_ITEM — tam genişlik kart.
+   "Leo'nun Tercihi" — BÖLÜM DEĞİL, KART.
 
-   Görsel üstte, ad ve açıklama ALTINDA. Metin görselin üstüne
-   binmiyor, gradyan overlay yok. Sayfanın LCP adayı olduğu için
-   eager + fetchpriority=high.
+   Önceki turda etiket "bölüm başlığı ağırlığında" yapılmıştı ve o
+   talimat yanlıştı: etiket bölüm başlığının bütün donanımını aldı
+   (sol dikey çubuk, yatay kural) ve altındaki ürün adıyla iki başlık
+   üst üste yığıldı. Hemen aşağıdaki "Leo'nun Önerdikleri" bölümünde
+   de aynı donanım olduğu için ikisi birbirine karışıyordu.
 
-   Dört tarafı saran kenarlık kalktı: blok kendi kenarını görselle
-   çiziyor, ayrım yalnız boşlukla. Rozet artık akışın içinde —
-   mutlak konumlu altın kutu yok.
+   Şimdi tek bir nesne:
+
+     ┌──────────────────────────────┐
+     │ LEO'NUN TERCİHİ              │  ← kart üst bandı, dolgulu altın
+     ├──────────────────────────────┤
+     │ Leo Burger                   │  ← kartın tek büyük tipografisi
+     │ [fotoğraf]                   │
+     │ 140 g köfte, çedar, turşu…   │
+     └──────────────────────────────┘
+
+   · Kart bir yüzey: zemin, ince kenarlık, köşe yuvarlaması, yumuşak
+     gölge — açılış sayfasındaki Cafe/Lounge kartlarıyla aynı dil.
+   · Sol dikey altın çubuk ve yatay kural KALKTI. Onlar bölüm başlığı
+     işaretleri.
+   · Bandın altın dolgusu CAFE anahtarındakiyle aynı token
+     (--gold-leaf): sayfada iki farklı altın dolgu tonu yok.
+   · LEO'NUN TERCİHİ artık etiket tipografisi (12px, harf aralıklı,
+     büyük harf), başlık tipografisi değil.
+
+   HİZA: kartın sol kenarı --pad çizgisinde, sayfadaki diğer her
+   öğeyle aynı dikey hatta. Eski kırıklığın sebebi ÇİFT DOLGUYDU —
+   .stage zaten var(--pad) veriyordu, karta bir kez daha
+   `margin: … var(--pad)` yazılmıştı; üstüne bir de stem oluğu için
+   22px iç boşluk biniyordu. Yatay margin kaldırıldı, oluk kalktı.
+
+   FİYAT YOK: karta tıklanınca açılan büyük görünümde zaten var.
+   Tetik yalnız fotoğraf (başlığı <button> içine almak geçersiz HTML
+   olurdu) ama geri bildirim kartın tamamında.
    ============================================================ */
 import Shot from './Shot.astro';
-import { itemHasPhoto } from '../lib/config';
-import type { CategoryId, MenuItem } from '../data/menu';
+import { hasPhoto } from '../lib/config';
+import type { MenuItem } from '../data/menu';
 
 interface Props {
   item: MenuItem;
-  catId: CategoryId;
 }
 
-const { item, catId } = Astro.props;
-const photo = itemHasPhoto(item.slug, catId, true);
+const { item } = Astro.props;
+const photo = hasPhoto(item.slug);
 ---
 
-<article class:list={['feature', !photo && 'no-shot']}>
-  {photo && <Shot slug={item.slug} name={item.name} eager trigger />}
-  <div class="body">
-    {item.leoPick && <span class="pick-badge">Leo'nun tercihi</span>}
-    <div class="row">
-      <span class="name">{item.name}</span>
-      <span class="gap" aria-hidden="true"></span>
-      <span class="price">{item.price} ₺</span>
-    </div>
+<article class:list={['pick-card', !photo && 'no-shot']}>
+  <p class="pick-band">Leo'nun Tercihi</p>
+  <div class="pick-body">
+    <h2 class="name">{item.name}</h2>
+    {photo && <Shot slug={item.slug} name={item.name} eager trigger />}
     {item.desc && <p class="desc">{item.desc}</p>}
   </div>
 </article>

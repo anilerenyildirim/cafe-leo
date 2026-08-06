@@ -3,26 +3,40 @@
    Kategori rayı — sticky, bar'ın hemen altında (top: var(--bar-h),
    yüksekliği çalışma anında ölçülüyor).
 
-   Scroll spy scripts/app.ts'te: kaydırdıkça aktif kategori
-   aria-current="true" alıyor ve çip görünüme kayıyor. İşaret renk
-   değil, altındaki altın hairline.
+   D1 KARARI: rayda YALNIZ BEŞ ANA KATEGORİ var. Alt kategoriler için
+   ikinci bir yapışkan şerit EKLENMEDİ — iki yapışkan şerit telefonda
+   ~100px dikey alan yer, 667px'lik bir ekranda içeriğin %15'i.
+   Üstelik kaydırdıkça içeriği değişen ikinci bir şerit yerleşim
+   kayması ve kafa karışıklığı üretirdi; düzeltmeye çalıştığımız şey
+   tam olarak buydu. Alt kategorilere erişim bölüm başlığının hemen
+   altındaki YAPIŞKAN OLMAYAN çip satırından (Section.astro).
 
-   WebGL specular çipler kapalı kalıyor (config.ts → SPECULAR = false);
-   anahtar duruyor ama bu iskelete bağlı bir şey yok.
+   D2: çip puntosu 1px büyütüldü, aktif kategori artık alt çizgiyle
+   değil dolgulu altın kapsülle belirtiliyor, şeridin kaydırılabilir
+   olduğu iki kenardaki maskeyle söyleniyor (maske yalnız gerçekten
+   kaydırılabilirken açılıyor — scripts/app.ts § railEdges).
+
+   Scroll spy scripts/app.ts'te: kaydırdıkça aktif kategori
+   aria-current="true" alıyor ve çip görünüme kayıyor.
+
+   Kaydırma kutusu ayrı bir katman (.rail-scroll): maske ve gölge
+   kaymayan .rail'e bağlı, içerikle birlikte sürüklenmiyor.
    ============================================================ */
-import type { Category } from '../data/menu';
+import type { Section } from '../data/menu';
 
 interface Props {
-  cats: Category[];
+  sections: Section[];
 }
 
-const { cats } = Astro.props;
+const { sections } = Astro.props;
 ---
 
 <nav class="rail" aria-label="Kategoriler">
-  <ul id="rail">
-    {cats.map((c) => (
-      <li><a href={`#${c.id}`}>{c.title}</a></li>
-    ))}
-  </ul>
+  <div class="rail-scroll" id="rail">
+    <ul>
+      {sections.map((s) => (
+        <li><a href={`#${s.slug}`}>{s.title}</a></li>
+      ))}
+    </ul>
+  </div>
 </nav>

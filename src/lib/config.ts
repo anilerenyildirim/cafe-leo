@@ -1,4 +1,3 @@
-import type { CategoryId } from '../data/menu';
 import { hasPhotoFile } from './photos';
 
 /* ============================================================
@@ -12,19 +11,23 @@ export const FOTO_VAR = true;
 export const FOTO_EXT = 'webp';
 
 /**
- * Tipografik kalan kategoriler.
+ * Tipografik kalan GRUPLAR (alt kategori slug'ları).
  *
- * Bölünme keyfi değil: TABAĞA gelen fotoğraflı, BARDAĞA gelen
- * tipografik. Sunumda tek cümleyle savunulur.
+ * Karar artık ana kategoride değil ALT KATEGORİDE: "Soğuk İçecekler"
+ * beş alt gruptan oluşuyor ve hepsi bardağa geliyor. Bölünme keyfi
+ * değil: TABAĞA gelen fotoğraflı, BARDAĞA gelen tipografik. Sunumda
+ * tek cümleyle savunulur.
  *
- * Fotoğraf düzeni üç kategoride: sicaklar, tatlilar, yiyecekler.
+ * Aşağıdaki beş grup Soğuk İçecekler'in tamamı — yani o kategori
+ * baştan sona tipografik. Sıcak İçecekler, Tatlılar, Yiyecekler ve
+ * İmza Ürünler fotoğraflı.
  */
-export const NO_PHOTO: CategoryId[] = [
+export const NO_PHOTO: string[] = [
+  'mokteyller',     // 0/4
   'soguk-kahveler', // 1/8 — tek fotoğraflı satır en kötü görünüm
-  'frozenler',      // 0/9
   'milkshakeler',   // 0/8
-  'kokteyller',     // 0/4
-  'mesrubat',       // 0/9
+  'frozenler',      // 0/9
+  'mesrubatlar',    // 0/9
 ];
 
 /* Bir zamanlar burada SKIP_PHOTO listesi vardı: flat-white, caramel-latte,
@@ -41,23 +44,25 @@ export const NO_PHOTO: CategoryId[] = [
  */
 export const SPECULAR = false;
 
-/** Kategori fotoğraf öncelikli düzende mi? */
-export const isPhotoCategory = (id: CategoryId): boolean =>
-  FOTO_VAR && !NO_PHOTO.includes(id);
+/** Grup (alt kategori) fotoğraf öncelikli düzende mi? */
+export const isPhotoGroup = (group: string): boolean =>
+  FOTO_VAR && !NO_PHOTO.includes(group);
 
 /**
- * Bu ürün görsel basacak mı?
+ * Dosyası GERÇEKTEN var mı? Grup kapısını atlar.
  *
- * Üç kapı: genel anahtar → kategori düzeni → dosyanın gerçekten
- * var olması. Öne çıkanlar şeridi kategori kapısını atlar
- * (`ignoreCategory`): şerit küratörlü ve fotoğraf ağırlıklı, tipografik
- * bir kategoriden gelen tek fotoğraflı ürün (ice-americano) oraya girebilir.
+ * Küratörlü yerlerde (öne çıkanlar şeridi, hero kartı) doğrudan bu
+ * kullanılır: şerit fotoğraf ağırlıklı ve tipografik bir gruptan gelen
+ * tek fotoğraflı ürün (ice-americano) oraya girebilir.
  */
-export const itemHasPhoto = (
-  slug: string,
-  catId: CategoryId,
-  ignoreCategory = false,
-): boolean =>
-  FOTO_VAR &&
-  (ignoreCategory || !NO_PHOTO.includes(catId)) &&
-  hasPhotoFile(slug);
+export const hasPhoto = (slug: string): boolean => FOTO_VAR && hasPhotoFile(slug);
+
+/**
+ * Bu ürün liste içinde görsel basacak mı?
+ *
+ * Üç kapı: genel anahtar → grubun düzeni → dosyanın gerçekten var
+ * olması. Üçü de geçmezse <img> hiç üretilmez — 404 yok, düzen
+ * sıçraması yok, satır DOĞUŞTAN tipografik gelir.
+ */
+export const itemHasPhoto = (slug: string, group: string): boolean =>
+  isPhotoGroup(group) && hasPhoto(slug);

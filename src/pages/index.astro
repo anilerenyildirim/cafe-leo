@@ -3,15 +3,23 @@
    / — tanıtım sayfası. TEK EKRAN: marka, iki mekan, ikişer bağlantı.
 
    QR kodları /menu'ye gidiyor; bu sayfa web'den gelen ziyaretçi için.
-   Dil menü sayfalarıyla aynı: aynı eyebrow, aynı stem, aynı kare
-   nokta, aynı metin-link satırı. Fazlası bugünün işi değil — burada
-   ne fotoğraf var ne şerit; sayfanın işi yön vermek.
+   Dil menü sayfalarıyla aynı: aynı eyebrow, aynı kare nokta, aynı
+   metin-link satırı.
+
+   BU TURDA DEĞİŞEN (A1–A4): logo ortalandı ve kendi bileşenine
+   alındı; iki mekan artık ÇERÇEVESİZ BLOK DEĞİL, gerçek kart yüzeyi.
+   Önceki turda çerçeveler kaldırılıp ayrım tamamen boşluğa
+   bırakılmıştı — müşteri ayrımı okuyamadı. Yapı geri geldi, ama düz
+   opaklık tonuyla değil: her kartın kendi gradyanı, kendi kenarı,
+   kendi gölgesi var. Sol altın kenar eski dikey hairline'ın (stem)
+   yerini alıyor — kimlik korundu, gövde kazanıldı.
 
    Lounge'un menüsü olmadığı için bağlantı adı da onu söylüyor
    ("Menü yakında"). Uydurma saat, telefon veya adres yok; null olan
    alan hiç basılmıyor.
    ============================================================ */
 import Base from '../layouts/Base.astro';
+import Logo from '../components/Logo.astro';
 import { VENUES } from '../data/menu';
 ---
 
@@ -21,22 +29,23 @@ import { VENUES } from '../data/menu';
   description="Cafe Leo ve Leo Lounge — Sinanoba, Büyükçekmece. Menüler, konum ve iletişim."
 >
   <div class="wrap home">
-    <p class="home-mark" aria-hidden="true">leo</p>
-    <p class="eyebrow">
-      <span>Sinanoba</span><span class="sq" aria-hidden="true"></span><span>Büyükçekmece</span>
-    </p>
+    <div class="home-brand">
+      <Logo size="lg" />
+      <p class="eyebrow">
+        <span>Sinanoba</span><span class="sq" aria-hidden="true"></span><span>Büyükçekmece</span>
+      </p>
+    </div>
 
     <h1 class="sr-only">Cafe Leo ve Leo Lounge</h1>
 
     <div class="home-venues">
       {VENUES.map((v) => (
-        <section class="home-venue">
-          <span class="stem" aria-hidden="true"></span>
+        <section class:list={['home-venue', v.key === 'cafe' ? 'card-cafe' : 'card-lounge']}>
           <h2>{v.name}</h2>
           <p class="tagline">{v.tagline}</p>
           <nav class="acts" aria-label={`${v.name} bağlantıları`}>
             <a href={v.key === 'cafe' ? '/menu' : '/lounge'}>
-              {v.categories ? 'Menü' : 'Menü yakında'}
+              {v.sections ? 'Menü' : 'Menü yakında'}
             </a>
             {v.contact.mapsUrl && (
               <>
@@ -57,27 +66,72 @@ import { VENUES } from '../data/menu';
 
 <style>
   .home { padding: 0 var(--pad); }
-  .home-mark {
-    font-family: var(--font-display); font-style: italic; font-weight: 500;
-    font-variation-settings: "opsz" 96;
-    font-size: clamp(58px, 20vw, 96px); line-height: .9;
+
+  /* A1 — marka bloğu yatay ortada. Logo kutusu sabit ölçülü
+     (bkz. Logo.astro), gerçek logoya geçişte bu blok oynamaz. */
+  .home-brand {
     margin-top: 9vh;
+    display: flex; flex-direction: column; align-items: center;
   }
-  .home .eyebrow { margin-top: 20px; }
-  .home-venues { margin-top: 13vh; display: grid; gap: 52px; }
-  .home-venue { position: relative; padding-left: 22px; }
+  .home-brand .eyebrow { margin-top: 20px; justify-content: center; text-align: center; }
+
+  /* A4 — kartlar arası boşluk artırıldı; footer'a inen boşluk
+     üsttekinden belirgin biçimde fazla, ritim artık dengeli. */
+  .home-venues { margin-top: 11vh; display: grid; gap: 60px; align-items: stretch; }
+
+  .home-venue {
+    display: flex; flex-direction: column;
+    border-radius: 14px;
+    padding: 28px 30px 26px;
+  }
   .home-venue h2 {
     font-family: var(--font-display); font-style: italic; font-weight: 500;
     font-variation-settings: "opsz" 40;
     font-size: 30px; line-height: 1;
   }
   .home-venue .tagline { margin-top: 10px; max-width: 30ch; }
-  .home footer { margin-top: 13vh; text-align: left; }
+  /* eşit yükseklikte kartlarda bağlantı satırı tabana oturur */
+  .home-venue .acts { margin-top: auto; padding-top: 24px; }
+
+  /* A2 — Cafe Leo kartı. Düz opaklık tonu değil, gerçek bir yüzey:
+     köşeden köşeye zayıflayan gradyan, ince kenar, sol altın kenar
+     ve tek yönlü yumuşak gölge. */
+  .card-cafe {
+    background:
+      linear-gradient(158deg,
+        color-mix(in oklch, var(--surf) 92%, transparent) 0%,
+        color-mix(in oklch, var(--surf) 55%, transparent) 100%);
+    border: 1px solid color-mix(in oklch, var(--text) 10%, transparent);
+    border-left: 2px solid var(--gold-leaf);
+    box-shadow:
+      0 1px 2px rgba(60, 44, 12, .05),
+      0 10px 28px -12px rgba(60, 44, 12, .20);
+  }
+
+  /* A3 — Leo Lounge kartı. Aynı yapı, amber sıcaklığında: iki kart
+     yan yana durduğunda hangisinin gece mekanı olduğu bakar bakmaz
+     anlaşılsın. Ölçüm: --muted (#6B6459) amber bandın EN KOYU
+     ucunda (#F2E9D3) 4.80:1 — eşiğin üstünde. Amber koyulaşırsa
+     metin de koyulaşmalı. */
+  .card-lounge {
+    background:
+      linear-gradient(158deg,
+        rgba(201, 160, 60, .20) 0%,
+        rgba(140, 100, 28, .06) 100%);
+    border: 1px solid rgba(140, 100, 28, .20);
+    border-left: 2px solid #B8862F;
+    box-shadow:
+      0 1px 2px rgba(60, 44, 12, .05),
+      0 10px 28px -12px rgba(100, 70, 15, .26);
+  }
+
+  .home footer { margin-top: 18vh; text-align: left; }
 
   @media (min-width: 720px) {
-    .home-venues { grid-template-columns: 1fr 1fr; gap: 56px; }
+    .home-venues { grid-template-columns: 1fr 1fr; gap: 64px; }
   }
   @media (min-width: 1100px) {
+    .home-venue { padding: 34px 36px 30px; }
     .home-venue h2 { font-size: 34px; }
   }
 </style>

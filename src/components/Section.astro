@@ -1,67 +1,144 @@
 ---
 /* ============================================================
-   Kategori bölümü.
+   Kategori bölümü — İKİ SEVİYELİ.
 
-   Başlık: logodan gelen "stem" (uzun ince dikey çubuk + dibinde ayrık
-   kare nokta) + italik Bodoni başlık + ince kural + adet.
+   D3: başlıklar artık çıplak değil, açık kahve bir zemin bandı
+   üzerinde. Kaydırırken bölümlerin nerede başlayıp bittiği bandın
+   kendisinden okunuyor. Ana başlığın solunda 3px altın kenar var —
+   bu, kaldırılan "stem" motifinin bant içindeki karşılığı. Alt
+   başlık hiyerarşiyi tonla söylüyor: daha soluk zemin, daha küçük
+   tipografi, altın kenarı yok.
 
-   Düzen iki modda:
-   · fotoğraf öncelikli — FOTO_VAR true ve kategori NO_PHOTO'da değil
+   D1: alt kategoriler için ikinci bir YAPIŞKAN şerit yok. Bölümün
+   başlığının hemen altında yapışkan OLMAYAN bir çip satırı var —
+   bölüm içinde atlama sağlıyor, kalıcı dikey alan tüketmiyor,
+   kaydırırken değişmiyor. Tek gruplu bölümde (İmza Ürünler) çip
+   satırı ve alt başlık hiç basılmıyor.
+
+   "Leo'nun tercihi" rozeti YALNIZCA REFERANSLARDAN OLUŞAN bölümde
+   (İmza Ürünler) basılmaz: başlık zaten seçkiyi söylüyor, her satırda
+   tekrarlamak gürültü ve "tercih" beş üründe birden kullanılınca
+   hero'daki gerçek tercihin anlamı kalmıyor. Rozet ürünün kendi
+   bölümünde duruyor — orada bilgi taşıyor.
+
+   Düzen kararı ALT KATEGORİ bazında (lib/config.ts → NO_PHOTO):
+   · fotoğraf öncelikli — grup NO_PHOTO'da değilse
    · tipografik        — görsel kutusu hiç basılmaz
+   Bu yüzden aynı mokteyl "Mokteyller" altında tipografik, "İmza
+   Ürünler" altında fotoğraf düzeninde durabiliyor.
 
-   Tek fiyatlı kategori (ör. Frozenler: hepsi 250 ₺) fiyatı satır satır
+   Tek fiyatlı grup (ör. Frozenler: hepsi 250 ₺) fiyatı satır satır
    tekrarlamaz; bir kez başlığın altında söyler.
 
-   Ekstralar ürün kartı değil: kategorinin altında tek satır şerit.
+   Ekstralar ürün kartı değil: ait olduğu grubun altında tek satır
+   şerit. Artık gruba da bağlanabiliyorlar — şurup ve ekstra shot
+   "Soğuk Kahveler"in altında duruyor, bütün Soğuk İçecekler'in
+   değil.
 
    `data-reveal` (§9c): belirme KATEGORİ başına bir kez tetiklenir,
-   ürün başına değil — 116 öğe tek tek yanıp sönseydi kaydırma
-   rahatsız ederdi.
+   ürün başına değil.
    ============================================================ */
 import Item from './Item.astro';
-import { extrasFor, type Category } from '../data/menu';
-import { isPhotoCategory } from '../lib/config';
+import { formatPrice, type Section, type Subsection } from '../data/menu';
+import { isPhotoGroup } from '../lib/config';
 
 interface Props {
-  cat: Category;
+  sec: Section;
 }
 
-const { cat } = Astro.props;
-const extras = extrasFor(cat.id);
-const photo = isPhotoCategory(cat.id);
+const { sec } = Astro.props;
 
-const prices = new Set(cat.items.map((i) => i.price));
-const uniformPrice = prices.size === 1 ? cat.items[0]!.price : null;
-/* açıklamalı listeler geniş ekranda üç kolona çıkmaz — kolon daralınca
-   açıklama satırları kırılıyor */
-const hasDesc = cat.items.some((i) => i.desc);
+/** Başlığı olan alt gruplar — çip satırının ve alt başlığın koşulu */
+const named = sec.subs.filter((s) => s.title !== null);
+const showChips = named.length > 1;
+
+const two = (n: number): string => String(n).padStart(2, '0');
+
+/* Grup içinde tüm fiyatlar aynıysa satır satır tekrarlanmaz.
+   null fiyat (teyit bekleyen) bu hesaba girmez — "Tümü —" saçma olurdu. */
+const uniform = (sub: Subsection): number | null => {
+  const prices = sub.items.map((i) => i.price);
+  if (!prices.length || prices.some((p) => p === null)) return null;
+  const first = prices[0]!;
+  return prices.every((p) => p === first) ? first : null;
+};
 ---
 
-<section class="sec" id={cat.id} aria-labelledby={`h-${cat.id}`} data-reveal>
-  <div class="sec-head">
-    <span class="stem" aria-hidden="true"></span>
-    <h2 id={`h-${cat.id}`}>{cat.title}</h2>
+<section class="sec" id={sec.slug} aria-labelledby={`h-${sec.slug}`} data-reveal>
+  <div class="cat-head">
+    <h2 id={`h-${sec.slug}`}>{sec.title}</h2>
     <span class="rule" aria-hidden="true"></span>
-    <span class="n" aria-hidden="true">{String(cat.items.length).padStart(2, '0')}</span>
+    <span class="n" aria-hidden="true">{two(sec.count)}</span>
   </div>
 
-  {uniformPrice !== null && <p class="sec-note">Tümü {uniformPrice} ₺</p>}
+  {showChips && (
+    <nav class="subcats" aria-label={`${sec.title} — alt kategoriler`}>
+      <div class="subcats-scroll">
+        {named.map((sub) => (
+          <a href={`#${sub.slug}`}>{sub.title}</a>
+        ))}
+      </div>
+    </nav>
+  )}
 
-  <div class:list={['items', photo ? 'photo' : 'type', hasDesc && 'has-desc']}>
-    {cat.items.map((item) => (
-      <Item item={item} catId={cat.id} hidePrice={uniformPrice !== null} />
-    ))}
-  </div>
+  {sec.subs.map((sub) => {
+    const photo = isPhotoGroup(sub.slug);
+    const one = uniform(sub);
+    /* açıklamalı listeler geniş ekranda üç kolona çıkmaz — kolon
+       daralınca açıklama satırları kırılıyor */
+    const hasDesc = sub.items.some((i) => i.desc);
 
-  {extras.length > 0 && (
+    return (
+      <section
+        class="sub"
+        id={sub.title ? sub.slug : undefined}
+        aria-labelledby={sub.title ? `h-${sub.slug}` : undefined}
+      >
+        {sub.title && (
+          <div class="sub-head">
+            <h3 id={`h-${sub.slug}`}>{sub.title}</h3>
+            <span class="gap" aria-hidden="true"></span>
+            <span class="n" aria-hidden="true">{two(sub.items.length)}</span>
+          </div>
+        )}
+
+        {one !== null && <p class="sec-note">Tümü {formatPrice(one)}</p>}
+
+        <div class:list={['items', photo ? 'photo' : 'type', hasDesc && 'has-desc']}>
+          {sub.items.map((item) => (
+            <Item
+              item={item}
+              group={sub.slug}
+              hidePrice={one !== null}
+              showPick={!sec.refsOnly}
+            />
+          ))}
+        </div>
+
+        {sub.extras.length > 0 && (
+          <p class="extras">
+            <span class="lbl">Ekstra</span>
+            {/* Astro ifade ile eleman arasındaki boşluğu yutuyor — ad ile
+                fiyat arasındaki ayrım &#32; ile açıkça basılıyor. */}
+            {sub.extras.map((e, i) => (
+              <>
+                {i > 0 && <span class="sq" aria-hidden="true"></span>}
+                <span class="ex">{e.name}&#32;<b>{formatPrice(e.price)}</b></span>
+              </>
+            ))}
+          </p>
+        )}
+      </section>
+    );
+  })}
+
+  {sec.extras.length > 0 && (
     <p class="extras">
       <span class="lbl">Ekstra</span>
-      {/* Astro ifade ile eleman arasındaki boşluğu yutuyor — ad ile fiyat
-          arasındaki ayrım &#32; ile açıkça basılıyor. */}
-      {extras.map((e, i) => (
+      {sec.extras.map((e, i) => (
         <>
           {i > 0 && <span class="sq" aria-hidden="true"></span>}
-          <span class="ex">{e.name}&#32;<b>{e.price}</b>&#32;₺</span>
+          <span class="ex">{e.name}&#32;<b>{formatPrice(e.price)}</b></span>
         </>
       ))}
     </p>

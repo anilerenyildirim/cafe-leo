@@ -2,9 +2,9 @@
 /* ============================================================
    /lounge — Leo Lounge.
 
-   Menü verisi henüz yok (menu.ts → VENUES[lounge].categories = null).
+   Menü verisi henüz yok (menu.json → venues[lounge].sections = null).
    Sayfa YAPISAL OLARAK /menu ile aynı iskelette: aynı Base, aynı Bar,
-   aynı Hero, aynı Foot. Veri geldiğinde tek yapılacak menu.ts'i
+   aynı Hero, aynı Foot. Veri geldiğinde tek yapılacak menu.json'u
    doldurmak; buradaki koşul kendiliğinden menüye döner.
 
    AMA İSKELET DEĞİL, TASARLANMIŞ EKRAN (§6). Sunumda anahtara
@@ -32,7 +32,7 @@ import Foot from '../components/Foot.astro';
 import { VENUES } from '../data/menu';
 
 const venue = VENUES.find((v) => v.key === 'lounge')!;
-const cats = venue.categories ? [...venue.categories].sort((a, b) => a.order - b.order) : null;
+const sections = venue.sections;
 ---
 
 <Base
@@ -51,11 +51,11 @@ const cats = venue.categories ? [...venue.categories].sort((a, b) => a.order - b
       <Hero venue={venue} />
     </div>
 
-    {cats ? (
+    {sections ? (
       <>
-        <Rail cats={cats} />
+        <Rail sections={sections} />
         <main id="menu">
-          {cats.map((c) => <Section cat={c} />)}
+          {sections.map((s) => <Section sec={s} />)}
         </main>
       </>
     ) : (

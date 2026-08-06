@@ -1,0 +1,516 @@
+{
+  "schema": 1,
+  "locales": { "default": "tr", "enabled": ["tr"] },
+
+  "venues": [
+    {
+      "slug": "cafe",
+      "name": { "tr": "Cafe Leo" },
+      "eyebrow": { "tr": "Kafe & Teras · Sinanoba" },
+      "tagline": { "tr": "Sabah kahvesinden gün batımına, terasta." },
+      "contact": {
+        "address": "Sinanoba, Mustafa Kemal Blv. No:54, Büyükçekmece",
+        "phone": "+905431779663",
+        "instagram": "https://www.instagram.com/cafeleoteras/",
+        "mapsUrl": "https://www.google.com/maps/search/?api=1&query=40.9957484,28.5397417&query_place_id=ChIJO89T4VBntRQR32ZYApreDUI"
+      },
+      "hours": {
+        "0": [10, 24], "1": [10, 24], "2": [10, 24], "3": [10, 24],
+        "4": [10, 24], "5": [10, 24], "6": [10, 24]
+      },
+      "hoursText": { "tr": "Her gün 10.00 – 00.00" },
+      "hero": "leo-burger",
+      "featured": [
+        "leo-waffle",
+        "leo-burger",
+        "leo-pizza",
+        "burrata-peynirli-pizza",
+        "san-sebastian",
+        "kahvalti-tabagi",
+        "ice-americano",
+        "cilekli-kruvasan"
+      ],
+
+      "sections": [
+        {
+          "slug": "imza-urunler",
+          "name": { "tr": "İmza Ürünler" },
+          "vat": null,
+          "subsections": [
+            {
+              "slug": "imza-urunler",
+              "name": null,
+              "items": [
+                "leo-pizza",
+                "leo-waffle",
+                "leo-sufle",
+                "karpuz-bogurtlen-limonata",
+                "hibiscus-yaban-mersini"
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "sicak-icecekler",
+          "name": { "tr": "Sıcak İçecekler" },
+          "vat": 10,
+          "subsections": [
+            {
+              "slug": "kahveler",
+              "name": { "tr": "Kahveler" },
+              "items": [
+                { "slug": "turk-kahvesi", "name": { "tr": "Türk Kahvesi" }, "price": 17500 },
+                { "slug": "double-turk-kahvesi", "name": { "tr": "Double Türk Kahvesi" }, "price": 20000 },
+                { "slug": "espresso", "name": { "tr": "Espresso" }, "price": 17500 },
+                { "slug": "double-espresso", "name": { "tr": "Double Espresso" }, "price": 20000 },
+                { "slug": "cortado", "name": { "tr": "Cortado" }, "price": 18000 },
+                { "slug": "americano", "name": { "tr": "Americano" }, "price": 22000 },
+                { "slug": "filtre-kahve", "name": { "tr": "Filtre Kahve" }, "price": 19000 },
+                { "slug": "misto", "name": { "tr": "Misto" }, "price": 22000 },
+                { "slug": "flat-white", "name": { "tr": "Flat White" }, "price": 24000 },
+                { "slug": "latte", "name": { "tr": "Latte" }, "price": 24000 },
+                { "slug": "cappuccino", "name": { "tr": "Cappuccino" }, "price": 24000 },
+                { "slug": "mocha", "name": { "tr": "Mocha" }, "price": 24000 },
+                { "slug": "white-mocha", "name": { "tr": "White Mocha" }, "price": 25000 },
+                { "slug": "caramel-latte", "name": { "tr": "Caramel Latte" }, "price": 25000 },
+                { "slug": "vanilla-latte", "name": { "tr": "Vanilla Latte" }, "price": 25000 },
+                { "slug": "caramel-macchiato", "name": { "tr": "Caramel Macchiato" }, "price": 25000, "note": "fix: \"CARAMEL MACCIHATO\" → Macchiato" }
+              ]
+            },
+            {
+              "slug": "caylar",
+              "name": { "tr": "Çaylar" },
+              "items": [
+                { "slug": "cay", "name": { "tr": "Çay" }, "price": 8500 },
+                { "slug": "buyuk-cay", "name": { "tr": "Büyük Çay" }, "price": 9500 },
+                { "slug": "kupa-cay", "name": { "tr": "Kupa Çay" }, "price": 11500 },
+                { "slug": "bitki-cayi", "name": { "tr": "Bitki Çayı" }, "price": 22000 }
+              ]
+            },
+            {
+              "slug": "diger-sicaklar",
+              "name": { "tr": "Diğer Sıcaklar" },
+              "items": [
+                { "slug": "sicak-cikolata", "name": { "tr": "Sıcak Çikolata" }, "price": 24000 },
+                { "slug": "salep", "name": { "tr": "Salep" }, "price": 25000 },
+                { "slug": "portakalli-salep", "name": { "tr": "Portakallı Salep" }, "price": 26000 },
+                { "slug": "balli-sut", "name": { "tr": "Ballı Süt" }, "price": 24000 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "tatlilar",
+          "name": { "tr": "Tatlılar" },
+          "vat": 10,
+          "subsections": [
+            {
+              "slug": "firin-tatlilari",
+              "name": { "tr": "Fırın Tatlıları" },
+              "items": [
+                { "slug": "leo-waffle", "name": { "tr": "Leo Waffle" }, "price": 51000, "badges": ["leo-pick"] },
+                { "slug": "leo-sufle", "name": { "tr": "Leo Sufle" }, "price": 30000, "badges": ["leo-pick"] },
+                { "slug": "cilekli-kruvasan", "name": { "tr": "Çilekli Kruvasan" }, "price": 54000 },
+                { "slug": "kruvasan", "name": { "tr": "Kruvasan" }, "price": 24000 },
+                { "slug": "brownie", "name": { "tr": "Brownie" }, "price": 36000 },
+                { "slug": "cookie-pie", "name": { "tr": "Cookie Pie" }, "price": 32000 },
+                { "slug": "nata", "name": { "tr": "Nata" }, "price": 18000 }
+              ]
+            },
+            {
+              "slug": "pastalar",
+              "name": { "tr": "Pastalar" },
+              "items": [
+                { "slug": "san-sebastian", "name": { "tr": "San Sebastian" }, "price": 36000, "badges": ["leo-pick"] },
+                { "slug": "limonlu-cheesecake", "name": { "tr": "Limonlu Cheesecake" }, "price": 30000 },
+                { "slug": "cilekli-pasta", "name": { "tr": "Çilekli Pasta" }, "price": 36000 },
+                { "slug": "cikolatali-pasta", "name": { "tr": "Çikolatalı Pasta" }, "price": 36000, "note": "fix: \"ÇİKOLATLI\" → Çikolatalı (5 üründe)" },
+                { "slug": "cilekli-cikolatali-pasta", "name": { "tr": "Çilekli Çikolatalı Pasta" }, "price": 36000 },
+                { "slug": "frambuaz-cikolatali-pasta", "name": { "tr": "Frambuaz Çikolatalı Pasta" }, "price": 36000 },
+                { "slug": "cilekli-rulo-pasta", "name": { "tr": "Çilekli Rulo Pasta" }, "price": 33000 },
+                { "slug": "frambuaz-cikolatali-rulo-pasta", "name": { "tr": "Frambuaz Çikolatalı Rulo Pasta" }, "price": 33000 }
+              ]
+            },
+            {
+              "slug": "dondurmali",
+              "name": { "tr": "Dondurmalı" },
+              "items": [
+                { "slug": "dondurmali-brownie", "name": { "tr": "Dondurmalı Brownie" }, "price": 47500, "note": "\"X Dondurmalı\" → \"Dondurmalı X\"" },
+                { "slug": "dondurmali-sufle", "name": { "tr": "Dondurmalı Sufle" }, "price": 41500 },
+                { "slug": "dondurmali-cookie-pie", "name": { "tr": "Dondurmalı Cookie Pie" }, "price": 43500 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "soguk-icecekler",
+          "name": { "tr": "Soğuk İçecekler" },
+          "vat": 10,
+          "subsections": [
+            {
+              "slug": "mokteyller",
+              "name": { "tr": "Mokteyller" },
+              "items": [
+                { "slug": "karpuz-bogurtlen-limonata", "name": { "tr": "Karpuz & Böğürtlen Limonata" }, "price": 29000 },
+                { "slug": "hibiscus-yaban-mersini", "name": { "tr": "Hibiscus & Yaban Mersini" }, "price": 29000 },
+                { "slug": "cool-lime", "name": { "tr": "Cool Lime" }, "price": 28000 },
+                { "slug": "pina-colada", "name": { "tr": "Pina Colada" }, "price": 28000 }
+              ]
+            },
+            {
+              "slug": "soguk-kahveler",
+              "name": { "tr": "Soğuk Kahveler" },
+              "items": [
+                { "slug": "ice-americano", "name": { "tr": "Ice Americano" }, "price": 24000 },
+                { "slug": "ice-latte", "name": { "tr": "Ice Latte" }, "price": 25000 },
+                { "slug": "ice-vanilla-latte", "name": { "tr": "Ice Vanilla Latte" }, "price": 26000 },
+                { "slug": "ice-caramel-latte", "name": { "tr": "Ice Caramel Latte" }, "price": 26000 },
+                { "slug": "ice-mocha", "name": { "tr": "Ice Mocha" }, "price": 26000 },
+                { "slug": "ice-white-mocha", "name": { "tr": "Ice White Mocha" }, "price": 26000, "note": "fix: \"ICE WHİTE MOCHA\" — Türkçe İ" },
+                { "slug": "ice-caramel-macchiato", "name": { "tr": "Ice Caramel Macchiato" }, "price": 27500, "note": "fix: \"ICE KARAMEL MACCHIATO\" → sıcak versiyonuyla aynı yazım" },
+                { "slug": "affogato", "name": { "tr": "Affogato" }, "price": 30000, "badges": ["leo-pick"] }
+              ]
+            },
+            {
+              "slug": "milkshakeler",
+              "name": { "tr": "Milkshakeler" },
+              "items": [
+                { "slug": "cikolatali-milkshake", "name": { "tr": "Çikolatalı Milkshake" }, "price": 26000, "note": "\"Milkshake X\" → \"X'li Milkshake\"" },
+                { "slug": "cilekli-milkshake", "name": { "tr": "Çilekli Milkshake" }, "price": 26000 },
+                { "slug": "muzlu-milkshake", "name": { "tr": "Muzlu Milkshake" }, "price": 26000 },
+                { "slug": "karamelli-milkshake", "name": { "tr": "Karamelli Milkshake" }, "price": 26000 },
+                { "slug": "vanilyali-milkshake", "name": { "tr": "Vanilyalı Milkshake" }, "price": 26000 },
+                { "slug": "oreo-milkshake", "name": { "tr": "Oreo Milkshake" }, "price": 27000 },
+                { "slug": "lotus-milkshake", "name": { "tr": "Lotus Milkshake" }, "price": 27000 },
+                { "slug": "brownie-milkshake", "name": { "tr": "Brownie Milkshake" }, "price": 27000 }
+              ]
+            },
+            {
+              "slug": "frozenler",
+              "name": { "tr": "Frozenler" },
+              "items": [
+                { "slug": "cilekli-frozen", "name": { "tr": "Çilekli Frozen" }, "price": 25000 },
+                { "slug": "mango-frozen", "name": { "tr": "Mango Frozen" }, "price": 25000 },
+                { "slug": "yesil-elma-frozen", "name": { "tr": "Yeşil Elma Frozen" }, "price": 25000 },
+                { "slug": "karpuz-frozen", "name": { "tr": "Karpuz Frozen" }, "price": 25000 },
+                { "slug": "karadut-frozen", "name": { "tr": "Karadut Frozen" }, "price": 25000 },
+                { "slug": "ananas-frozen", "name": { "tr": "Ananas Frozen" }, "price": 25000 },
+                { "slug": "kavun-frozen", "name": { "tr": "Kavun Frozen" }, "price": 25000 },
+                { "slug": "seftali-frozen", "name": { "tr": "Şeftali Frozen" }, "price": 25000 },
+                { "slug": "passion-fruit-frozen", "name": { "tr": "Passion Fruit Frozen" }, "price": 25000 }
+              ]
+            },
+            {
+              "slug": "mesrubatlar",
+              "name": { "tr": "Meşrubatlar" },
+              "items": [
+                { "slug": "leo-limonata", "name": { "tr": "Leo Limonata" }, "price": 17500, "badges": ["leo-pick"] },
+                { "slug": "cilekli-limonata", "name": { "tr": "Çilekli Limonata" }, "price": 18000 },
+                { "slug": "sikma-portakal-suyu", "name": { "tr": "Sıkma Portakal Suyu" }, "price": 26000 },
+                { "slug": "kola", "name": { "tr": "Kola" }, "price": 12500 },
+                { "slug": "sprite", "name": { "tr": "Sprite" }, "price": 12500 },
+                { "slug": "sade-soda", "name": { "tr": "Sade Soda" }, "price": 12500 },
+                { "slug": "churchill", "name": { "tr": "Churchill" }, "price": 19000 },
+                { "slug": "red-bull", "name": { "tr": "Red Bull" }, "price": 18000 },
+                { "slug": "su", "name": { "tr": "Su" }, "price": 6000 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "yiyecekler",
+          "name": { "tr": "Yiyecekler" },
+          "vat": 20,
+          "subsections": [
+            {
+              "slug": "kahvalti",
+              "name": { "tr": "Kahvaltı" },
+              "items": [
+                {
+                  "slug": "kahvalti-tabagi",
+                  "name": { "tr": "Kahvaltı Tabağı" },
+                  "description": { "tr": "Piliç sosis, omlet, tereyağlı kruvasan, mantar, roka, fırın cherry domates, rende kaşar" },
+                  "price": 55000,
+                  "note": "fix: \"sosıs\" → sosis"
+                },
+                {
+                  "slug": "omlet",
+                  "name": { "tr": "Omlet" },
+                  "description": { "tr": "2 köy yumurtası, roka, cherry domates" },
+                  "price": 25000
+                },
+                {
+                  "slug": "kasarli-omlet",
+                  "name": { "tr": "Kaşarlı Omlet" },
+                  "description": { "tr": "2 köy yumurtası, rende kaşar, roka, cherry domates" },
+                  "price": 27500
+                },
+                {
+                  "slug": "mantarli-omlet",
+                  "name": { "tr": "Mantarlı Omlet" },
+                  "description": { "tr": "2 köy yumurtası, mantar, roka, cherry domates" },
+                  "price": 30000
+                }
+              ]
+            },
+            {
+              "slug": "atistirmaliklar",
+              "name": { "tr": "Atıştırmalıklar" },
+              "items": [
+                {
+                  "slug": "yumurtali-somon-fume-eksi-maya",
+                  "name": { "tr": "Yumurtalı Somon Füme · Ekşi Maya" },
+                  "description": { "tr": "Avokado, somon füme, göz yumurta, kızarmış ekşi maya ekmek, Akdeniz yeşillikleri, salatalık, domates, mısır, siyah zeytin, zeytinyağlı limon sos" },
+                  "price": 47000
+                },
+                {
+                  "slug": "somon-fume-labne-eksi-maya",
+                  "name": { "tr": "Somon Füme & Labne · Ekşi Maya" },
+                  "description": { "tr": "Avokado, somon füme, labne, göz yumurta, kızarmış ekşi maya ekmek, Akdeniz yeşillikleri, salatalık, cherry domates, siyah zeytin, mısır, zeytinyağlı limon sos" },
+                  "price": 45000
+                },
+                {
+                  "slug": "yumurtali-pastirma-eksi-maya",
+                  "name": { "tr": "Yumurtalı Pastırma · Ekşi Maya" },
+                  "description": { "tr": "Avokado, kızarmış ekşi maya ekmek, göz yumurta, zeytinyağlı pastırma, roka, salatalık, cherry domates, siyah zeytin, mısır, zeytinyağlı limon sos" },
+                  "price": 42000
+                },
+                {
+                  "slug": "mozzarella-eksi-maya",
+                  "name": { "tr": "Mozzarella · Ekşi Maya" },
+                  "description": { "tr": "Suda mozzarella, roka, domates, kızarmış ekşi maya ekmek, pesto sos, Akdeniz yeşillikleri, salatalık, cherry domates, mısır, siyah zeytin, zeytinyağlı limon sos" },
+                  "price": 36000
+                },
+                {
+                  "slug": "kruvasan-dana-jambon",
+                  "name": { "tr": "Kruvasan · Dana Jambon" },
+                  "description": { "tr": "Labne, roka, dana jambon, çedar, zeytinyağı" },
+                  "price": 58000,
+                  "note": "fix: \"DANAJAMBON\" → Dana Jambon"
+                },
+                {
+                  "slug": "kruvasan-hindi-fume",
+                  "name": { "tr": "Kruvasan · Hindi Füme" },
+                  "description": { "tr": "Labne, leo sos, marul, hindi füme, domates, çedar, rende kaşar, zeytinyağı" },
+                  "price": 56000
+                },
+                {
+                  "slug": "kruvasan-mozzarella",
+                  "name": { "tr": "Kruvasan · Mozzarella" },
+                  "description": { "tr": "Pesto sos, roka, mozzarella, domates, zeytinyağı" },
+                  "price": 53000
+                },
+                {
+                  "slug": "club-sandvic",
+                  "name": { "tr": "Club Sandviç" },
+                  "description": { "tr": "Tavuk bonfile, marul, turşu, domates, sarımsaklı mayonez, baharatlı patates" },
+                  "price": 50000,
+                  "note": "fix: \"CLUP\" → Club"
+                },
+                {
+                  "slug": "4-peynirli-tost",
+                  "name": { "tr": "4 Peynirli Tost" },
+                  "description": { "tr": "Kaşar, çedar, beyaz peynir, parmesan, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin" },
+                  "price": 35000,
+                  "note": "fix: \"maydonoz\" → maydanoz (6 üründe), \"pulbiberli\" → pul biberli"
+                },
+                {
+                  "slug": "kasarli-tost",
+                  "name": { "tr": "Kaşarlı Tost" },
+                  "description": { "tr": "Dilim kaşar, salatalık, cherry domates, maydanoz, kekikli pul biberli karışık zeytin" },
+                  "price": 32000
+                },
+                {
+                  "slug": "karisik-tost",
+                  "name": { "tr": "Karışık Tost" },
+                  "description": { "tr": "Sucuk, dilim kaşar, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin" },
+                  "price": 35000
+                },
+                {
+                  "slug": "kavurmali-kasarli-tost",
+                  "name": { "tr": "Kavurmalı Kaşarlı Tost" },
+                  "description": { "tr": "Kavurma, dilim kaşar, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin" },
+                  "price": 42000
+                },
+                {
+                  "slug": "bazlama-tost",
+                  "name": { "tr": "Bazlama Tost" },
+                  "description": { "tr": "Sucuk, dilim kaşar, pesto sos, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin" },
+                  "price": 37000
+                },
+                {
+                  "slug": "frankfurter-tabagi",
+                  "name": { "tr": "Frankfurter Tabağı" },
+                  "description": { "tr": "2 piliç sosis, patates, çedarlı mantar, roka, cherry domates, rende kaşar" },
+                  "price": 55000
+                },
+                {
+                  "slug": "patates-kizartmasi",
+                  "name": { "tr": "Patates Kızartması" },
+                  "price": 30000
+                }
+              ]
+            },
+            {
+              "slug": "ana-yemekler",
+              "name": { "tr": "Ana Yemekler" },
+              "items": [
+                {
+                  "slug": "leo-burger",
+                  "name": { "tr": "Leo Burger" },
+                  "description": { "tr": "140 g köfte, çedar, turşu, domates, karamelize soğan, leo sos, baharatlı patates" },
+                  "price": 73000,
+                  "badges": ["leo-pick"]
+                },
+                {
+                  "slug": "sarkuteri-burger",
+                  "name": { "tr": "Şarküteri Burger" },
+                  "description": { "tr": "140 g köfte, turşu, domates, karamelize soğan, füme et, dana jambon, suda mozzarella, leo sos, baharatlı patates" },
+                  "price": 82000,
+                  "note": "fix: \"loe sos\" → leo sos"
+                },
+                {
+                  "slug": "hot-dog",
+                  "name": { "tr": "Hot Dog" },
+                  "description": { "tr": "Kıyma, karamelize soğan, dana sosis, füme et, leo sos, soğan çıtırı, baharatlı patates" },
+                  "price": 59000
+                },
+                {
+                  "slug": "leo-pizza",
+                  "name": { "tr": "Leo Pizza" },
+                  "description": { "tr": "Pizza sos, mozzarella, karides, kalamar, karamelize soğan, kapari çiçeği, fesleğen, rende parmesan" },
+                  "price": 118000,
+                  "badges": ["leo-pick"],
+                  "note": "fix: \"kaparı\" → kapari"
+                },
+                {
+                  "slug": "burrata-peynirli-pizza",
+                  "name": { "tr": "Burrata Peynirli Pizza" },
+                  "description": { "tr": "Burrata, pizza sos, mozzarella, mortadella, fesleğen, rende parmesan" },
+                  "price": 108000,
+                  "note": "fix: \"Buratta\" → Burrata"
+                },
+                {
+                  "slug": "dana-ham-pizza",
+                  "name": { "tr": "Dana Ham Pizza" },
+                  "description": { "tr": "Pizza sos, mozzarella, dana füme et, fesleğen, rende parmesan" },
+                  "price": 90000,
+                  "note": "TEYİT: ad \"Dana Ham Pizza\", açıklama \"dana füme et\" diyor · fix: \"permasan\" → parmesan"
+                },
+                {
+                  "slug": "margarita-pizza",
+                  "name": { "tr": "Margarita Pizza" },
+                  "description": { "tr": "Pizza sos, mozzarella, cherry domates, pesto sos, fesleğen, rende parmesan" },
+                  "price": 65000
+                },
+                {
+                  "slug": "bonfile",
+                  "name": { "tr": "Bonfile" },
+                  "description": { "tr": "180 g marine bonfile, baby patates, mantar-soğan-maydanoz mix" },
+                  "price": 110000
+                },
+                {
+                  "slug": "tavuk-snitzel",
+                  "name": { "tr": "Tavuk Şnitzel" },
+                  "description": { "tr": "180 g tavuk bonfile, limon, tereyağı, baharatlı patates" },
+                  "price": 70000,
+                  "note": "fix: \"ŞİNİTZEL\" → Şnitzel"
+                },
+                {
+                  "slug": "karidesli-fettuccine",
+                  "name": { "tr": "Karidesli Fettuccine" },
+                  "description": { "tr": "Karides, domates sos, acı sos, pesto sos" },
+                  "price": 75000,
+                  "note": "fix: \"FETTUCİNİ\" → Fettuccine"
+                },
+                {
+                  "slug": "bonfileli-alfredo",
+                  "name": { "tr": "Bonfileli Alfredo" },
+                  "description": { "tr": "Krema, mantar, soğan, pesto sos" },
+                  "price": 70000
+                },
+                {
+                  "slug": "tavuklu-alfredo",
+                  "name": { "tr": "Tavuklu Alfredo" },
+                  "description": { "tr": "Krema, mantar, renkli biberler, pesto sos" },
+                  "price": 65000
+                },
+                {
+                  "slug": "bolonez-soslu-spagetti",
+                  "name": { "tr": "Bolonez Soslu Spagetti" },
+                  "description": { "tr": "Domates sos, kıyma, pesto sos" },
+                  "price": 58000
+                },
+                {
+                  "slug": "penne-arrabbiata",
+                  "name": { "tr": "Penne Arrabbiata" },
+                  "description": { "tr": "Domates sos, acı sos, siyah zeytin, pesto sos" },
+                  "price": 45000,
+                  "note": "fix: \"ARABİATA\" → Arrabbiata"
+                }
+              ]
+            },
+            {
+              "slug": "salatalar",
+              "name": { "tr": "Salatalar" },
+              "items": [
+                {
+                  "slug": "deniz-mahsullu-salata",
+                  "name": { "tr": "Deniz Mahsullü Salata" },
+                  "description": { "tr": "Mix deniz mahsulü, Akdeniz yeşillikleri, yeşil zeytin, kapari çiçeği, kırmızı soğan, zeytinyağlı limon sos" },
+                  "price": 90000,
+                  "note": "fix: \"MAHSÜLLÜ\" → Mahsullü"
+                },
+                {
+                  "slug": "sezar-salata",
+                  "name": { "tr": "Sezar Salata" },
+                  "description": { "tr": "120 g tavuk bonfile, marul, sezar sos, kruton, cherry domates" },
+                  "price": 59000,
+                  "note": "fix: \"kroton\" → kruton"
+                },
+                {
+                  "slug": "akdeniz-peynirli-salata",
+                  "name": { "tr": "Akdeniz Peynirli Salata" },
+                  "description": { "tr": "Akdeniz yeşillikleri, köz kırmızı biber, siyah zeytin, beyaz peynir, cherry domates, salatalık, zeytinyağlı limon sos, pul biber, kekik" },
+                  "price": 46000
+                }
+              ]
+            }
+          ]
+        }
+      ],
+
+      "extras": [
+        { "slug": "ekstra-shot", "name": { "tr": "Ekstra Shot" }, "price": 7000, "appliesTo": ["sicak-icecekler", "soguk-kahveler"] },
+        { "slug": "surup", "name": { "tr": "Şurup" }, "price": 6000, "appliesTo": ["sicak-icecekler", "soguk-kahveler"] },
+        { "slug": "laktozsuz-sut", "name": { "tr": "Laktozsuz Süt" }, "price": 5500, "appliesTo": ["sicak-icecekler", "soguk-kahveler"] },
+        { "slug": "ekstra-sut", "name": { "tr": "Ekstra Süt" }, "price": 5000, "appliesTo": ["sicak-icecekler", "soguk-kahveler"] },
+        { "slug": "bal", "name": { "tr": "Bal" }, "price": 5000, "appliesTo": ["sicak-icecekler"] },
+        { "slug": "ek-sos", "name": { "tr": "Ek Sos" }, "price": 8500, "appliesTo": ["tatlilar"] }
+      ]
+    },
+
+    {
+      "slug": "lounge",
+      "name": { "tr": "Leo Lounge" },
+      "eyebrow": { "tr": "Lounge · Ünlüsoy Caddesi" },
+      "tagline": { "tr": "Işık kısılır, gün üzerinden düşer." },
+      "contact": {
+        "address": "Sinanoba, Ünlüsoy Cd., Büyükçekmece",
+        "phone": null,
+        "instagram": null,
+        "mapsUrl": "https://www.google.com/maps/search/?api=1&query=40.9985511,28.5438501&query_place_id=ChIJo3xPAABntRQRV_qZNT6yuG8"
+      },
+      "hours": null,
+      "hoursText": null,
+      "hero": null,
+      "featured": [],
+      "sections": null,
+      "extras": []
+    }
+  ]
+}

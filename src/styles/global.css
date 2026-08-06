@@ -101,8 +101,8 @@
      rengi değil, animasyonun tepe noktası.
      --shine-0 aynı rengin ALFA 0 hâli; `transparent` yazılmıyor
      (o şeffaf SİYAHtır ve araya gri bir halka sokar). */
-  --shine: #876712;
-  --shine-0: rgba(135, 103, 18, 0);
+  --shine: rgba(216, 181, 35, .30);
+  --shine-0: rgba(216, 181, 35, 0);
 }
 
 /* ---------- Leo Lounge — siyah + koyu ahşap ---------- */
@@ -123,7 +123,7 @@
 
   /* Loşta parıltı sıcak beyaz. rgba(255,246,216,·) ailesinden —
      saf beyaz burada soğuk ve keskin duruyordu. */
-  --shine: #FFF6D8;
+  --shine: rgba(255, 246, 216, .22);
   --shine-0: rgba(255, 246, 216, 0);
 }
 
@@ -327,57 +327,81 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 @media (hover: hover) {
   .seg a:not([aria-current]):hover { color: var(--text); border-color: var(--gold-leaf); }
   /* İşaretçi üzerindeyken parıltının işi bitti: keşif zaten oldu.
-     Dalga durur, metin düz hover rengine döner. */
-  .seg a:not([aria-current]):hover .seg-t {
-    animation-play-state: paused;
-    background-image: none;
-    -webkit-background-clip: border-box;
-    background-clip: border-box;
-    color: var(--text);
-  }
+     Kenarlık animasyonu duraklatılmıyor KAPATILIYOR — duraklatılsaydı
+     parlama anında yakalanan altın kenar orada asılı kalırdı. Kapanınca
+     kural yukarıdaki :hover kenarına (altın) düşüyor, sıçrama olmuyor. */
+  .seg a:not([aria-current]):hover { animation: none; }
+  .seg a:not([aria-current]):hover::after { animation-play-state: paused; opacity: 0; }
 }
 
-/* Parıltı — 4 saniyede bir soldan sağa, YALNIZ PASİF segmentte.
+/* Parıltı — 10 saniyede bir soldan sağa, YALNIZ PASİF segmentte.
    Aktif zaten belli; keşfedilmesi gereken diğerinin tıklanabilir
    olduğu. Kontrolün görünürlüğü buna yaslanmıyor: kapsül parıltı
    olmadan da (reduced-motion) anahtarı anahtar gibi gösteriyor.
 
-   ÜÇ TUZAK, üçünden de kaçınıldı:
+   EFEKT METİNDEN KAPSÜLE TAŞINDI. Önce `background-clip: text` ile
+   harflerin üzerinde geziyordu; 10.5px'lik harf aralıklı büyük harfte
+   o kadar küçük bir yüzey kalıyor ki efekt fark edilmedi — kaldırıldı
+   sanıldı. Artık kapsülün TAMAMINDA gezen bir altın ışıma: aynı
+   hareket, kat kat büyük yüzey.
+
+   Yan fayda: `color: transparent` + iki katmanlı text-clip numarası
+   tamamen gitti. Metin her karede normal metin.
+
+   İKİ TUZAK, ikisinden de kaçınıldı:
 
    · Gradyanda `transparent` YOK — `transparent` şeffaf SİYAHtır ve
      renkli bir stop'tan ona interpolasyon gri bir halka bırakır.
      Uçlarda aynı rengin alfa-0 hâli (--shine-0) duruyor.
 
-   · İKİ KATMAN. Tek katman denendi ve pasif segment GÖRÜNMEZ oldu:
-     dalga kutunun dışına çıktığı bekleme fazında boyanacak hiçbir
-     şey kalmıyor, `color: transparent` de metni yok ediyordu. Alttaki
-     ikinci katman düz --muted dolgusu — parıltı nerede olursa olsun
-     metin her karede basılı.
-
    · Bekleme fazı KEYFRAME YÜZDESİNDE, `animation-delay` ile değil.
      animation-delay yalnız ilk turda çalışır; sonraki turlarda
-     parıltılar arka arkaya gelirdi. %22'de dalga bitiyor, %100'e
-     kadar aynı yerde bekliyor.
+     parıltılar arka arkaya gelirdi. %9'da dalga bitiyor (~0.9 sn),
+     %100'e kadar aynı yerde bekliyor.
 
-   Yön: %160 → -%60 soldan sağa. (Konum yüzdesi kutu ile görüntü
-   farkına oranlıdır; 220% boyutta %160 kutunun soluna, -%60 sağına
-   düşüyor.) */
-.seg a:not([aria-current]) .seg-t {
-  background-image:
-    linear-gradient(100deg, var(--shine-0) 42%, var(--shine) 50%, var(--shine-0) 58%),
-    linear-gradient(var(--muted), var(--muted));
-  background-size: 220% 100%, 100% 100%;
-  background-position: 160% center, 0 0;
+   TON ÖLÇÜLDÜ: altın dolgu %30'da tutuldu. Daha güçlüsü daha görünür
+   ama dalganın tepe anında --muted metnin kontrastı 4.5:1'in altına
+   iniyor (%40'ta 4.37, %55'te 3.96). %30'da tepe noktasında bile
+   4.67:1.
+
+   Yön: %165 → -%65 soldan sağa. */
+.seg a:not([aria-current]) {
+  position: relative;
+  overflow: hidden;
+  /* Kenarlık da aynı anda parlıyor. Işımanın tonunu yükseltmek metin
+     kontrastını düşürüyor (bkz. yukarıdaki ölçüm), kenarlık ise
+     metnin altında değil YANINDA — görünürlüğü bedelsiz artırıyor. */
+  animation: toggle-edge 10s ease-in-out infinite;
+}
+/* metin ışımanın üstünde kalsın */
+.seg a:not([aria-current]) .seg-t { position: relative; z-index: 1; }
+
+@keyframes toggle-edge {
+  0%   { border-color: var(--line); }
+  4%   { border-color: var(--gold-leaf); }
+  9%   { border-color: var(--line); }
+  100% { border-color: var(--line); }
+}
+
+.seg a:not([aria-current])::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    105deg,
+    var(--shine-0) 38%,
+    var(--shine) 50%,
+    var(--shine-0) 62%
+  );
+  background-size: 240% 100%;
+  background-position: 165% center;
   background-repeat: no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: toggle-shine 4s ease-in-out infinite;
+  animation: toggle-shine 10s ease-in-out infinite;
 }
 @keyframes toggle-shine {
-  0%   { background-position: 160% center, 0 0; }
-  22%  { background-position: -60% center, 0 0; }
-  100% { background-position: -60% center, 0 0; }
+  0%   { background-position: 165% center; }
+  9%   { background-position: -65% center; }
+  100% { background-position: -65% center; }
 }
 
 /* ============================================================
@@ -563,6 +587,39 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 }
 :root[data-venue="lounge"] .reco {
   background: color-mix(in oklch, #C9A03C 8%, transparent);
+}
+
+/* BANT BU BÖLÜMDE YÜKSELTİLMİŞ YÜZEY.
+   Menüdeki bantlar --bg üzerinde durduğu için kahve tonlarıyla
+   kendiliğinden ayrışıyor. Burada zemin de kahve olunca iki ton
+   birbirine karıştı — üstelik bandın sağ ucu (%4) zeminin kendisinden
+   (%8) daha soluktu, yani bant zeminin ALTINA düşüyordu.
+
+   Çözüm sistemin kendi yükseltme dili: zeminden AÇIK bir yüzey +
+   kartlarla birebir aynı gölge. Bant artık zeminin üstünde duran bir
+   plaka gibi okunuyor. Başlık dili değişmedi — hâlâ bant + sol altın
+   kenar; değişen yalnız yüzeyin tonu ve derinliği. */
+.reco .cat-head {
+  background:
+    linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+    linear-gradient(158deg,
+      var(--bg) 0%,
+      color-mix(in oklch, var(--bg) 80%, transparent) 100%);
+  box-shadow:
+    0 1px 2px rgba(60, 44, 12, .05),
+    0 10px 28px -12px rgba(60, 44, 12, .20);
+}
+/* Loşta yükseltme yine AÇIĞA doğru: --bg zeminden koyu olduğu için
+   plaka amber bir tonla kaldırılıyor, gölge de karanlığa göre derin. */
+:root[data-venue="lounge"] .reco .cat-head {
+  background:
+    linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+    linear-gradient(158deg,
+      color-mix(in oklch, #C9A03C 22%, var(--bg)) 0%,
+      color-mix(in oklch, #C9A03C 10%, var(--bg)) 100%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, .35),
+    0 10px 28px -12px rgba(0, 0, 0, .8);
 }
 
 /* Şerit bölümün dolgusunu aşıp kenara kadar akıyor — kartlar zeminin
@@ -1197,16 +1254,10 @@ footer .note { margin-top: 12px; }
      değil, bir hareket biçimi. Kapatmak erişimi bozardı. */
 
   /* (f) mekan anahtarı parıltısı DURUR — ama kontrol belirgin kalır.
-     Dolgulu kapsül parıltıdan bağımsız; burada yalnız dalga düşüyor.
-     background-clip: text geri alınmazsa metin şeffaf kalır ve pasif
-     segment görünmez olurdu — bu yüzden üç satır birden. */
-  .seg a:not([aria-current]) .seg-t {
-    animation: none;
-    background-image: none;
-    -webkit-background-clip: border-box;
-    background-clip: border-box;
-    color: var(--muted);
-  }
+     Dolgulu kapsül parıltıdan bağımsız; burada yalnız ışıma düşüyor.
+     Metin zaten normal metin, geri alınacak bir şey yok. */
+  .seg a:not([aria-current]) { animation: none; }
+  .seg a:not([aria-current])::after { animation: none; background-image: none; }
 
   /* (g) öne çıkan kartın yükselmesi kapalı; odak halkası ve imleç
      duruyor — tıklanabilirlik hâlâ söyleniyor. */

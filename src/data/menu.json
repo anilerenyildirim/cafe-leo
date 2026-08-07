@@ -45,8 +45,7 @@
                 "leo-waffle",
                 "leo-sufle",
                 "pink-dream",
-                "karpuz-bogurtlen-limonata",
-                "hibiscus-yaban-mersini"
+                "pornstar-martini"
               ]
             }
           ]
@@ -130,13 +129,39 @@
             {
               "slug": "mokteyller",
               "name": { "tr": "Mokteyller" },
-              "icon": "pink-dream",
+              "icon": "pornstar-martini",
               "items": [
-                { "slug": "pink-dream", "name": { "tr": "Pink Dream" }, "price": 17500, "badges": ["leo-pick"] },
-                { "slug": "karpuz-bogurtlen-limonata", "name": { "tr": "Karpuz & Böğürtlen Limonata" }, "price": 29000 },
-                { "slug": "hibiscus-yaban-mersini", "name": { "tr": "Hibiscus & Yaban Mersini" }, "price": 29000 },
-                { "slug": "cool-lime", "name": { "tr": "Cool Lime" }, "price": 28000 },
-                { "slug": "pina-colada", "name": { "tr": "Pina Colada" }, "price": 28000 }
+                {
+                  "slug": "pornstar-martini",
+                  "name": { "tr": "Pornstar Martini" },
+                  "description": { "tr": "4 cl passion püresi, 1 cl vanilya şurubu, 3 cl portakal suyu, 4 cl su, 1 cl şeker, 1,5 cl lime" },
+                  "price": 45000,
+                  "badges": ["leo-pick"]
+                },
+                {
+                  "slug": "espresso-martini",
+                  "name": { "tr": "Espresso Martini" },
+                  "description": { "tr": "5 cl espresso, 1 cl vanilya şurubu, 1 cl çikolata şurubu, 5 cl su" },
+                  "price": 40000
+                },
+                {
+                  "slug": "green-garden",
+                  "name": { "tr": "Green Garden" },
+                  "description": { "tr": "10–12 yaprak kuzu kulağı, 10 yaprak nane, 5 cl limon suyu, 5 cl su, 3 cl şeker şurubu, 7 cl bergamotlu çay" },
+                  "price": 40000
+                },
+                {
+                  "slug": "hibiskus",
+                  "name": { "tr": "Hibiskus" },
+                  "description": { "tr": "6 cl bergamotlu çay, 6 cl hibiskus sos, 6 cl limon suyu" },
+                  "price": 40000
+                },
+                {
+                  "slug": "mexican",
+                  "name": { "tr": "Mexican" },
+                  "description": { "tr": "Alkolsüz bira" },
+                  "price": 35000
+                }
               ]
             },
             {
@@ -190,6 +215,7 @@
               "name": { "tr": "Meşrubatlar" },
               "icon": "sikma-portakal-suyu",
               "items": [
+                { "slug": "pink-dream", "name": { "tr": "Pink Dream" }, "price": 17500, "badges": ["leo-pick"] },
                 { "slug": "cilekli-limonata", "name": { "tr": "Çilekli Limonata" }, "price": 18000 },
                 { "slug": "sikma-portakal-suyu", "name": { "tr": "Sıkma Portakal Suyu" }, "price": 26000 },
                 { "slug": "kola", "name": { "tr": "Kola" }, "price": 12500 },

@@ -6,9 +6,16 @@
    zamanı manifestosu, lib/photos.ts). Eksik dosya için <img> hiç
    üretilmez — 404 yok, konsol temiz, düzen sıçraması yok.
 
-   Kaynaklar 1200×800 (3:2). Liste kutusu da 3:2 — kare kırpımda
-   tabak kenarları kesiliyordu, burada hiç kırpma yok. Şeritte kutu
-   4:5'e dönüyor (CSS), orada kırpım kasıtlı.
+   Kaynakların çoğu 1200×800 (3:2) ve liste kutusu da 3:2 — kare
+   kırpımda tabak kenarları kesiliyordu, orada hiç kırpma yok.
+
+   Mokteyller 1200×1200 (1:1): dikey çekilmiş kokteyller 3:2'ye
+   sığmıyordu. Kutu oranı `shot-sq` sınıfıyla ürün bazında veriliyor
+   (lib/config.ts → SQUARE_PHOTO), bölüm bazında değil: aynı ürün
+   İmza Ürünler'de de görünüyor ve oranın onunla birlikte gitmesi
+   gerekiyor.
+
+   Şeritte kutu 4:5'e dönüyor (CSS), orada kırpım kasıtlı.
 
    `trigger`: kutu <button> olur, tıklanınca büyük görünüm açılır
    (§8). O durumda img alt'ı BOŞ ve erişilebilir ad düğmede: aksi
@@ -16,7 +23,7 @@
 
    `eager`: hero kartı ve şeridin ilk karesi için. Gerisi lazy.
    ============================================================ */
-import { FOTO_EXT } from '../lib/config';
+import { FOTO_EXT, isSquarePhoto } from '../lib/config';
 
 interface Props {
   slug: string;
@@ -39,12 +46,12 @@ const extra = trigger
   : {};
 ---
 
-<Tag class:list={['shot', cls]} {...extra}>
+<Tag class:list={['shot', isSquarePhoto(slug) && 'shot-sq', cls]} {...extra}>
   <img
     src={`/foto/${slug}.${FOTO_EXT}`}
     alt={trigger || decorative ? '' : name}
     width="1200"
-    height="800"
+    height={isSquarePhoto(slug) ? '1200' : '800'}
     loading={eager ? 'eager' : 'lazy'}
     fetchpriority={eager ? 'high' : 'auto'}
     decoding="async"

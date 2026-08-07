@@ -521,6 +521,21 @@ function lightbox(): void {
       row?.querySelector<HTMLImageElement>('.shot img')?.getAttribute('src') ?? fallbackSrc;
     if (!src) return false;
 
+    /* EN-BOY ORANI SATIRDAN GELİYOR.
+
+       Kutu oranı artık her yerde 3:2 değil: mokteyller kare, öneri
+       şeridi 4:5 (global.css). Büyük görünüm sabit 3:2 kalsaydı kare
+       bir kokteyl büyütülünce YENİDEN kırpılırdı — küçük halinde tam
+       görünen bardak, büyük halinde kesik. Tıklanan satırın
+       hesaplanmış oranı olduğu gibi taşınıyor.
+
+       Kaynak yine CSS: buraya oran sayısı yazılmıyor, satırın kendi
+       hesaplanmış değeri okunuyor. Yarın bir grup 5:4 olursa burası
+       değişmez. */
+    const shotEl = row?.querySelector<HTMLElement>('.shot');
+    const ar = shotEl ? getComputedStyle(shotEl).aspectRatio : '';
+    lb.style.setProperty('--shot-ar', ar && ar !== 'auto' ? ar : '3 / 2');
+
     curSec = secId;
 
     slug = s;

@@ -1080,6 +1080,26 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
 button.shot { cursor: zoom-in; padding: 0; }
 
+/* KARE fotoğraflar (mokteyller).
+
+   Menünün geri kalanı 3:2 çünkü kaynaklar 1200×800 ve tabak yatay bir
+   şey. Kokteyl dikey: bardak, sap, garnitür üst üste duruyor. Aynı
+   kareler 3:2'ye kırpıldığında elde kalan şey içecek değil, pipetin
+   arkasındaki deniz oluyordu.
+
+   Sınıf ÜRÜNDE, bölümde değil (Shot.astro ← lib/config.ts).
+   `#mokteyller { --shot-ar: 1 }` denendi ve kırıldı: Pornstar Martini
+   İmza Ürünler'de de listeleniyor, orada seçici tutmuyor ve kare
+   fotoğraf 3:2 kutuda yeniden kırpılıyordu.
+
+   Oran DEĞİŞKEN üzerinden veriliyor, .shot kuralı değiştirilmiyor:
+   büyük görünüm de satırın hesaplanmış oranını okuyor (scripts/app.ts
+   § 7), yani liste ile büyük görünüm hiç ayrışmıyor.
+
+   Sistemdeki tek oran istisnası bu değil: öneri şeridi zaten 4:5
+   kullanıyor. Kural "tek oran" değil, "kırpım kasıtlı olacak". */
+.shot.shot-sq { --shot-ar: 1; }
+
 /* (e) hover — yalnız ince işaretçide, yalnız fotoğrafta.
    Kartta gölge, kalkma, renk değişimi yok. */
 @media (hover: hover) and (pointer: fine) {
@@ -1168,10 +1188,17 @@ button.shot { cursor: zoom-in; padding: 0; }
 .lb .lb-shot { transform: scale(.98); transition: transform .16s ease; }
 .lb.is-open .lb-shot { transform: none; transition: transform .22s cubic-bezier(.2, 0, .2, 1); }
 
-/* Panel genişliği yüksekliğe de bağlı: 3:2 görsel hiçbir zaman ekranı
-   taşmasın, metin de görselin tam altında hizalı kalsın. */
+/* Panel genişliği yüksekliğe de bağlı: görsel hiçbir zaman ekranı
+   taşmasın, metin de görselin tam altında hizalı kalsın.
+
+   Üçüncü terim bir zamanlar `58dvh * 1.5` yazıyordu — 1.5 elle yazılmış
+   3:2 oranıydı. Mokteyller kare kutuya geçince o sayı yalan söylemeye
+   başladı: kare görselin yüksekliği 58dvh yerine 87dvh oluyor, ad ve
+   fiyat ekranın altına düşüyordu. Çarpan artık kutunun kendi oranından
+   geliyor, yani `--shot-ar` ne olursa görselin yüksekliği 58dvh'de
+   kalıyor. (calc içinde `3 / 2` de `1` de geçerli bir çarpan.) */
 .lb-panel {
-  width: min(calc(100vw - 2 * var(--pad)), 640px, calc(58dvh * 1.5));
+  width: min(calc(100vw - 2 * var(--pad)), 640px, calc(58dvh * var(--shot-ar)));
   max-height: 100dvh; overflow-y: auto;
   padding: 20px 0;
 }

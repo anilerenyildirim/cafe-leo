@@ -11,6 +11,7 @@
      1c kenar maskesi — yatay şeritlerin kaydırılabilirlik işareti
      2  durum      — açık/kapalı, İstanbul saatiyle (§ hours.ts)
      3  emniyet ağı— dosya var ama çözülemiyorsa satır tipografiye düşer
+     3b atlama     — sayfa içi bağlantılar (ClientRouter yutuyor)
      4  scroll spy — kategori rayı (§5)
      5  belirme    — bölümler görünüme girerken (§9c)
      6  şerit      — öneri şeridinin akışı (§7)
@@ -165,16 +166,121 @@ function shotNet(): void {
 }
 
 /* ============================================================
+   3b — SAYFA İÇİ ATLAMA
+
+   Kategori rayı, alt kategori çipleri ve hero'daki "Menü" bağlantısı
+   sıradan fragment bağlantılarıydı: hedefi tarayıcı buluyor, payı
+   CSS'teki scroll-margin-top veriyordu. Bu yol ÇALIŞIYOR — ölçüldü,
+   yerel fragment gezinmesi doğru yere gidiyor. Buradaki devralma bir
+   onarım değil, DENETİM.
+
+   Gerekçe, "Yiyecekler yanlış konuma gidiyor" şikâyetinin asıl
+   sebebiyle aynı yerden geliyor (bkz. §4): yumuşak kaydırma
+   SÜRERKEN gelen her yeni kaydırma isteği süren animasyonu iptal
+   ediyor. Tarayıcının kendi fragment kaydırmasında hedef bizim
+   elimizde olmuyor; iptal olursa yolun ortasında kalıyoruz ve
+   yeniden nişan alacak bir yerimiz yok. Kendi isteğimizi kendimiz
+   gönderince hedef tek bir sayı olarak elimizde kalıyor.
+
+   İki kazanç daha:
+
+   · PAY TAM. Tarayıcı hedefin ÇİZİLEN kutusunu ölçüyor; belirme
+     animasyonu (§9c) henüz açılmamış bölümü 8px aşağı ötelenmiş
+     gösterdiği için varış noktası o kadar kayıyordu. Burada konum
+     offsetTop zincirinden, yani YERLEŞİMDEN okunuyor — transform
+     ona karışmıyor.
+
+   · GEÇMİŞ TEMİZ. ClientRouter her hash tıklamasına pushState
+     yazıyor; menüde on kategori gezen biri geri tuşuna basınca
+     geldiği sayfaya değil dokuz kez geriye gidiyordu. Burada
+     replaceState var.
+
+   Payın kaynağı HÂLÂ CSS: hedefin kendi `scroll-margin-top`'u
+   okunuyor. .sec ile .sub farklı pay istediğinde ya da bar yüksekliği
+   değiştiğinde burada değişecek bir sayı yok.
+
+   preventDefault yeterli: ClientRouter'ın belge üzerindeki
+   dinleyicisi `defaultPrevented` görünce çekiliyor, bizimki
+   bağlantının kendisinde olduğu için ondan önce çalışıyor.
+   ============================================================ */
+
+function jumps(): void {
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
+  if (!links.length) return;
+
+  /** Belge tepesine göre GERÇEK yerleşim konumu (transform'dan etkilenmez) */
+  const docTop = (el: HTMLElement): number => {
+    let y = 0;
+    let node: HTMLElement | null = el;
+    while (node) {
+      y += node.offsetTop;
+      node = node.offsetParent as HTMLElement | null;
+    }
+    return y;
+  };
+
+  const onClick = (e: MouseEvent) => {
+    if (e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; // yeni sekme vb.
+
+    const a = e.currentTarget as HTMLAnchorElement;
+    const id = a.getAttribute('href')?.slice(1);
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    e.preventDefault();
+
+    const pad = parseFloat(getComputedStyle(target).scrollMarginTop) || 0;
+    window.scrollTo({ top: Math.max(0, docTop(target) - pad), behavior: scrollMode() });
+
+    /* Adres güncelleniyor ama GEÇMİŞE YENİ KAYIT DÜŞMÜYOR: menüde on
+       kategori gezen biri geri tuşuna basınca on kez geri gitmemeli,
+       geldiği sayfaya dönmeli. */
+    history.replaceState(history.state, '', `#${id}`);
+  };
+
+  links.forEach((a) => a.addEventListener('click', onClick));
+  onTeardown(() => links.forEach((a) => a.removeEventListener('click', onClick)));
+}
+
+/* ============================================================
    4 — SCROLL SPY (§5)
    Kaydırdıkça aktif kategori işaretlenir, aktif çip görünüme kayar.
    rootMargin ölçülen bar + ray yüksekliğinden türüyor: sabit sayı
    yazılsa 320px'te ray başlığın üstünü kapatıyordu.
+
+   ÇİP YALNIZ YATAY SÜRÜLÜR — burada bir hata düzeltildi.
+
+   Eskiden aktif çip `a.scrollIntoView({ block: 'nearest' })` ile
+   ortalanıyordu. `scrollIntoView` yalnız en yakın kutuyu değil,
+   BELGE KAYDIRICISI dahil bütün kaydırılabilir ataları hedefler;
+   'nearest' "gerekmiyorsa oynatma" demek, "o kaydırıcıya hiç
+   dokunma" demek değil. Şeride tıklayınca başlayan yumuşak DİKEY
+   kaydırma yoldayken her bölüm sınırı bir gözlemci olayı üretiyor,
+   her olay yeni bir kaydırma isteği gönderiyor ve tarayıcı süren
+   animasyonu iptal ediyor — sayfa hedefe varmadan duruyor.
+
+   "Yiyecekler yanlış konuma gidiyor" şikâyetinin en olası kaynağı
+   bu: Yiyecekler son bölüm, tepeden tıklandığında yolda dört sınır
+   birden kesiliyor, iptal üstüne iptal geliyor. İlk kategorilerde
+   bir-iki kesişme olduğu için hata "bazen oluyor" gibi okunuyordu.
+
+   NOT — bu iptal davranışı otomasyon ortamında DOĞRULANAMADI:
+   Chrome gizli sekmede yumuşak kaydırma animasyonunu hiç
+   başlatmıyor, dolayısıyla iptal edilecek bir animasyon da olmuyor.
+   Tanı `scrollIntoView`'un tanımlı davranışına dayanıyor, canlı
+   tekrarına değil. Gerçek cihazda bir kez teyit edilmeli.
+
+   Düzeltme: dikey kaydırmaya hiç dokunulmuyor, yalnız rayın kendi
+   kutusunun scrollLeft'i sürülüyor.
    ============================================================ */
 
 function spy(): void {
   const rail = document.querySelector<HTMLElement>('.rail');
+  const railBox = document.querySelector<HTMLElement>('.rail-scroll');
   const secs = [...document.querySelectorAll<HTMLElement>('main .sec')];
-  if (!rail || !secs.length) return;
+  if (!rail || !railBox || !secs.length) return;
 
   const links = new Map(
     [...rail.querySelectorAll<HTMLAnchorElement>('a')].map((a) => [
@@ -185,6 +291,20 @@ function spy(): void {
 
   const bar = document.querySelector<HTMLElement>('.bar');
   const top = (bar?.offsetHeight ?? 56) + rail.offsetHeight + 10;
+
+  /** Çipi şeridin ortasına getir — SADECE yatayda, sadece bu kutuda. */
+  const center = (a: HTMLAnchorElement): void => {
+    const max = railBox.scrollWidth - railBox.clientWidth;
+    if (max <= 0) return; // şerit zaten sığıyor, sürülecek bir şey yok
+    const left = Math.max(
+      0,
+      Math.min(max, a.offsetLeft - (railBox.clientWidth - a.offsetWidth) / 2),
+    );
+    /* 1px'lik farklar için istek göndermeye değmez; her olayda
+       scrollTo çağırmak dokunmatikte akışı kekeletiyor. */
+    if (Math.abs(left - railBox.scrollLeft) < 2) return;
+    railBox.scrollTo({ left, behavior: scrollMode() });
+  };
 
   let current = '';
   const io = new IntersectionObserver(
@@ -198,7 +318,7 @@ function spy(): void {
         const a = links.get(id);
         if (!a) continue;
         a.setAttribute('aria-current', 'true');
-        a.scrollIntoView({ inline: 'center', block: 'nearest', behavior: scrollMode() });
+        center(a);
       }
     },
     { rootMargin: `-${top}px 0px -70% 0px` },
@@ -582,6 +702,7 @@ function init(): void {
   edges();
   status();
   shotNet();
+  jumps();
   spy();
   reveal();
   recoFlow();

@@ -12,8 +12,14 @@
    D1: alt kategoriler için ikinci bir YAPIŞKAN şerit yok. Bölümün
    başlığının hemen altında yapışkan OLMAYAN bir çip satırı var —
    bölüm içinde atlama sağlıyor, kalıcı dikey alan tüketmiyor,
-   kaydırırken değişmiyor. Tek gruplu bölümde (İmza Ürünler) çip
-   satırı ve alt başlık hiç basılmıyor.
+   kaydırırken değişmiyor. Tek gruplu bölümde (İmza Ürünler, Sıcak
+   İçecekler, Tatlılar) çip satırı ve alt başlık hiç basılmıyor.
+
+   ÇİP BELİRTECİ: alt kategori çipi küçük yuvarlak bir görsel
+   taşıyabiliyor. Ayrı ikon seti çizilmedi — grubu en iyi anlatan
+   ÜRÜNÜN KENDİ fotoğrafı kullanılıyor (menu.json → subsection.icon).
+   Dosya yoksa çip sessizce metne düşüyor; bu yüzden henüz
+   çekilmemiş fotoğrafın slug'ı bugünden yazılabiliyor.
 
    "Leo'nun tercihi" rozeti YALNIZCA REFERANSLARDAN OLUŞAN bölümde
    (İmza Ürünler) basılmaz: başlık zaten seçkiyi söylüyor, her satırda
@@ -27,8 +33,10 @@
    Bu yüzden aynı mokteyl "Mokteyller" altında tipografik, "İmza
    Ürünler" altında fotoğraf düzeninde durabiliyor.
 
-   Tek fiyatlı grup (ör. Frozenler: hepsi 250 ₺) fiyatı satır satır
-   tekrarlamaz; bir kez başlığın altında söyler.
+   FİYAT HER SATIRDA. Bir zamanlar tek fiyatlı grup (Frozenler: hepsi
+   250 ₺) fiyatı başlığın altında bir kez söylüyordu; müşteri
+   isteğiyle kaldırıldı — fiyatı aynı olsa da her ürünün yanında
+   kendi fiyatı yazıyor. Menüde okunacak tek yer var.
 
    Ekstralar ürün kartı değil: ait olduğu grubun altında tek satır
    şerit. Artık gruba da bağlanabiliyorlar — şurup ve ekstra shot
@@ -39,8 +47,8 @@
    ürün başına değil.
    ============================================================ */
 import Item from './Item.astro';
-import { formatPrice, type Section, type Subsection } from '../data/menu';
-import { isPhotoGroup } from '../lib/config';
+import { formatPrice, type Section } from '../data/menu';
+import { isPhotoGroup, hasPhoto, FOTO_EXT } from '../lib/config';
 
 interface Props {
   sec: Section;
@@ -54,14 +62,9 @@ const showChips = named.length > 1;
 
 const two = (n: number): string => String(n).padStart(2, '0');
 
-/* Grup içinde tüm fiyatlar aynıysa satır satır tekrarlanmaz.
-   null fiyat (teyit bekleyen) bu hesaba girmez — "Tümü —" saçma olurdu. */
-const uniform = (sub: Subsection): number | null => {
-  const prices = sub.items.map((i) => i.price);
-  if (!prices.length || prices.some((p) => p === null)) return null;
-  const first = prices[0]!;
-  return prices.every((p) => p === first) ? first : null;
-};
+/** Çip belirteci — yalnız dosyası GERÇEKTEN varsa. Yoksa null → metin çip. */
+const iconSrc = (icon: string | undefined): string | null =>
+  icon && hasPhoto(icon) ? `/foto/${icon}.${FOTO_EXT}` : null;
 ---
 
 <section class="sec" id={sec.slug} aria-labelledby={`h-${sec.slug}`} data-reveal>
@@ -74,16 +77,23 @@ const uniform = (sub: Subsection): number | null => {
   {showChips && (
     <nav class="subcats" aria-label={`${sec.title} — alt kategoriler`}>
       <div class="subcats-scroll">
-        {named.map((sub) => (
-          <a href={`#${sub.slug}`}>{sub.title}</a>
-        ))}
+        {named.map((sub) => {
+          const ico = iconSrc(sub.icon);
+          return (
+            <a href={`#${sub.slug}`} class:list={[ico && 'has-ico']}>
+              {ico && (
+                <img class="chip-ico" src={ico} alt="" width="48" height="48" loading="lazy" decoding="async" />
+              )}
+              <span>{sub.title}</span>
+            </a>
+          );
+        })}
       </div>
     </nav>
   )}
 
   {sec.subs.map((sub) => {
     const photo = isPhotoGroup(sub.slug);
-    const one = uniform(sub);
     /* açıklamalı listeler geniş ekranda üç kolona çıkmaz — kolon
        daralınca açıklama satırları kırılıyor */
     const hasDesc = sub.items.some((i) => i.desc);
@@ -102,16 +112,9 @@ const uniform = (sub: Subsection): number | null => {
           </div>
         )}
 
-        {one !== null && <p class="sec-note">Tümü {formatPrice(one)}</p>}
-
         <div class:list={['items', photo ? 'photo' : 'type', hasDesc && 'has-desc']}>
           {sub.items.map((item) => (
-            <Item
-              item={item}
-              group={sub.slug}
-              hidePrice={one !== null}
-              showPick={!sec.refsOnly}
-            />
+            <Item item={item} group={sub.slug} hidePrice={false} showPick={!sec.refsOnly} />
           ))}
         </div>
 

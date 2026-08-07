@@ -6,7 +6,7 @@
    TASARIM DİLİ logodan türetildi (public/brand/leologo.jpg):
      a) uzun, çıplak, ince dikey çubuk  → bölüm işareti, "stem"
      b) ayrık KARE nokta                → sistemin tek ayraç karakteri
-     c) yüksek kontrastlı italik serif  → Bodoni Moda italik
+     c) oyulmuş, düşük kontrastlı serif → Marcellus (müşteri seçimi)
 
    Referans demonun imzaları BİLEREK atıldı: CurvedLoop marquee,
    ShinyText altın rampa, noktalı leader, mono rakamlar, ✦ ayracı,
@@ -32,14 +32,31 @@
    ============================================================ */
 
 @theme static {
-  /* --- tipografi --- */
-  /* Bodoni Moda: Didone. Logonun yüksek kontrastlı italik serifinin
-     en yakın karşılığı. opsz ekseni var — büyük puntoda inceliyor. */
-  --font-display: "Bodoni Moda", "Didot", Georgia, serif;
-  /* Instrument Sans: dar, nötr, düşük kontrastlı grotesk. Didone'nin
-     karşıtı olarak duruyor; Manrope'un geometrik yuvarlaklığı bu
-     logoyla yarışırdı. */
-  --font-body: "Instrument Sans", system-ui, -apple-system, sans-serif;
+  /* --- tipografi — TEK AİLE: MARCELLUS ---
+     Müşteri seçimi. Aday yüzler bir karşılaştırma sayfasında yan yana
+     sunuldu; seçim yapıldıktan sonra o sayfa (/ornekfontlar) silindi —
+     kararı verilmiş bir şey için canlıda sayfa taşınmaz.
+
+     Şikâyet "eğim" değil GÖVDE KONTRASTIydı: incelip kalınlaşan
+     Didone serifler küçük puntoda okumayı zorluyordu. Marcellus Roma
+     yazıtı geleneğinden geliyor, gövde kalınlığı yatay ve dikeyde
+     birbirine yakın.
+
+     İki değişken de AYNI aileyi gösteriyor ama ikisi de duruyor:
+     ayrım "başlık mı gövde mi" sorusunu kodda canlı tutuyor ve
+     yarın ikinci bir aile gelirse dokunulacak yer yine burası.
+
+     MARCELLUS'UN ÜÇ SINIRI — aşağıdaki CSS bunlara göre yazıldı:
+     · İTALİĞİ YOK. Bir zamanlar başlıklar italikti (Bodoni'nin
+       imzasıydı); burada tarayıcı sahte eğim üretirdi ve oyulmuş
+       harf karakterini bozardı. Bütün `font-style: italic` kaldırıldı.
+     · EKSENİ YOK. `opsz` ayarları kaldırıldı — değişken font değil.
+     · TEK AĞIRLIK (400). 500 yazan yerler tarayıcıda zaten 400'e
+       düşüyor, dokunulmadı: ileride çok ağırlıklı bir aileye
+       geçilirse hiyerarşi niyeti kodda duruyor. 600 yazanlar
+       500'e çekildi — 600 sahte kalınlık üretiyordu. */
+  --font-display: "Marcellus", Georgia, "Times New Roman", serif;
+  --font-body: "Marcellus", Georgia, "Times New Roman", serif;
 
   /* --- marka sabiti --- */
   --color-brand: #d8b523;
@@ -269,10 +286,12 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 /* ---------- LOGO KUTUSU (A1) ----------
    Logo tek bileşende (components/Logo.astro) ve SABİT KUTUDA.
 
-   Gerçek logo küçük harf, italik, yüksek kontrastlı serif; Bodoni
-   Moda italik onun tipografik eşdeğeri. leologo.jpg opak beyaz
-   zeminli JPG olduğu için loş temada beyaz kutu olarak durur —
-   şeffaf SVG gelince görsele döneriz.
+   Buradaki "leo" YER TUTUCU. Gerçek logo geldiğinde bu yazının
+   yerini görsel alacak (bkz. components/Logo.astro) — bu yüzden
+   tipografik eşdeğer aramaya devam edilmiyor, Marcellus'un düz
+   hâli kullanılıyor. leologo.jpg opak beyaz zeminli JPG olduğu için
+   loş temada beyaz kutu olarak durur; şeffaf SVG gelince görsele
+   döneriz.
 
    O gün geldiğinde yerleşim OYNAMASIN diye kutu şimdiden ölçülü:
    yüksekliği --logo-h, genişliği --logo-h * --logo-ar. İçerik metinden
@@ -288,12 +307,10 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .logo-lg { --logo-h: clamp(64px, 21vw, 106px); }
 
 .logo-mark {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-family: var(--font-display); font-weight: 500;
   font-size: calc(var(--logo-h) * .9); line-height: 1;
   color: var(--text);
 }
-.logo-sm .logo-mark { font-variation-settings: "opsz" 48; }
-.logo-lg .logo-mark { font-variation-settings: "opsz" 96; }
 
 /* Görsele geçişte gereken tek kural — şimdiden burada duruyor. */
 .logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
@@ -414,8 +431,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   display: flex; align-items: baseline; gap: 16px;
 }
 .mh-name {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 96;
+  font-family: var(--font-display); font-weight: 500;
   font-size: clamp(40px, 13vw, 58px);
   line-height: .95; letter-spacing: -.01em;
   color: var(--text);
@@ -525,7 +541,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .pick-band {
   background: var(--gold-leaf);
   color: var(--on-gold);
-  font: 600 12px/1 var(--font-body);
+  font: 500 12px/1 var(--font-body);
   letter-spacing: .18em; text-transform: uppercase;
   padding: 12px var(--pad);
 }
@@ -533,8 +549,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .pick-body { padding: 20px var(--pad) 22px; }
 .pick-card .name {
   display: block;
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 40;
+  font-family: var(--font-display); font-weight: 500;
   font-size: 27px; line-height: 1.1;
   margin-bottom: 16px;
 }
@@ -738,6 +753,60 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   .rail a:not([aria-current]):hover { color: var(--text); border-color: var(--line); }
 }
 
+/* ---------- kenar okları ----------
+   Maske "burada solma var" diyor ama solma bir YÖN göstermiyor.
+   Ok yönü söylüyor. Aynı edge-l / edge-r anahtarına bağlı: gidilecek
+   yer yoksa ok basılmıyor — hiçbir zaman olmayan bir devamı işaret
+   etmiyor.
+
+   %40 opaklık kasıtlı: bu bir düğme değil, kaydırma daveti. Çipin
+   önüne geçerse rayın kendisi okunmaz olurdu. */
+.rail-arw {
+  position: absolute; top: 50%; z-index: 1;
+  width: 9px; height: 9px;
+  margin-top: -5px;
+  opacity: 0;
+  color: var(--muted);
+  pointer-events: none;
+  transition: opacity .3s ease;
+}
+.rail-arw::before {
+  content: ''; display: block;
+  width: 100%; height: 100%;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+}
+.rail-arw.l { left: 6px; }
+.rail-arw.l::before { transform: rotate(-135deg); }
+.rail-arw.r { right: 6px; }
+.rail-arw.r::before { transform: rotate(45deg); }
+
+.rail.edge-l .rail-arw.l,
+.rail.edge-r .rail-arw.r { opacity: .4; }
+
+/* Salınım UZUN aralıklı ve KISA: 4.2s'nin yalnız son ~%20'sinde iki
+   küçük itiş var. Sürekli titreşen bir ok gürültüdür ve göz onu
+   birkaç saniyede filtreler; seyrek olan fark edilir. Genlik 3px —
+   hareketi görürsünüz, oku takip etmezsiniz. */
+@media (prefers-reduced-motion: no-preference) {
+  .rail.edge-l .rail-arw.l { animation: rail-nudge-l 4.2s ease-in-out infinite; }
+  .rail.edge-r .rail-arw.r { animation: rail-nudge-r 4.2s ease-in-out infinite; }
+}
+@keyframes rail-nudge-l {
+  0%, 74%, 100% { transform: translateX(0); }
+  80%           { transform: translateX(-3px); }
+  86%           { transform: translateX(0); }
+  92%           { transform: translateX(-3px); }
+  98%           { transform: translateX(0); }
+}
+@keyframes rail-nudge-r {
+  0%, 74%, 100% { transform: translateX(0); }
+  80%           { transform: translateX(3px); }
+  86%           { transform: translateX(0); }
+  92%           { transform: translateX(3px); }
+  98%           { transform: translateX(0); }
+}
+
 /* ============================================================
    BÖLÜMLER
    ============================================================ */
@@ -786,8 +855,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 }
 
 .cat-head h2 {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 40;
+  font-family: var(--font-display); font-weight: 500;
   font-size: 27px; letter-spacing: -.008em; line-height: 1;
 }
 .cat-head .rule {
@@ -820,7 +888,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   border-bottom: 1px solid var(--line);
 }
 .sub-head h3 {
-  font: 600 11px/1 var(--font-body);
+  font: 500 11px/1 var(--font-body);
   letter-spacing: .2em; text-transform: uppercase;
   color: var(--gold-ink);        /* --bg üzerinde 5.10:1 */
 }
@@ -879,6 +947,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 }
 
 .subcats a {
+  display: inline-flex; align-items: center; gap: 8px;
   text-decoration: none; white-space: nowrap;
   font: 500 10.5px/1 var(--font-body);
   letter-spacing: .12em; text-transform: uppercase;
@@ -888,16 +957,26 @@ button { font: inherit; color: inherit; background: none; border: 0; }
   border-radius: 999px;
   transition: color .25s ease, border-color .25s ease;
 }
-@media (hover: hover) {
-  .subcats a:hover { color: var(--text); border-color: var(--gold-leaf); }
+/* İkonlu çipte sol dolgu daralıyor: yuvarlak görsel zaten kendi
+   nefesini taşıyor, 12px bırakılınca çip sola doğru şişiyordu. */
+.subcats a.has-ico { padding-left: 5px; }
+
+/* Belirteç görseli — ürünün kendi fotoğrafı, yuvarlak kırpma.
+   Kare kutu değil daire: çip zaten kapsül, içine giren kare form
+   iki ayrı geometri okutuyordu. Dosya yoksa <img> hiç basılmıyor
+   (Section.astro), yani kırık ikon ya da boş daire çıkmıyor. */
+.subcats .chip-ico {
+  width: 22px; height: 22px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+  background: var(--surf);
+  /* fotoğraf çipin içinde çıplak durmasın — saç teli kalınlığında halka */
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--text) 10%, transparent);
 }
 
-/* tek fiyatlı gruplar (ör. Frozenler: hepsi 250 ₺) fiyatı satır
-   satır tekrarlamaz — bir kez burada söylenir */
-.sec-note {
-  margin: 0 0 8px;
-  font: 500 11px/1 var(--font-body); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--gold-ink);
+@media (hover: hover) {
+  .subcats a:hover { color: var(--text); border-color: var(--gold-leaf); }
 }
 
 /* ============================================================
@@ -971,7 +1050,7 @@ button { font: inherit; color: inherit; background: none; border: 0; }
    yanlıştı. */
 .pick-badge, .tag {
   display: inline-flex; align-items: center; gap: 7px;
-  font: 600 9px/1 var(--font-body);
+  font: 500 9px/1 var(--font-body);
   letter-spacing: .17em; text-transform: uppercase;
   color: var(--gold-ink); background: none; padding: 0;
   white-space: nowrap;
@@ -1039,8 +1118,7 @@ button.shot { cursor: zoom-in; padding: 0; }
 .stage.intro { padding-top: 30px; }
 .stage.intro .tagline {
   margin-top: 26px; max-width: 15ch;
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 72;
+  font-family: var(--font-display); font-weight: 500;
   font-size: clamp(29px, 8.6vw, 44px); line-height: 1.08; letter-spacing: -.012em;
 }
 .stage.intro .acts { margin-top: 34px; }
@@ -1058,8 +1136,7 @@ button.shot { cursor: zoom-in; padding: 0; }
 }
 .soon .kicker .sq { color: var(--gold-leaf); }
 .soon h2 {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 40;
+  font-family: var(--font-display); font-weight: 500;
   font-size: 26px; line-height: 1.1; margin-bottom: 14px;
 }
 .soon p { font-size: 13.5px; color: var(--muted); max-width: 40ch; line-height: 1.65; }
@@ -1110,8 +1187,7 @@ button.shot { cursor: zoom-in; padding: 0; }
 .lb-body { padding-top: 18px; }
 .lb-body .pick-badge { margin-bottom: 12px; }
 .lb-body .name {
-  font-family: var(--font-display); font-style: italic; font-weight: 500;
-  font-variation-settings: "opsz" 40;
+  font-family: var(--font-display); font-weight: 500;
   font-size: 27px; line-height: 1.1; letter-spacing: -.01em;
 }
 .lb-body .price { font-size: 15px; }
@@ -1159,7 +1235,6 @@ footer {
 }
 /* İmza da logo kutusunun kendisi (Logo.astro), yalnız daha küçük. */
 footer .sig { --logo-h: 24px; margin-bottom: 14px; }
-footer .sig .logo-mark { font-variation-settings: "opsz" 30; }
 footer p { font-size: 12px; color: var(--muted); line-height: 1.8; }
 footer .note { margin-top: 12px; }
 

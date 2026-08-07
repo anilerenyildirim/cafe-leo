@@ -16,11 +16,17 @@
    oluyor. fallback="swap" → View Transitions API'si olmayan
    tarayıcıda da (Safari 16.4) takas anında, morph yine çalışıyor.
 
-   Dış istek yalnız Google Fonts:
-   · Bodoni Moda (ital + opsz) — display. opsz ekseni gerekiyor:
-     masthead 58px'te ince, bölüm başlığı 27px'te gövdeli olmalı.
-   · Instrument Sans (ital + wght) — gövde. Mono yok; fiyatlar
-     tabular-nums ile hizalanıyor.
+   Dış istek yalnız Google Fonts — ve artık TEK AİLE:
+   · Marcellus (tek ağırlık, italiksiz, ekseni yok) — hem başlık hem
+     gövde. Müşteri seçimi; gerekçe global.css @theme bloğunda.
+
+   İKİ AİLE YERİNE BİR AİLE ağ tarafında da kazanç: eskiden iki
+   değişken font ailesinin ital + opsz + wght eksenleri isteniyordu,
+   şimdi tek statik yüz iniyor.
+
+   Mono yok; fiyatlar tabular-nums ile hizalanıyor. Marcellus'ta
+   tabular figür yoksa tarayıcı kuralı sessizce yok sayar — fiyat
+   sütunu sağa yaslı olduğu için hizayı düzen zaten tutuyor.
    ============================================================ */
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
@@ -48,7 +54,7 @@ const themeColor = venue === 'lounge' ? '#0B0907' : '#FCFBF9';
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Marcellus&display=swap"
     rel="stylesheet"
   />
 

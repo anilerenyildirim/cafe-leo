@@ -16,6 +16,14 @@
    olduğu iki kenardaki maskeyle söyleniyor (maske yalnız gerçekten
    kaydırılabilirken açılıyor — scripts/app.ts § railEdges).
 
+   OKLAR: maske tek başına "burada devam var" demeye yetmiyordu —
+   müşteri şeridi kaydırılabilir görmedi. İki uca soluk birer ok
+   kondu. Ok maskeyle AYNI anahtarı kullanıyor (edge-l / edge-r):
+   gidilecek yer yoksa ok da yok, yani ok hiçbir zaman yalan
+   söylemiyor. Süsleme değil işaret olduğu için aria-hidden ve
+   pointer-events:none — klavye sırasına girmiyor, altındaki çipin
+   dokunuşunu yemiyor.
+
    Scroll spy scripts/app.ts'te: kaydırdıkça aktif kategori
    aria-current="true" alıyor ve çip görünüme kayıyor.
 
@@ -32,6 +40,7 @@ const { sections } = Astro.props;
 ---
 
 <nav class="rail" aria-label="Kategoriler">
+  <span class="rail-arw l" aria-hidden="true"></span>
   <div class="rail-scroll" id="rail">
     <ul>
       {sections.map((s) => (
@@ -39,4 +48,5 @@ const { sections } = Astro.props;
       ))}
     </ul>
   </div>
+  <span class="rail-arw r" aria-hidden="true"></span>
 </nav>

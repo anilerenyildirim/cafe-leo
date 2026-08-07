@@ -1,6 +1,6 @@
 ---
 /* ============================================================
-   /menu — Cafe Leo menüsü. Masa QR'ları buraya gelir.
+   /menu — Cafe Leo Teras menüsü. Masa QR'ları buraya gelir.
    Ana sayfadan menüye ekstra dokunuş yok; bu sayfa kendi başına ayakta.
 
    Bölüm sırası menu.json'daki dizi sırasıdır — ayrı bir `order`
@@ -24,8 +24,8 @@ const hero = venue.hero ? itemBySlug(venue.hero) : undefined;
 
 <Base
   venue="cafe"
-  title="Cafe Leo — Menü"
-  description="Cafe Leo, Sinanoba Büyükçekmece. Kahve, tatlı, mutfak — güncel menü."
+  title={`${venue.name} — Menü`}
+  description={`${venue.name}, Sinanoba Büyükçekmece. Kahve, tatlı, mutfak — güncel menü.`}
 >
   <Bar venue="cafe" />
 

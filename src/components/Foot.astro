@@ -2,7 +2,10 @@
 /* ============================================================
    Alt bilgi.
 
-   Demo notu referanstaki gibi duruyor: fiyat ve içerik teyide tabi.
+   "Demo — fiyatlar ve ürün listesi teyit bekliyor." notu KALDIRILDI:
+   site canlıya çıkıyor, fiyatlar müşteriden teyitli geldi. Ziyaretçiye
+   menünün güvenilmez olduğunu söyleyen bir satır artık yalan olurdu.
+
    null contact alanları basılmaz — uydurma yok, yer tutucu yok.
    ============================================================ */
 import Logo from './Logo.astro';
@@ -24,5 +27,4 @@ const c = venue.contact;
     {c.address && <>{c.address}<br /></>}
     {venue.hoursText && <>{venue.hoursText}<br /></>}
   </p>
-  <p class="note">Demo — fiyatlar ve ürün listesi teyit bekliyor.</p>
 </footer>

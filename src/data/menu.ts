@@ -30,14 +30,14 @@
      gerekirse iz burada.
 
    TEYİT BEKLEYEN
-   · Yiyecekler'in dört alt kategorisine ürün dağılımı (Kahvaltı
-     müşteriden geldi; Atıştırmalıklar / Ana Yemekler / Salatalar
-     bizim ayrımımız).
-   · Sıcak İçecekler ve Tatlılar'ın alt kategorileri — müşteri
-     onaylayacak.
-   · İmza Ürünler'deki iki mokteyl seçimi; ikisinin de fotoğrafı
-     henüz yok, dosya gelince kendiliğinden fotoğraflı olurlar.
    · VENUE.contact altındaki her alan.
+
+   FOTOĞRAFI BEKLENEN — dosya `public/foto/` altına düştüğü an
+   kendiliğinden görünür olurlar, kod değişmez:
+   · pink-dream (hem satır hem Mokteyller çip ikonu)
+   · oreo-milkshake · karpuz-frozen · sikma-portakal-suyu (çip ikonu)
+   · taze-gunluk-tatlilar · karpuz-bogurtlen-limonata
+     hibiscus-yaban-mersini · cilekli-cikolatali-pasta · mantarli-omlet
    ============================================================ */
 
 import rawFile from './menu.json';
@@ -66,6 +66,15 @@ interface RawSubsection {
   slug: string;
   /** null → alt başlık basılmaz (tek gruplu bölüm) */
   name: Loc | null;
+  /**
+   * Çipte görünecek küçük belirteç görsel — bir ÜRÜN SLUG'I.
+   *
+   * Ayrı bir ikon dosyası seti yok: alt kategoriyi en iyi anlatan
+   * ürünün kendi fotoğrafı kullanılıyor. Dosya yoksa çip metin
+   * kalıyor (lib/photos.ts manifestosu), yani daha çekilmemiş
+   * fotoğraf için bugünden slug yazılabilir.
+   */
+  icon?: string;
   items: RawEntry[];
 }
 
@@ -147,6 +156,8 @@ export interface Subsection {
   slug: string;
   /** null → alt başlık ve çip basılmaz */
   title: string | null;
+  /** çip belirteci olarak kullanılacak ürün slug'ı (bkz. RawSubsection.icon) */
+  icon?: string;
   items: MenuItem[];
   /** bu alt gruba özel ekstralar (ör. Soğuk Kahveler → şurup) */
   extras: Extra[];
@@ -250,6 +261,7 @@ function buildVenue(v: RawVenue): Venue {
       const subs: Subsection[] = sec.subsections.map((sub) => ({
         slug: sub.slug,
         title: tOpt(sub.name),
+        ...(sub.icon ? { icon: sub.icon } : {}),
         extras: extrasFor(sub.slug),
         items: sub.items
           .map((entry) => (isRef(entry) ? defined.get(entry) : toItem(entry, sec.vat)))

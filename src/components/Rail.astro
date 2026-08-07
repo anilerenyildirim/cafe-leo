@@ -17,8 +17,10 @@
    kaydırılabilirken açılıyor — scripts/app.ts § railEdges).
 
    OKLAR: maske tek başına "burada devam var" demeye yetmiyordu —
-   müşteri şeridi kaydırılabilir görmedi. İki uca soluk birer ok
-   kondu. Ok maskeyle AYNI anahtarı kullanıyor (edge-l / edge-r):
+   müşteri şeridi kaydırılabilir görmedi. İki uca birer ok kondu.
+   İlk deneme fazla soluktu (%40, ince çizgi) ve maskenin solmasına
+   karışıyordu; ağırlığı artırıldı. Ok maskeyle AYNI anahtarı
+   kullanıyor (edge-l / edge-r):
    gidilecek yer yoksa ok da yok, yani ok hiçbir zaman yalan
    söylemiyor. Süsleme değil işaret olduğu için aria-hidden ve
    pointer-events:none — klavye sırasına girmiyor, altındaki çipin

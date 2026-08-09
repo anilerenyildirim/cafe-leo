@@ -1,6 +1,11 @@
 ---
 /* ============================================================
-   "Leo'nun Tercihi" — BÖLÜM DEĞİL, KART.
+   "Haftanın Ürünü" — BÖLÜM DEĞİL, KART.
+
+   Bant metni "Leo'nun Tercihi"ydi; müşteri isteğiyle "Haftanın Ürünü"
+   oldu. Satır rozetleri ("Leo'nun tercihi", Item.astro) DEĞİŞMEDİ:
+   onlar sekiz ürüne birden basılıyor, "haftanın ürünü" ise tanımı
+   gereği tek şeye işaret eder — ikisi ayrı iki iddia.
 
    Önceki turda etiket "bölüm başlığı ağırlığında" yapılmıştı ve o
    talimat yanlıştı: etiket bölüm başlığının bütün donanımını aldı
@@ -11,7 +16,7 @@
    Şimdi tek bir nesne:
 
      ┌──────────────────────────────┐
-     │ LEO'NUN TERCİHİ              │  ← kart üst bandı, dolgulu altın
+     │ HAFTANIN ÜRÜNÜ               │  ← kart üst bandı, dolgulu altın
      ├──────────────────────────────┤
      │ Leo Burger                   │  ← kartın tek büyük tipografisi
      │ [fotoğraf]                   │
@@ -24,7 +29,7 @@
      işaretleri.
    · Bandın altın dolgusu CAFE anahtarındakiyle aynı token
      (--gold-leaf): sayfada iki farklı altın dolgu tonu yok.
-   · LEO'NUN TERCİHİ artık etiket tipografisi (12px, harf aralıklı,
+   · HAFTANIN ÜRÜNÜ artık etiket tipografisi (12px, harf aralıklı,
      büyük harf), başlık tipografisi değil.
 
    HİZA: kartın sol kenarı --pad çizgisinde, sayfadaki diğer her
@@ -50,7 +55,7 @@ const photo = hasPhoto(item.slug);
 ---
 
 <article class:list={['pick-card', !photo && 'no-shot']}>
-  <p class="pick-band">Leo'nun Tercihi</p>
+  <p class="pick-band">Haftanın Ürünü</p>
   <div class="pick-body">
     <h2 class="name">{item.name}</h2>
     {photo && <Shot slug={item.slug} name={item.name} eager trigger />}

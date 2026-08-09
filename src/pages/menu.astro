@@ -35,7 +35,9 @@ const hero = venue.hero ? itemBySlug(venue.hero) : undefined;
     <Masthead name={venue.name} />
 
     <div class="stage">
-      <Hero venue={venue} />
+      {/* eyebrow yok: masthead zaten mekan adını söylüyor, hemen
+          altındaki "Kafe & Teras · Sinanoba" tekrardı. */}
+      <Hero venue={venue} eyebrow={false} />
       {hero && <FeatureCard item={hero} />}
     </div>
 

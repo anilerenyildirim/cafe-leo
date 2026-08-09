@@ -482,23 +482,45 @@ button { font: inherit; color: inherit; background: none; border: 0; }
    İKON BUTON IZGARASI KALKTI. Kare çerçeve, ikon ve dolgu ekrandaki en
    şablon öğeydi; hiçbir lüks marka ikon butonu kullanmaz. Yerine tek
    satır harf aralıklı küçük kapital metin linki, aralarında kare nokta.
-   Alt hairline yalnız hover ve focus'ta belirir. */
+   Alt hairline yalnız hover ve focus'ta belirir.
+
+   SATIRIN BİR BAŞI VAR (.lead — Menü). Dört link aynı ağırlıkta
+   dizildiğinde satır bir menü değil bir künye gibi okunuyordu; oysa
+   burada bir iş öbürlerinden önemli. Ayrım İKİ TONDA:
+     · ikincil linkler --muted, birincil --text — "bir ton daha koyu"
+       ancak böyle mümkün, --text zaten paletin en koyusu.
+     · birincilin altında KALICI altın çizgi. Diğerlerinde aynı çizgi
+       yalnız hover/focus'ta beliriyor, yani motif ödünç alınmıyor —
+       aynı motifin sürekli hâli.
+   Çizgi 1 → 2px kalınlaştığı için dolgu 5 → 4px: metin tabanı diğer
+   linklerle aynı hatta kalıyor, satır zıplamıyor. */
 .acts {
   display: flex; flex-wrap: wrap; align-items: center;
   gap: 11px; margin-top: 24px;
 }
 .acts a {
-  text-decoration: none; color: var(--text);
+  text-decoration: none; color: var(--muted);
   font: 500 10.5px/1 var(--font-body);
   letter-spacing: .19em; text-transform: uppercase;
   padding-bottom: 5px;
   border-bottom: 1px solid transparent;
-  transition: border-color .25s ease;
+  transition: color .25s ease, border-color .25s ease;
+}
+.acts a.lead {
+  color: var(--text);
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--gold-leaf);
 }
 .acts .sq { color: var(--rule); transform: translateY(-1px); }
-@media (hover: hover) { .acts a:hover { border-bottom-color: var(--gold-leaf); } }
+@media (hover: hover) {
+  .acts a:hover { color: var(--text); border-bottom-color: var(--gold-leaf); }
+}
 .acts a:focus-visible { border-bottom-color: var(--gold-leaf); }
 @media (max-width: 359px) { .acts { gap: 9px; } .acts a { letter-spacing: .14em; } }
+
+/* eyebrow basılmayan sayfada (/menu) tagline hero'nun ilk öğesi olur;
+   eyebrow'un altındaki nefes payını üstüne almasın. */
+.hero > .tagline:first-child { margin-top: 0; }
 
 #menu { scroll-margin-top: calc(var(--bar-h) + var(--rail-h) + 8px); }
 
@@ -751,6 +773,98 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .rail a[aria-current="true"] { background: var(--gold-leaf); color: var(--on-gold); }
 @media (hover: hover) {
   .rail a:not([aria-current]):hover { color: var(--text); border-color: var(--line); }
+}
+
+/* ---------- öne çıkan çip (.hot) ----------
+   Kaynağı veri: menu.json → section.highlight. CSS burada bir slug
+   tanımıyor; hangi kategorinin parladığı menüden geliyor.
+
+   BİÇİM: altın kenar + soluk altın dolgu + 25px köşe. 999px yerine
+   ölçülü bir yarıçap yazılmasının sebebi var — 999px çipi TAM kapsüle
+   çeviriyor ve o biçim rayda zaten "aktif kategori" demek. Bu çip
+   aktif değil, DAVETLİ: kapsüle yakın ama onunla aynı değil.
+   Yükseklik 33px olduğu için tarayıcı yarıçapı ~16px'e kırpar; kural
+   yine de 25px yazılıyor ki çip büyürse köşe onunla büyüsün.
+
+   Kenar 1px'ten 1.5px'e çıkmıyor: kutu modeli diğer çiplerle aynı
+   kalmalı, yoksa öne çıkan çip komşularından yarım piksel uzun durur.
+
+   PARILTI: mekan anahtarındaki efektin ta kendisi (§C2), yalnız
+   periyot 10 → 7 sn. Oradaki iki tuzaktan burada da kaçınılıyor —
+   gradyan uçlarında `transparent` değil --shine-0, bekleme fazı
+   animation-delay ile değil keyframe yüzdesiyle (delay yalnız ilk
+   turda çalışır; sonraki turlarda parıltılar arka arkaya gelirdi).
+
+   DALGA İKİ TURDA YAVAŞLADI: ~0.9 sn → ~2 sn → ~3 sn. İlk hâli
+   "kayıp geçiyordu" — göz dalgayı yakalayamadan bitiyordu.
+
+   Süre uzarken PERİYOT da 7 → 9 sn'ye çıktı, çünkü bekleme sabit bir
+   yüzdeden değil ARTAN BİR FARKTAN geliyor: 7 sn'lik turda 3 sn'lik
+   dalga geriye 4 sn sessizlik bırakırdı ve onaylanan bekleme ~6 sn'ydi.
+   9 sn'lik tur ikisini birden tutuyor — 3 sn ışık, 6 sn sessizlik.
+
+   Dalganın kendi eğrisi de ease-in-out'tan LINEAR'a çekildi. Bu tek
+   başına yavaşlatma kadar iş görüyor: ease-in-out iki ucu yumuşatmak
+   için ortayı ~1.6 kat hızlandırıyor, yani süreyi uzatsanız bile
+   dalganın GÖRÜLDÜĞÜ an yine bir savruluş oluyordu. Işık artık sabit
+   hızda geçiyor. Uçlardaki sertlik sorun değil: gradyanın kendisi
+   alfa-0'dan başlayıp alfa-0'a dönüyor, yani giriş-çıkış zaten
+   yumuşak — eğriyle ikinci kez yumuşatmaya gerek yok.
+
+   Kategori AKTİF olduğunda parıltı da vurgu da düşüyor: aktif çipin
+   altın dolgusu zaten en güçlü hâl, üstüne parıltı koymak "neredesin"
+   ile "buraya bak"ı aynı anda söylemek olurdu. */
+.rail a.hot {
+  color: var(--text);
+  border-color: var(--gold-leaf);
+  border-radius: 25px;
+  background: color-mix(in srgb, var(--gold-leaf) 15%, transparent);
+  position: relative;
+  overflow: hidden;
+}
+.rail a.hot[aria-current="true"] {
+  background: var(--gold-leaf); color: var(--on-gold);
+}
+/* metin parıltı katmanının üstünde kalsın */
+.rail a .rail-t { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .rail a.hot:not([aria-current])::after {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    /* Gradyan İKİ KEZ üst üste basılıyor. Mekan anahtarında tek kat
+       yetiyor çünkü orada kapsülün zemini yok — %30 altın doğrudan
+       sayfanın üzerine düşüyor. Burada çipin kendi zemini zaten soluk
+       altın; tek kat dalganın üzerinden geçtiğini fark ettirmiyordu.
+       İki özdeş kat ~%51 tepe veriyor.
+
+       Ton yükseltmenin bedeli yok: anahtardaki %30 sınırı --muted
+       METİN yüzünden konmuştu, buradaki metin --text (altın dolgu
+       üzerinde 9.23:1). Sabit bir renk yazmak yerine katman
+       tekrarlanıyor ki loş temada --shine kendi sıcak beyazına
+       düşmeye devam etsin. */
+    background-image:
+      linear-gradient(105deg, var(--shine-0) 38%, var(--shine) 50%, var(--shine-0) 62%),
+      linear-gradient(105deg, var(--shine-0) 38%, var(--shine) 50%, var(--shine-0) 62%);
+    background-size: 240% 100%;
+    background-position: 165% center;
+    background-repeat: no-repeat;
+    animation: hot-shine 9s linear infinite;
+  }
+}
+@keyframes hot-shine {
+  0%     { background-position: 165% center; }
+  33.3%  { background-position: -65% center; }
+  100%   { background-position: -65% center; }
+}
+
+/* İşaretçi üzerindeyken parıltının işi bitti: keşif zaten oldu.
+   (§C2'deki aynı gerekçe — duraklatmak değil kapatmak, yoksa dalga
+   yakalandığı yerde asılı kalır.) */
+@media (hover: hover) {
+  .rail a.hot:hover { color: var(--text); border-color: var(--gold-leaf); }
+  .rail a.hot:hover::after { animation: none; opacity: 0; }
 }
 
 /* ---------- kenar okları ----------
@@ -1114,20 +1228,45 @@ button.shot { cursor: zoom-in; padding: 0; }
 }
 
 /* ---------- ekstralar şeridi ----------
-   Ürün kartı değil: kategorinin altında tek satır. */
+   Ürün kartı değil: kategorinin altında tek blok.
+
+   ÖNCEKİ HÂLİ GÖRÜNMÜYORDU. Tek bir hairline'ın altında 13px --muted
+   metin — ürün listesinin dibindeki bir dipnot gibi okunuyordu ve
+   müşteri "ekstraları göremiyorum" dedi. Haklıydı: ekstralar bir
+   dipnot değil, sipariş anında okunacak bir fiyat listesi.
+
+   Üç şey değişti, hiçbiri yeni bir dil icat etmiyor:
+     · Blok bir YÜZEY oldu: --surf zemin, --line hairline çerçeve ve
+       solda 3px altın çubuk. Altın sol kenar sayfada zaten kategori
+       bandının işareti (§D3); ekstralar o ailenin küçük üyesi olarak
+       okunuyor, kendi başına bir şey olarak değil.
+     · "EKSTRA" etiketi KENDİ SATIRINDA (flex-basis: 100%). Satır
+       başındayken ilk ekstranın adına yapışıyor ve etiket mi ürün mü
+       belli olmuyordu. Punto 9 → 10.5px, ağırlık 500 → 600.
+     · Liste metni --muted 13px → --text 14px. Fiyat okunacaksa
+       ikincil tonda duramaz.
+   Köşeler kare kalıyor — yuvarlaklık bu sistemde yalnız fotoğraf
+   kutusunun ve kapsüllerin hakkı. */
 .extras {
-  margin-top: 20px; padding-top: 14px;
-  border-top: 1px solid var(--rule);
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px;
-  font-size: 13px; color: var(--muted); line-height: 1.7;
+  margin-top: 22px;
+  padding: 13px 15px;
+  background: var(--surf);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold-leaf);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px;
+  font-size: 14px; color: var(--text); line-height: 1.7;
 }
 .extras .lbl {
-  font: 500 9px/1 var(--font-body); letter-spacing: .17em; text-transform: uppercase;
-  color: var(--gold-ink); margin-right: 4px;
+  flex: 0 0 100%;
+  font: 600 10.5px/1 var(--font-body); letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-ink);
+  margin-bottom: 7px;
 }
 .extras .ex { white-space: nowrap; }
-.extras b { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
-.extras .sq { color: var(--rule); }
+.extras b { font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+/* Ayraç kare noktası artık altın: metin --text'e çıkınca --rule tonu
+   listenin altında kayboluyordu. */
+.extras .sq { color: var(--gold-leaf); }
 
 /* ============================================================
    /lounge — menü verisi gelene kadarki ekran (§6)

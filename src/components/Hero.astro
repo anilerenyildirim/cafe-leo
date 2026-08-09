@@ -15,6 +15,16 @@
    eyebrow metnindeki "·" ayracı kare noktaya çevriliyor: ayraç
    karakteri sistemde tek ve o kare.
 
+   EYEBROW OPSİYONEL (`eyebrow` prop). /menu'de basılmıyor: masthead
+   zaten "Cafe Leo Teras" diyor, hemen altındaki "Kafe & Teras ·
+   Sinanoba" aynı şeyi ikinci kez söylüyordu. /lounge'da DURUYOR —
+   orada menü yok, eyebrow ekrandaki dört gerçek veriden biri.
+
+   AKSİYON SIRASI: Menü başta. Bu satırın işi öncelikle menüye
+   götürmek; konum ve telefon ondan sonra gelir. Menü linki tonuyla da
+   ayrılıyor (.lead — bkz. global.css § aksiyon satırı): diğerleri
+   --muted, o --text ve altında kalıcı altın çizgi var.
+
    Durum rozetinin JS'i buradan çıktı — tüm istemci davranışı tek
    modülde (scripts/app.ts), çünkü ClientRouter altında bileşen
    script'leri gezinmede yeniden çalışmaz.
@@ -23,30 +33,34 @@ import type { Venue } from '../data/menu';
 
 interface Props {
   venue: Venue;
+  /** üst satır (mekan · semt) basılsın mı — bkz. başlıktaki not */
+  eyebrow?: boolean;
 }
 
-const { venue } = Astro.props;
+const { venue, eyebrow = true } = Astro.props;
 const c = venue.contact;
 
 const brow = venue.eyebrow.split('·').map((s) => s.trim()).filter(Boolean);
 
-interface Lnk { href: string; label: string; ext?: boolean }
+interface Lnk { href: string; label: string; ext?: boolean; lead?: boolean }
 const links: Lnk[] = [];
+if (venue.sections) links.push({ href: '#menu', label: 'Menü', lead: true });
 if (c.mapsUrl) links.push({ href: c.mapsUrl, label: 'Konum', ext: true });
 if (c.phone) links.push({ href: `tel:${c.phone}`, label: 'Ara' });
 if (c.instagram) links.push({ href: c.instagram, label: 'Instagram', ext: true });
-if (venue.sections) links.push({ href: '#menu', label: 'Menü' });
 ---
 
 <section class="hero">
-  <p class="eyebrow">
-    {brow.map((part, i) => (
-      <>
-        {i > 0 && <span class="sq" aria-hidden="true"></span>}
-        <span>{part}</span>
-      </>
-    ))}
-  </p>
+  {eyebrow && (
+    <p class="eyebrow">
+      {brow.map((part, i) => (
+        <>
+          {i > 0 && <span class="sq" aria-hidden="true"></span>}
+          <span>{part}</span>
+        </>
+      ))}
+    </p>
+  )}
 
   <p class="tagline">{venue.tagline}</p>
 
@@ -64,6 +78,7 @@ if (venue.sections) links.push({ href: '#menu', label: 'Menü' });
           {i > 0 && <span class="sq" aria-hidden="true"></span>}
           <a
             href={l.href}
+            class:list={[l.lead && 'lead']}
             target={l.ext ? '_blank' : undefined}
             rel={l.ext ? 'noopener' : undefined}
           >{l.label}</a>

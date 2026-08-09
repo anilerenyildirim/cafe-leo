@@ -85,6 +85,18 @@ interface RawSection {
       null: bölüm referanslardan oluşuyor, oran ürünün kendi
       bölümünden geliyor. */
   vat: 10 | 20 | null;
+  /**
+   * Rayda ÖNE ÇIKAN kategori — altın kenarlı kapsül + 7 sn'de bir
+   * parıltı (mekan anahtarındaki efektin aynısı, bkz. global.css).
+   *
+   * Slug'a bakan bir CSS kuralı yazılmadı: hangi kategorinin
+   * vurgulanacağı bir MENÜ KARARI, bir stil kararı değil. Yarın
+   * vurgu Tatlılar'a geçerse burada tek satır değişir.
+   *
+   * Aynı anda birden fazla bölüme konabilir ama konmamalı: iki
+   * parlayan çip birbirinin vurgusunu yer.
+   */
+  highlight?: boolean;
   subsections: RawSubsection[];
 }
 
@@ -172,6 +184,8 @@ export interface Section {
   extras: Extra[];
   /** bölümdeki toplam ürün adedi — başlıktaki sayaç */
   count: number;
+  /** rayda öne çıkan kategori (bkz. RawSection.highlight) */
+  highlight: boolean;
   /**
    * Bölüm YALNIZCA referanslardan mı oluşuyor? (İmza Ürünler)
    *
@@ -277,6 +291,7 @@ function buildVenue(v: RawVenue): Venue {
         subs,
         extras: extrasFor(sec.slug),
         count: subs.reduce((n, s) => n + s.items.length, 0),
+        highlight: sec.highlight === true,
         refsOnly: sec.subsections.every((sub) => sub.items.every(isRef)),
       };
     });

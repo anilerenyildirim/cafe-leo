@@ -31,6 +31,14 @@
 
    Kaydırma kutusu ayrı bir katman (.rail-scroll): maske ve gölge
    kaymayan .rail'e bağlı, içerikle birlikte sürüklenmiyor.
+
+   ÖNE ÇIKAN ÇİP (.hot): menu.json → section.highlight. Altın kenarlı
+   kapsül, üzerinden 7 saniyede bir mekan anahtarındakiyle AYNI parıltı
+   geçiyor. Karar veriden geliyor, slug'a bakan bir CSS kuralı yok.
+
+   Çip metni <span> içinde: parıltı katmanı (::after) çipin tamamını
+   kaplıyor, metin onun ÜSTÜNDE kalmalı — yoksa dalganın tepe anında
+   harflerin üzerine altın bir tül biniyor.
    ============================================================ */
 import type { Section } from '../data/menu';
 
@@ -46,7 +54,11 @@ const { sections } = Astro.props;
   <div class="rail-scroll" id="rail">
     <ul>
       {sections.map((s) => (
-        <li><a href={`#${s.slug}`}>{s.title}</a></li>
+        <li>
+          <a href={`#${s.slug}`} class:list={[s.highlight && 'hot']}>
+            <span class="rail-t">{s.title}</span>
+          </a>
+        </li>
       ))}
     </ul>
   </div>

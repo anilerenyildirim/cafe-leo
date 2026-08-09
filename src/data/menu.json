@@ -52,187 +52,10 @@
         },
 
         {
-          "slug": "sicak-icecekler",
-          "name": { "tr": "Sıcak İçecekler" },
-          "vat": 10,
-          "subsections": [
-            {
-              "slug": "sicak-icecekler-liste",
-              "name": null,
-              "items": [
-                { "slug": "turk-kahvesi", "name": { "tr": "Türk Kahvesi" }, "price": 17500 },
-                { "slug": "double-turk-kahvesi", "name": { "tr": "Double Türk Kahvesi" }, "price": 20000 },
-                { "slug": "espresso", "name": { "tr": "Espresso" }, "price": 17500 },
-                { "slug": "double-espresso", "name": { "tr": "Double Espresso" }, "price": 20000 },
-                { "slug": "cortado", "name": { "tr": "Cortado" }, "price": 18000 },
-                { "slug": "americano", "name": { "tr": "Americano" }, "price": 22000 },
-                { "slug": "filtre-kahve", "name": { "tr": "Filtre Kahve" }, "price": 19000 },
-                { "slug": "misto", "name": { "tr": "Misto" }, "price": 22000 },
-                { "slug": "flat-white", "name": { "tr": "Flat White" }, "price": 24000 },
-                { "slug": "latte", "name": { "tr": "Latte" }, "price": 24000 },
-                { "slug": "cappuccino", "name": { "tr": "Cappuccino" }, "price": 24000 },
-                { "slug": "mocha", "name": { "tr": "Mocha" }, "price": 24000 },
-                { "slug": "white-mocha", "name": { "tr": "White Mocha" }, "price": 25000 },
-                { "slug": "caramel-latte", "name": { "tr": "Caramel Latte" }, "price": 25000 },
-                { "slug": "vanilla-latte", "name": { "tr": "Vanilla Latte" }, "price": 25000 },
-                { "slug": "caramel-macchiato", "name": { "tr": "Caramel Macchiato" }, "price": 25000, "note": "fix: \"CARAMEL MACCIHATO\" → Macchiato" },
-
-                { "slug": "cay", "name": { "tr": "Çay" }, "price": 8500 },
-                { "slug": "buyuk-cay", "name": { "tr": "Büyük Çay" }, "price": 9500 },
-                { "slug": "kupa-cay", "name": { "tr": "Kupa Çay" }, "price": 11500 },
-                { "slug": "bitki-cayi", "name": { "tr": "Bitki Çayı" }, "price": 22000 },
-
-                { "slug": "sicak-cikolata", "name": { "tr": "Sıcak Çikolata" }, "price": 24000 },
-                { "slug": "salep", "name": { "tr": "Salep" }, "price": 25000 },
-                { "slug": "portakalli-salep", "name": { "tr": "Portakallı Salep" }, "price": 26000 },
-                { "slug": "balli-sut", "name": { "tr": "Ballı Süt" }, "price": 24000 }
-              ]
-            }
-          ]
-        },
-
-        {
-          "slug": "tatlilar",
-          "name": { "tr": "Tatlılar" },
-          "vat": 10,
-          "subsections": [
-            {
-              "slug": "tatlilar-liste",
-              "name": null,
-              "items": [
-                { "slug": "leo-waffle", "name": { "tr": "Leo Waffle" }, "price": 51000, "badges": ["leo-pick"] },
-                { "slug": "cilekli-kruvasan", "name": { "tr": "Çilekli Kruvasan" }, "price": 54000 },
-                { "slug": "san-sebastian", "name": { "tr": "San Sebastian" }, "price": 36000, "badges": ["leo-pick"] },
-                { "slug": "brownie", "name": { "tr": "Brownie" }, "price": 36000 },
-                { "slug": "dondurmali-brownie", "name": { "tr": "Dondurmalı Brownie" }, "price": 47500, "note": "\"X Dondurmalı\" → \"Dondurmalı X\"" },
-                { "slug": "cookie-pie", "name": { "tr": "Cookie Pie" }, "price": 32000 },
-                { "slug": "dondurmali-cookie-pie", "name": { "tr": "Dondurmalı Cookie Pie" }, "price": 43500 },
-                { "slug": "leo-sufle", "name": { "tr": "Leo Sufle" }, "price": 30000, "badges": ["leo-pick"] },
-                { "slug": "dondurmali-sufle", "name": { "tr": "Dondurmalı Leo Sufle" }, "price": 41500 },
-                { "slug": "limonlu-cheesecake", "name": { "tr": "Limonlu Cheesecake" }, "price": 30000 },
-                {
-                  "slug": "taze-gunluk-tatlilar",
-                  "name": { "tr": "Taze Günlük Tatlılar" },
-                  "description": { "tr": "Taze Günlük Tatlılarımız için garsona danışabilirsiniz." },
-                  "price": 36000
-                }
-              ]
-            }
-          ]
-        },
-
-        {
-          "slug": "soguk-icecekler",
-          "name": { "tr": "Soğuk İçecekler" },
-          "vat": 10,
-          "subsections": [
-            {
-              "slug": "mokteyller",
-              "name": { "tr": "Mokteyller" },
-              "icon": "pornstar-martini",
-              "items": [
-                {
-                  "slug": "pornstar-martini",
-                  "name": { "tr": "Pornstar Martini" },
-                  "description": { "tr": "4 cl passion püresi, 1 cl vanilya şurubu, 3 cl portakal suyu, 4 cl su, 1 cl şeker, 1,5 cl lime" },
-                  "price": 45000,
-                  "badges": ["leo-pick"]
-                },
-                {
-                  "slug": "espresso-martini",
-                  "name": { "tr": "Espresso Martini" },
-                  "description": { "tr": "5 cl espresso, 1 cl vanilya şurubu, 1 cl çikolata şurubu, 5 cl su" },
-                  "price": 40000
-                },
-                {
-                  "slug": "green-garden",
-                  "name": { "tr": "Green Garden" },
-                  "description": { "tr": "10–12 yaprak kuzu kulağı, 10 yaprak nane, 5 cl limon suyu, 5 cl su, 3 cl şeker şurubu, 7 cl bergamotlu çay" },
-                  "price": 40000
-                },
-                {
-                  "slug": "hibiskus",
-                  "name": { "tr": "Hibiskus" },
-                  "description": { "tr": "6 cl bergamotlu çay, 6 cl hibiskus sos, 6 cl limon suyu" },
-                  "price": 40000
-                },
-                {
-                  "slug": "mexican",
-                  "name": { "tr": "Mexican" },
-                  "description": { "tr": "Alkolsüz bira" },
-                  "price": 35000
-                }
-              ]
-            },
-            {
-              "slug": "soguk-kahveler",
-              "name": { "tr": "Soğuk Kahveler" },
-              "icon": "ice-americano",
-              "items": [
-                { "slug": "ice-americano", "name": { "tr": "Ice Americano" }, "price": 24000 },
-                { "slug": "ice-latte", "name": { "tr": "Ice Latte" }, "price": 25000 },
-                { "slug": "ice-vanilla-latte", "name": { "tr": "Ice Vanilla Latte" }, "price": 26000 },
-                { "slug": "ice-caramel-latte", "name": { "tr": "Ice Caramel Latte" }, "price": 26000 },
-                { "slug": "ice-mocha", "name": { "tr": "Ice Mocha" }, "price": 26000 },
-                { "slug": "ice-white-mocha", "name": { "tr": "Ice White Mocha" }, "price": 26000, "note": "fix: \"ICE WHİTE MOCHA\" — Türkçe İ" },
-                { "slug": "ice-caramel-macchiato", "name": { "tr": "Ice Caramel Macchiato" }, "price": 27500, "note": "fix: \"ICE KARAMEL MACCHIATO\" → sıcak versiyonuyla aynı yazım" },
-                { "slug": "affogato", "name": { "tr": "Affogato" }, "price": 30000, "badges": ["leo-pick"] }
-              ]
-            },
-            {
-              "slug": "milkshakeler",
-              "name": { "tr": "Milkshakeler" },
-              "icon": "oreo-milkshake",
-              "items": [
-                { "slug": "cikolatali-milkshake", "name": { "tr": "Çikolatalı Milkshake" }, "price": 26000, "note": "\"Milkshake X\" → \"X'li Milkshake\"" },
-                { "slug": "cilekli-milkshake", "name": { "tr": "Çilekli Milkshake" }, "price": 26000 },
-                { "slug": "muzlu-milkshake", "name": { "tr": "Muzlu Milkshake" }, "price": 26000 },
-                { "slug": "karamelli-milkshake", "name": { "tr": "Karamelli Milkshake" }, "price": 26000 },
-                { "slug": "vanilyali-milkshake", "name": { "tr": "Vanilyalı Milkshake" }, "price": 26000 },
-                { "slug": "oreo-milkshake", "name": { "tr": "Oreo Milkshake" }, "price": 27000 },
-                { "slug": "lotus-milkshake", "name": { "tr": "Lotus Milkshake" }, "price": 27000 },
-                { "slug": "brownie-milkshake", "name": { "tr": "Brownie Milkshake" }, "price": 27000 }
-              ]
-            },
-            {
-              "slug": "frozenler",
-              "name": { "tr": "Frozenler" },
-              "icon": "karpuz-frozen",
-              "items": [
-                { "slug": "cilekli-frozen", "name": { "tr": "Çilekli Frozen" }, "price": 25000 },
-                { "slug": "mango-frozen", "name": { "tr": "Mango Frozen" }, "price": 25000 },
-                { "slug": "yesil-elma-frozen", "name": { "tr": "Yeşil Elma Frozen" }, "price": 25000 },
-                { "slug": "karpuz-frozen", "name": { "tr": "Karpuz Frozen" }, "price": 25000 },
-                { "slug": "karadut-frozen", "name": { "tr": "Karadut Frozen" }, "price": 25000 },
-                { "slug": "ananas-frozen", "name": { "tr": "Ananas Frozen" }, "price": 25000 },
-                { "slug": "kavun-frozen", "name": { "tr": "Kavun Frozen" }, "price": 25000 },
-                { "slug": "seftali-frozen", "name": { "tr": "Şeftali Frozen" }, "price": 25000 },
-                { "slug": "passion-fruit-frozen", "name": { "tr": "Passion Fruit Frozen" }, "price": 25000 }
-              ]
-            },
-            {
-              "slug": "mesrubatlar",
-              "name": { "tr": "Meşrubatlar" },
-              "icon": "sikma-portakal-suyu",
-              "items": [
-                { "slug": "pink-dream", "name": { "tr": "Pink Dream" }, "price": 17500, "badges": ["leo-pick"] },
-                { "slug": "cilekli-limonata", "name": { "tr": "Çilekli Limonata" }, "price": 18000 },
-                { "slug": "sikma-portakal-suyu", "name": { "tr": "Sıkma Portakal Suyu" }, "price": 26000 },
-                { "slug": "kola", "name": { "tr": "Kola" }, "price": 12500 },
-                { "slug": "sprite", "name": { "tr": "Sprite" }, "price": 12500 },
-                { "slug": "sade-soda", "name": { "tr": "Sade Soda" }, "price": 12500 },
-                { "slug": "churchill", "name": { "tr": "Churchill" }, "price": 19000 },
-                { "slug": "red-bull", "name": { "tr": "Red Bull" }, "price": 18000 },
-                { "slug": "su", "name": { "tr": "Su" }, "price": 6000 }
-              ]
-            }
-          ]
-        },
-
-        {
           "slug": "yiyecekler",
           "name": { "tr": "Yiyecekler" },
           "vat": 20,
+          "highlight": true,
           "subsections": [
             {
               "slug": "kahvalti",
@@ -516,6 +339,184 @@
                   "description": { "tr": "Akdeniz yeşillikleri, köz kırmızı biber, siyah zeytin, beyaz peynir, cherry domates, salatalık, zeytinyağlı limon sos, pul biber, kekik" },
                   "price": 46000
                 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "sicak-icecekler",
+          "name": { "tr": "Sıcak İçecekler" },
+          "vat": 10,
+          "subsections": [
+            {
+              "slug": "sicak-icecekler-liste",
+              "name": null,
+              "items": [
+                { "slug": "turk-kahvesi", "name": { "tr": "Türk Kahvesi" }, "price": 17500 },
+                { "slug": "double-turk-kahvesi", "name": { "tr": "Double Türk Kahvesi" }, "price": 20000 },
+                { "slug": "espresso", "name": { "tr": "Espresso" }, "price": 17500 },
+                { "slug": "double-espresso", "name": { "tr": "Double Espresso" }, "price": 20000 },
+                { "slug": "cortado", "name": { "tr": "Cortado" }, "price": 18000 },
+                { "slug": "americano", "name": { "tr": "Americano" }, "price": 22000 },
+                { "slug": "filtre-kahve", "name": { "tr": "Filtre Kahve" }, "price": 19000 },
+                { "slug": "misto", "name": { "tr": "Misto" }, "price": 22000 },
+                { "slug": "flat-white", "name": { "tr": "Flat White" }, "price": 24000 },
+                { "slug": "latte", "name": { "tr": "Latte" }, "price": 24000 },
+                { "slug": "cappuccino", "name": { "tr": "Cappuccino" }, "price": 24000 },
+                { "slug": "mocha", "name": { "tr": "Mocha" }, "price": 24000 },
+                { "slug": "white-mocha", "name": { "tr": "White Mocha" }, "price": 25000 },
+                { "slug": "caramel-latte", "name": { "tr": "Caramel Latte" }, "price": 25000 },
+                { "slug": "vanilla-latte", "name": { "tr": "Vanilla Latte" }, "price": 25000 },
+                { "slug": "caramel-macchiato", "name": { "tr": "Caramel Macchiato" }, "price": 25000, "note": "fix: \"CARAMEL MACCIHATO\" → Macchiato" },
+
+                { "slug": "cay", "name": { "tr": "Çay" }, "price": 8500 },
+                { "slug": "buyuk-cay", "name": { "tr": "Büyük Çay" }, "price": 9500 },
+                { "slug": "kupa-cay", "name": { "tr": "Kupa Çay" }, "price": 11500 },
+                { "slug": "bitki-cayi", "name": { "tr": "Bitki Çayı" }, "price": 22000 },
+
+                { "slug": "sicak-cikolata", "name": { "tr": "Sıcak Çikolata" }, "price": 24000 },
+                { "slug": "salep", "name": { "tr": "Salep" }, "price": 25000 },
+                { "slug": "portakalli-salep", "name": { "tr": "Portakallı Salep" }, "price": 26000 },
+                { "slug": "balli-sut", "name": { "tr": "Ballı Süt" }, "price": 24000 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "tatlilar",
+          "name": { "tr": "Tatlılar" },
+          "vat": 10,
+          "subsections": [
+            {
+              "slug": "tatlilar-liste",
+              "name": null,
+              "items": [
+                { "slug": "leo-waffle", "name": { "tr": "Leo Waffle" }, "price": 51000, "badges": ["leo-pick"] },
+                { "slug": "cilekli-kruvasan", "name": { "tr": "Çilekli Kruvasan" }, "price": 54000 },
+                { "slug": "san-sebastian", "name": { "tr": "San Sebastian" }, "price": 36000, "badges": ["leo-pick"] },
+                { "slug": "brownie", "name": { "tr": "Brownie" }, "price": 36000 },
+                { "slug": "dondurmali-brownie", "name": { "tr": "Dondurmalı Brownie" }, "price": 47500, "note": "\"X Dondurmalı\" → \"Dondurmalı X\"" },
+                { "slug": "cookie-pie", "name": { "tr": "Cookie Pie" }, "price": 32000 },
+                { "slug": "dondurmali-cookie-pie", "name": { "tr": "Dondurmalı Cookie Pie" }, "price": 43500 },
+                { "slug": "leo-sufle", "name": { "tr": "Leo Sufle" }, "price": 30000, "badges": ["leo-pick"] },
+                { "slug": "dondurmali-sufle", "name": { "tr": "Dondurmalı Leo Sufle" }, "price": 41500 },
+                { "slug": "limonlu-cheesecake", "name": { "tr": "Limonlu Cheesecake" }, "price": 30000 },
+                {
+                  "slug": "taze-gunluk-tatlilar",
+                  "name": { "tr": "Taze Günlük Tatlılar" },
+                  "description": { "tr": "Taze Günlük Tatlılarımız için bize danışabilirsiniz." },
+                  "price": 36000
+                }
+              ]
+            }
+          ]
+        },
+
+        {
+          "slug": "soguk-icecekler",
+          "name": { "tr": "Soğuk İçecekler" },
+          "vat": 10,
+          "subsections": [
+            {
+              "slug": "mokteyller",
+              "name": { "tr": "Mokteyller" },
+              "icon": "pornstar-martini",
+              "items": [
+                {
+                  "slug": "pornstar-martini",
+                  "name": { "tr": "Pornstar Martini" },
+                  "description": { "tr": "4 cl passion püresi, 1 cl vanilya şurubu, 3 cl portakal suyu, 4 cl su, 1 cl şeker, 1,5 cl lime" },
+                  "price": 45000,
+                  "badges": ["leo-pick"]
+                },
+                {
+                  "slug": "espresso-martini",
+                  "name": { "tr": "Espresso Martini" },
+                  "description": { "tr": "5 cl espresso, 1 cl vanilya şurubu, 1 cl çikolata şurubu, 5 cl su" },
+                  "price": 40000
+                },
+                {
+                  "slug": "green-garden",
+                  "name": { "tr": "Green Garden" },
+                  "description": { "tr": "10–12 yaprak kuzu kulağı, 10 yaprak nane, 5 cl limon suyu, 5 cl su, 3 cl şeker şurubu, 7 cl bergamotlu çay" },
+                  "price": 40000
+                },
+                {
+                  "slug": "hibiskus",
+                  "name": { "tr": "Hibiskus" },
+                  "description": { "tr": "6 cl bergamotlu çay, 6 cl hibiskus sos, 6 cl limon suyu" },
+                  "price": 40000
+                },
+                {
+                  "slug": "mexican",
+                  "name": { "tr": "Mexican" },
+                  "description": { "tr": "Alkolsüz bira" },
+                  "price": 35000
+                }
+              ]
+            },
+            {
+              "slug": "soguk-kahveler",
+              "name": { "tr": "Soğuk Kahveler" },
+              "icon": "ice-americano",
+              "items": [
+                { "slug": "ice-americano", "name": { "tr": "Ice Americano" }, "price": 24000 },
+                { "slug": "ice-latte", "name": { "tr": "Ice Latte" }, "price": 25000 },
+                { "slug": "ice-vanilla-latte", "name": { "tr": "Ice Vanilla Latte" }, "price": 26000 },
+                { "slug": "ice-caramel-latte", "name": { "tr": "Ice Caramel Latte" }, "price": 26000 },
+                { "slug": "ice-mocha", "name": { "tr": "Ice Mocha" }, "price": 26000 },
+                { "slug": "ice-white-mocha", "name": { "tr": "Ice White Mocha" }, "price": 26000, "note": "fix: \"ICE WHİTE MOCHA\" — Türkçe İ" },
+                { "slug": "ice-caramel-macchiato", "name": { "tr": "Ice Caramel Macchiato" }, "price": 27500, "note": "fix: \"ICE KARAMEL MACCHIATO\" → sıcak versiyonuyla aynı yazım" },
+                { "slug": "affogato", "name": { "tr": "Affogato" }, "price": 30000, "badges": ["leo-pick"] }
+              ]
+            },
+            {
+              "slug": "milkshakeler",
+              "name": { "tr": "Milkshakeler" },
+              "icon": "oreo-milkshake",
+              "items": [
+                { "slug": "cikolatali-milkshake", "name": { "tr": "Çikolatalı Milkshake" }, "price": 26000, "note": "\"Milkshake X\" → \"X'li Milkshake\"" },
+                { "slug": "cilekli-milkshake", "name": { "tr": "Çilekli Milkshake" }, "price": 26000 },
+                { "slug": "muzlu-milkshake", "name": { "tr": "Muzlu Milkshake" }, "price": 26000 },
+                { "slug": "karamelli-milkshake", "name": { "tr": "Karamelli Milkshake" }, "price": 26000 },
+                { "slug": "vanilyali-milkshake", "name": { "tr": "Vanilyalı Milkshake" }, "price": 26000 },
+                { "slug": "oreo-milkshake", "name": { "tr": "Oreo Milkshake" }, "price": 27000 },
+                { "slug": "lotus-milkshake", "name": { "tr": "Lotus Milkshake" }, "price": 27000 },
+                { "slug": "brownie-milkshake", "name": { "tr": "Brownie Milkshake" }, "price": 27000 }
+              ]
+            },
+            {
+              "slug": "frozenler",
+              "name": { "tr": "Frozenler" },
+              "icon": "karpuz-frozen",
+              "items": [
+                { "slug": "cilekli-frozen", "name": { "tr": "Çilekli Frozen" }, "price": 25000 },
+                { "slug": "mango-frozen", "name": { "tr": "Mango Frozen" }, "price": 25000 },
+                { "slug": "yesil-elma-frozen", "name": { "tr": "Yeşil Elma Frozen" }, "price": 25000 },
+                { "slug": "karpuz-frozen", "name": { "tr": "Karpuz Frozen" }, "price": 25000 },
+                { "slug": "karadut-frozen", "name": { "tr": "Karadut Frozen" }, "price": 25000 },
+                { "slug": "ananas-frozen", "name": { "tr": "Ananas Frozen" }, "price": 25000 },
+                { "slug": "kavun-frozen", "name": { "tr": "Kavun Frozen" }, "price": 25000 },
+                { "slug": "seftali-frozen", "name": { "tr": "Şeftali Frozen" }, "price": 25000 },
+                { "slug": "passion-fruit-frozen", "name": { "tr": "Passion Fruit Frozen" }, "price": 25000 }
+              ]
+            },
+            {
+              "slug": "mesrubatlar",
+              "name": { "tr": "Meşrubatlar" },
+              "icon": "sikma-portakal-suyu",
+              "items": [
+                { "slug": "pink-dream", "name": { "tr": "Pink Dream" }, "price": 17500, "badges": ["leo-pick"] },
+                { "slug": "cilekli-limonata", "name": { "tr": "Çilekli Limonata" }, "price": 18000 },
+                { "slug": "sikma-portakal-suyu", "name": { "tr": "Sıkma Portakal Suyu" }, "price": 26000 },
+                { "slug": "kola", "name": { "tr": "Kola" }, "price": 12500 },
+                { "slug": "sprite", "name": { "tr": "Sprite" }, "price": 12500 },
+                { "slug": "sade-soda", "name": { "tr": "Sade Soda" }, "price": 12500 },
+                { "slug": "churchill", "name": { "tr": "Churchill" }, "price": 19000 },
+                { "slug": "red-bull", "name": { "tr": "Red Bull" }, "price": 18000 },
+                { "slug": "su", "name": { "tr": "Su" }, "price": 6000 }
               ]
             }
           ]

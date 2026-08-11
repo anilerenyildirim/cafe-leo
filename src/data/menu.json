@@ -42,6 +42,7 @@
               "name": null,
               "items": [
                 "leo-pizza",
+                "leo-sushi",
                 "leo-waffle",
                 "leo-sufle",
                 "pink-dream",
@@ -179,13 +180,6 @@
                   "price": 36000
                 },
                 {
-                  "slug": "club-sandvic",
-                  "name": { "tr": "Club Sandviç" },
-                  "description": { "tr": "Tavuk bonfile, marul, turşu, domates, sarımsaklı mayonez, baharatlı patates" },
-                  "price": 50000,
-                  "note": "fix: \"CLUP\" → Club"
-                },
-                {
                   "slug": "frankfurter-tabagi",
                   "name": { "tr": "Frankfurter Tabağı" },
                   "description": { "tr": "2 piliç sosis, patates, çedarlı mantar, roka, cherry domates, rende kaşar" },
@@ -199,24 +193,36 @@
               "icon": "cheese-burger",
               "items": [
                 {
+                  "slug": "klasik-burger",
+                  "name": { "tr": "Klasik Burger" },
+                  "description": { "tr": "140 g dana köfte, 20 g Leo sos, 5 g turşu ve 20 g domates ile hazırlanır. 120 g patates ile servis edilir." },
+                  "price": 72000
+                },
+                {
                   "slug": "cheese-burger",
                   "name": { "tr": "Cheese Burger" },
-                  "description": { "tr": "140 g köfte, çedar, turşu, domates, karamelize soğan, leo sos, baharatlı patates" },
-                  "price": 73000,
+                  "description": { "tr": "140 g dana köfte, 20 g Leo sos, 5 g turşu, 20 g domates ve 20 g cheddar peyniri ile hazırlanır. 120 g patates ile servis edilir." },
+                  "price": 80000,
                   "badges": ["leo-pick"]
                 },
                 {
                   "slug": "sarkuteri-burger",
                   "name": { "tr": "Şarküteri Burger" },
-                  "description": { "tr": "140 g köfte, turşu, domates, karamelize soğan, füme et, dana jambon, suda mozzarella, leo sos, baharatlı patates" },
-                  "price": 82000,
-                  "note": "fix: \"loe sos\" → leo sos"
+                  "description": { "tr": "140 g dana köfte, 20 g mayosos, 5 g turşu, 20 g domates, 5 g karamelize soğan, 20 g roast beef ve 20 g suda mozzarella ile hazırlanır. 120 g patates ile servis edilir." },
+                  "price": 90000
                 },
                 {
                   "slug": "hot-dog",
                   "name": { "tr": "Hot Dog" },
-                  "description": { "tr": "Kıyma, karamelize soğan, dana sosis, füme et, leo sos, soğan çıtırı, baharatlı patates" },
-                  "price": 59000
+                  "description": { "tr": "100 g dana sosis; 20 g roast beef, 20 g cheddar sos, 20 g dana kıyma, 10 g karamelize soğan, 15 g burger sos ve ekşi mayalı pizza hamuru ile hazırlanır. 120 g patates ile servis edilir." },
+                  "price": 65000
+                },
+                {
+                  "slug": "club-sandvic",
+                  "name": { "tr": "Club Sandviç" },
+                  "description": { "tr": "Üç dilim tost ekmeği; 120 g tavuk, 10 g domates, 20 g iceberg marul, 20 g dana füme, 20 g mayonez ve 5 g turşu ile hazırlanır. 120 g patates ile servis edilir." },
+                  "price": 55000,
+                  "note": "kaynak \"CLUP\" → Club. Atıştırmalıklar'dan Burgerler'e taşındı (müşteri fiyat listesi)."
                 }
               ]
             },
@@ -228,30 +234,41 @@
                 {
                   "slug": "leo-pizza",
                   "name": { "tr": "Leo Pizza" },
-                  "description": { "tr": "Pizza sos, mozzarella, karides, kalamar, karamelize soğan, kapari çiçeği, fesleğen, rende parmesan" },
-                  "price": 118000,
+                  "description": { "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella, 60 g kalamar, 90 g karides, 50 g karamelize soğan ve 20 g kapari çiçeği ile hazırlanır." },
+                  "price": 130000,
                   "badges": ["leo-pick"],
                   "note": "fix: \"kaparı\" → kapari"
                 },
                 {
                   "slug": "burrata-peynirli-pizza",
                   "name": { "tr": "Burrata Peynirli Pizza" },
-                  "description": { "tr": "Burrata, pizza sos, mozzarella, mortadella, fesleğen, rende parmesan" },
-                  "price": 108000,
+                  "description": { "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella, 200 g burrata peyniri ve 100 g İtalyan mortadella salamı ile hazırlanır." },
+                  "price": 120000,
                   "note": "fix: \"Buratta\" → Burrata"
                 },
                 {
                   "slug": "dana-ham-pizza",
                   "name": { "tr": "Dana Ham Pizza" },
-                  "description": { "tr": "Pizza sos, mozzarella, dana füme et, fesleğen, rende parmesan" },
-                  "price": 90000,
-                  "note": "TEYİT: ad \"Dana Ham Pizza\", açıklama \"dana füme et\" diyor · fix: \"permasan\" → parmesan"
+                  "description": { "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella ve 100 g roast beef ile hazırlanır." },
+                  "price": 99000
+                },
+                {
+                  "slug": "4-peynirli-pizza",
+                  "name": { "tr": "4 Peynirli Pizza" },
+                  "description": { "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella, 40 g roquefort peyniri, 40 g cheddar peyniri ve 20 g parmesan peyniri ile hazırlanır." },
+                  "price": 85000
+                },
+                {
+                  "slug": "akdeniz-pizza",
+                  "name": { "tr": "Akdeniz Pizza" },
+                  "description": { "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella, 100 g ricotta peyniri, 60 g patlıcan ve 30 g cherry domates ile hazırlanır." },
+                  "price": 77000
                 },
                 {
                   "slug": "margarita-pizza",
                   "name": { "tr": "Margarita Pizza" },
-                  "description": { "tr": "Pizza sos, mozzarella, cherry domates, pesto sos, fesleğen, rende parmesan" },
-                  "price": 65000
+                  "description": { "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella ve 60 g cherry domates ile hazırlanır." },
+                  "price": 72000
                 }
               ]
             },
@@ -263,54 +280,81 @@
                 {
                   "slug": "karidesli-fettuccine",
                   "name": { "tr": "Karidesli Fettuccine" },
-                  "description": { "tr": "Karides, domates sos, acı sos, pesto sos" },
-                  "price": 75000,
+                  "description": { "tr": "Özel domates sosuyla harmanlanan 200 g fettuccine, 100-110 g karides eşliğinde servis edilir." },
+                  "price": 82500,
                   "note": "fix: \"FETTUCİNİ\" → Fettuccine"
                 },
                 {
                   "slug": "bonfileli-alfredo",
-                  "name": { "tr": "Bonfileli Alfredo" },
-                  "description": { "tr": "Krema, mantar, soğan, pesto sos" },
-                  "price": 70000
+                  "name": { "tr": "Alfredo Etli" },
+                  "description": { "tr": "Kremalı sos ile hazırlanan 200 g fettuccine; 120 g bonfile, 20 g soğan ve 20 g mantar ile servis edilir." },
+                  "price": 77000,
+                  "note": "ad \"Bonfileli Alfredo\" → \"Alfredo Etli\" (müşteri). Slug foto dosyasına bağlı, eski hâlinde."
                 },
                 {
                   "slug": "tavuklu-alfredo",
-                  "name": { "tr": "Tavuklu Alfredo" },
-                  "description": { "tr": "Krema, mantar, renkli biberler, pesto sos" },
+                  "name": { "tr": "Alfredo Tavuklu" },
+                  "description": { "tr": "Kremalı sos ile hazırlanan 200 g fettuccine; 120 g tavuk, 20 g kapya biber, 20 g çarliston biber ve 20 g mantar ile servis edilir." },
+                  "price": 72000,
+                  "note": "ad \"Tavuklu Alfredo\" → \"Alfredo Tavuklu\" (müşteri). Slug foto dosyasına bağlı, eski hâlinde."
+                },
+                {
+                  "slug": "mantarli-fettuccine",
+                  "name": { "tr": "Mantarlı Fettuccine" },
+                  "description": { "tr": "Kremalı sos ile hazırlanan 200 g fettuccine, 40 g porçini mantarı, 40 g istiridye mantarı ve 40 g kültür mantarı ile servis edilir." },
                   "price": 65000
                 },
                 {
                   "slug": "bolonez-soslu-spagetti",
                   "name": { "tr": "Bolonez Soslu Spagetti" },
-                  "description": { "tr": "Domates sos, kıyma, pesto sos" },
-                  "price": 58000
+                  "description": { "tr": "Özel domates sosuyla hazırlanan 200 g spaghetti; 100 g dana kıyma ve 60 g domates sos ile servis edilir." },
+                  "price": 64000,
+                  "note": "kaynakta \"60 domates sos\" — birim eksikti, 60 g yazıldı"
                 },
                 {
                   "slug": "penne-arrabbiata",
                   "name": { "tr": "Penne Arabiata" },
-                  "description": { "tr": "Domates sos, acı sos, siyah zeytin, pesto sos" },
-                  "price": 45000,
+                  "description": { "tr": "Özel domates sosuyla hazırlanan 200 g penne; 20 g siyah zeytin ve 60 g domates sos ile servis edilir." },
+                  "price": 50000,
                   "note": "kaynak \"ARABİATA\"; önce Arrabbiata'ya çevrilmişti, müşteri Arabiata istedi. Slug eski hâlinde bırakıldı (foto dosyası)."
                 }
               ]
             },
             {
-              "slug": "et-tavuk",
-              "name": { "tr": "Et & Tavuk" },
+              "slug": "ana-yemekler",
+              "name": { "tr": "Ana Yemekler" },
               "icon": "bonfile",
               "items": [
                 {
-                  "slug": "bonfile",
-                  "name": { "tr": "Bonfile" },
-                  "description": { "tr": "180 g marine bonfile, baby patates, mantar-soğan-maydanoz mix" },
-                  "price": 110000
+                  "slug": "izgara-kofte",
+                  "name": { "tr": "Izgara Köfte" },
+                  "description": { "tr": "200 g özel Leo köfte, 120 g pirinç pilavı, 120 g patates püresi, 15 g közlenmiş biber ve 20 g közlenmiş domates ile servis edilir." },
+                  "price": 85000
                 },
                 {
                   "slug": "tavuk-snitzel",
                   "name": { "tr": "Tavuk Şnitzel" },
-                  "description": { "tr": "180 g tavuk bonfile, limon, tereyağı, baharatlı patates" },
-                  "price": 70000,
-                  "note": "fix: \"ŞİNİTZEL\" → Şnitzel"
+                  "description": { "tr": "140 g özel panko pane şnitzel, 10 g tereyağı ve 15 g lime limon ile servis edilir. 140 g kızarmış patates eşlik eder." },
+                  "price": 77000,
+                  "note": "kaynak \"ŞİNİTZEL\", sonra \"Schnitzel\" yazıldı; menüde Şnitzel tutuldu"
+                },
+                {
+                  "slug": "bonfile",
+                  "name": { "tr": "Bonfile" },
+                  "description": { "tr": "160 g et bonfile, 120 g patates püresi ve 100 g mantar mix ile servis edilir." },
+                  "price": 149000
+                },
+                {
+                  "slug": "antrikot",
+                  "name": { "tr": "Antrikot" },
+                  "description": { "tr": "200-210 g antrikot, 100 g mantar mix ve 120 g patates püresi ile servis edilir." },
+                  "price": 135000
+                },
+                {
+                  "slug": "izgara-karides",
+                  "name": { "tr": "Izgara Karides" },
+                  "description": { "tr": "333 g karides, 120 g patates kızartması ve 20 g sweet chili ile servis edilir." },
+                  "price": 150000
                 }
               ]
             },
@@ -320,22 +364,35 @@
               "icon": "bonfile-bowl",
               "items": [
                 {
+                  "slug": "karides-bowl",
+                  "name": { "tr": "Karides Bowl" },
+                  "description": { "tr": "120 g karides, 120 g patates ve 20 g sweet chili ile hazırlanır." },
+                  "price": 85000
+                },
+                {
                   "slug": "bonfile-bowl",
                   "name": { "tr": "Bonfile Bowl" },
-                  "price": null,
-                  "note": "yeni ürün — fiyat ve fotoğraf müşteriden bekleniyor"
+                  "description": { "tr": "20 g Akdeniz yeşilliği, 80 g siyah pirinç, 50 g dilimlenmiş avokado, 50 g brokoli, 20 g cherry domates, 60 g mantar mix ve 120 g et bonfile ile hazırlanır." },
+                  "price": 77000
                 },
                 {
-                  "slug": "tavuklu-bowl",
-                  "name": { "tr": "Tavuklu Bowl" },
-                  "price": null,
-                  "note": "yeni ürün — fiyat ve fotoğraf müşteriden bekleniyor"
-                },
+                  "slug": "tavuk-bowl",
+                  "name": { "tr": "Tavuk Bowl" },
+                  "description": { "tr": "20 g Akdeniz yeşilliği, 80 g siyah pirinç, 50 g dilimlenmiş avokado, 50 g brokoli, 20 g cherry domates, 60 g mantar mix ve 120 g tavuk ile hazırlanır." },
+                  "price": 68000
+                }
+              ]
+            },
+            {
+              "slug": "sushi",
+              "name": { "tr": "Sushi" },
+              "icon": "leo-sushi",
+              "items": [
                 {
-                  "slug": "karidesli-bowl",
-                  "name": { "tr": "Karidesli Bowl" },
-                  "price": null,
-                  "note": "yeni ürün — fiyat ve fotoğraf müşteriden bekleniyor"
+                  "slug": "leo-sushi",
+                  "name": { "tr": "Leo Sushi" },
+                  "description": { "tr": "120 g sushi pirinci ve 1 adet nori, 60 g tempuralı karides, 10 g Philadelphia peyniri, 15 g avokado, 10 g salatalık, 15 g kibrit patates ve 10 g trüflü mayonez ile hazırlanır." },
+                  "price": 87000
                 }
               ]
             },
@@ -345,24 +402,37 @@
               "icon": "sezar-salata",
               "items": [
                 {
+                  "slug": "burrata-peynirli-salata",
+                  "name": { "tr": "Burrata Peynirli Salata" },
+                  "description": { "tr": "30 g Akdeniz yeşilliği, 30 g cherry domates, 30 g salatalık, 20 g incir, 20 g kayısı, 20 g ceviz ve 200 g burrata peyniri ile hazırlanır. Üzerine 5 g pesto sos eklenerek servis edilir." },
+                  "price": 99000
+                },
+                {
                   "slug": "deniz-mahsullu-salata",
                   "name": { "tr": "Deniz Mahsullü Salata" },
-                  "description": { "tr": "Mix deniz mahsulü, Akdeniz yeşillikleri, yeşil zeytin, kapari çiçeği, kırmızı soğan, zeytinyağlı limon sos" },
-                  "price": 90000,
+                  "description": { "tr": "120 g Akdeniz yeşilliği, 20 g kırmızı soğan, 20 g yeşil zeytin, 120 g deniz mahsulleri mixi ve 15 g kapari çiçeği ile hazırlanır." },
+                  "price": 99000,
                   "note": "fix: \"MAHSÜLLÜ\" → Mahsullü"
                 },
                 {
                   "slug": "sezar-salata",
                   "name": { "tr": "Sezar Salata" },
-                  "description": { "tr": "120 g tavuk bonfile, marul, sezar sos, kruton, cherry domates" },
-                  "price": 59000,
+                  "description": { "tr": "120 g marul, 120 g kızarmış tavuk, 60 g Sezar sos, 20 g cherry domates ve 10 g kruton ekmek ile hazırlanır." },
+                  "price": 65000,
                   "note": "fix: \"kroton\" → kruton"
                 },
                 {
+                  "slug": "hellim-salata",
+                  "name": { "tr": "Hellim Salata" },
+                  "description": { "tr": "120 g Akdeniz yeşilliği, 20 g salatalık, 30 g cherry domates, 20 g siyah zeytin ve 100 g kızarmış hellim ile hazırlanır. 10 ml zeytinyağlı limon sos ile servis edilir." },
+                  "price": 55000
+                },
+                {
                   "slug": "akdeniz-peynirli-salata",
-                  "name": { "tr": "Akdeniz Peynirli Salata" },
-                  "description": { "tr": "Akdeniz yeşillikleri, köz kırmızı biber, siyah zeytin, beyaz peynir, cherry domates, salatalık, zeytinyağlı limon sos, pul biber, kekik" },
-                  "price": 46000
+                  "name": { "tr": "Akdeniz Salata" },
+                  "description": { "tr": "120 g Akdeniz yeşilliği, 30 g köz biber, 20 g siyah zeytin, 100 g beyaz peynir ve 20 g cherry domates ile hazırlanır. Kekik ve pul biber ile servis edilir." },
+                  "price": 52000,
+                  "note": "ad \"Akdeniz Peynirli Salata\" → \"Akdeniz Salata\" (müşteri). Slug foto dosyasına bağlı, eski hâlinde."
                 }
               ]
             }

@@ -26,6 +26,7 @@ export const FOTO_EXT = 'webp';
  * yanında dört boş satır en kötü görünüm (bkz. soguk-kahveler).
  */
 export const NO_PHOTO: string[] = [
+  'sicak-icecekler-liste', // müşteri kararı: kahve ve çay çeşitleri tipografik
   'soguk-kahveler', // 1/8 — tek fotoğraflı satır en kötü görünüm
   'milkshakeler',   // 0/8
   'frozenler',      // 0/9

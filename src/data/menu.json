@@ -19,10 +19,10 @@
         "4": [10, 24], "5": [10, 24], "6": [10, 24]
       },
       "hoursText": { "tr": "Her gün 10.00 – 00.00" },
-      "hero": "leo-burger",
+      "hero": "cheese-burger",
       "featured": [
         "leo-waffle",
-        "leo-burger",
+        "cheese-burger",
         "leo-pizza",
         "burrata-peynirli-pizza",
         "san-sebastian",
@@ -196,11 +196,11 @@
             {
               "slug": "burgerler",
               "name": { "tr": "Burgerler" },
-              "icon": "leo-burger",
+              "icon": "cheese-burger",
               "items": [
                 {
-                  "slug": "leo-burger",
-                  "name": { "tr": "Leo Burger" },
+                  "slug": "cheese-burger",
+                  "name": { "tr": "Cheese Burger" },
                   "description": { "tr": "140 g köfte, çedar, turşu, domates, karamelize soğan, leo sos, baharatlı patates" },
                   "price": 73000,
                   "badges": ["leo-pick"]
@@ -287,10 +287,10 @@
                 },
                 {
                   "slug": "penne-arrabbiata",
-                  "name": { "tr": "Penne Arrabbiata" },
+                  "name": { "tr": "Penne Arabiata" },
                   "description": { "tr": "Domates sos, acı sos, siyah zeytin, pesto sos" },
                   "price": 45000,
-                  "note": "fix: \"ARABİATA\" → Arrabbiata"
+                  "note": "kaynak \"ARABİATA\"; önce Arrabbiata'ya çevrilmişti, müşteri Arabiata istedi. Slug eski hâlinde bırakıldı (foto dosyası)."
                 }
               ]
             },
@@ -311,6 +311,31 @@
                   "description": { "tr": "180 g tavuk bonfile, limon, tereyağı, baharatlı patates" },
                   "price": 70000,
                   "note": "fix: \"ŞİNİTZEL\" → Şnitzel"
+                }
+              ]
+            },
+            {
+              "slug": "bowl",
+              "name": { "tr": "Bowl" },
+              "icon": "bonfile-bowl",
+              "items": [
+                {
+                  "slug": "bonfile-bowl",
+                  "name": { "tr": "Bonfile Bowl" },
+                  "price": null,
+                  "note": "yeni ürün — fiyat ve fotoğraf müşteriden bekleniyor"
+                },
+                {
+                  "slug": "tavuklu-bowl",
+                  "name": { "tr": "Tavuklu Bowl" },
+                  "price": null,
+                  "note": "yeni ürün — fiyat ve fotoğraf müşteriden bekleniyor"
+                },
+                {
+                  "slug": "karidesli-bowl",
+                  "name": { "tr": "Karidesli Bowl" },
+                  "price": null,
+                  "note": "yeni ürün — fiyat ve fotoğraf müşteriden bekleniyor"
                 }
               ]
             },

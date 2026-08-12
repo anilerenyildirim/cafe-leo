@@ -11,7 +11,7 @@
    TypeScript'e dokunması gerekmesin diye veri koddan ayrıldı.
 
    ŞEMA NOTLARI (menu.json)
-   · schema: 1 — kırıcı değişiklikte artar.
+   · schema: 2 — panelle ortak sürüm (bkz. menu-panel/docs/menu-json.md).
    · Metin alanları TEK DİLLİ OLSA DA sözlük: { "tr": "…" }.
      İngilizce/Arapça eklendiğinde migrasyon gerekmesin.
    · price TAMSAYI KURUŞ: 73000 = 730,00 ₺. Ondalık yok, kayan nokta
@@ -21,10 +21,10 @@
      REFERANS: ürün başka bir bölümde tanımlı, burada yalnız
      gösteriliyor. "İmza Ürünler" böyle kuruldu — aynı ürün iki kez
      yazılmıyor, fiyatı tek yerden geliyor.
-   · `photo` alanı ŞEMADA YOK. Bir ürünün görseli olup olmadığı
-     build zamanında `public/foto/<slug>.webp` manifestosundan
-     okunuyor (lib/photos.ts). Aynı gerçeği iki yerde tutmamak için
-     veriye alınmadı — dosyayı klasöre koymak yetiyor.
+   · `photo` alanı ÖLÇÜ taşır: `{w,h}` ya da null. Adres şemada YOK,
+     slug'dan türetiliyor (`photoSrc`) — aynı gerçeği iki yerde
+     tutmamak için. Fotoğraflar R2'de; klasör manifestosu (eski
+     lib/photos.ts) kalktı.
    · `note` alanı normalizasyon izidir (ALL CAPS düzeltmeleri, yazım
      hataları, TEYİT işaretleri). Ekrana basılmaz; kaynağa dönmek
      gerekirse iz burada.
@@ -32,8 +32,8 @@
    TEYİT BEKLEYEN
    · VENUE.contact altındaki her alan.
 
-   FOTOĞRAFI BEKLENEN — dosya `public/foto/` altına düştüğü an
-   kendiliğinden görünür olurlar, kod değişmez:
+   FOTOĞRAFI BEKLENEN — panelden fotoğraf yüklendiği an kendiliğinden
+   görünür olurlar, kod değişmez:
    · pink-dream (hem satır hem Mokteyller çip ikonu)
    · oreo-milkshake · karpuz-frozen · sikma-portakal-suyu (çip ikonu)
    · taze-gunluk-tatlilar · karpuz-bogurtlen-limonata
@@ -55,6 +55,10 @@ interface RawItem {
   name: Loc;
   description?: Loc;
   price: number | null;
+  /** fiyatın birimi (adet/kg/porsiyon…). Etiketi site çevirir. */
+  unit?: string | null;
+  /** null → fotoğraf yok. Varsa ÖLÇÜSÜ de gelir; oran kararı buradan. */
+  photo?: { w: number; h: number } | null;
   badges?: string[];
   note?: string;
 }
@@ -130,6 +134,10 @@ interface RawVenue {
 
 interface RawFile {
   schema: number;
+  /** R2 anahtarının ilk parçası — fotoğraf yolu bundan kuruluyor */
+  tenant: string;
+  /** fotoğraf taban adresi (cdn.onlinemenu-qr.com) */
+  cdn: string;
   locales: { default: string; enabled: string[] };
   venues: RawVenue[];
 }
@@ -152,12 +160,23 @@ const tOpt = (d: Loc | null | undefined): string | null => (d ? t(d) : null);
    ------------------------------------------------------------ */
 
 export interface MenuItem {
-  /** foto/<slug>.webp ve büyük görünüm eşlemesi için */
+  /** büyük görünüm eşlemesi ve fotoğraf anahtarı */
   slug: string;
   name: string;
   desc?: string;
   /** TAMSAYI KURUŞ. null → fiyat teyit edilmedi, ekranda "—". */
   price: number | null;
+  /** fiyatın birimi; yoksa adet varsayılır */
+  unit?: string | null;
+  /**
+   * Fotoğraf: yoksa null. Varsa ÖLÇÜSÜ ve tam adresi.
+   *
+   * Oran bir VERİ (dosyanın gerçeği), "kare fotoğraf kare kutuda" bir
+   * TASARIM kararı. Panel birincisini bildiriyor, ikincisi burada
+   * veriliyor — eskiden `SQUARE_PHOTO` diye elle tutulan slug listesi
+   * vardı ve her yeni kare fotoğrafta güncellenmesi gerekiyordu.
+   */
+  photo: { w: number; h: number; src: string } | null;
   /** Leo'nun tercihi rozeti */
   leoPick: boolean;
   badges: string[];
@@ -233,7 +252,15 @@ export interface Venue {
 
 const isRef = (e: RawEntry): e is string => typeof e === 'string';
 
-const toItem = (r: RawItem, vat: 10 | 20 | null): MenuItem => {
+/**
+ * Fotoğraf adresi ŞEMADAN DEĞİL slug'dan türetilir — aynı gerçeği iki
+ * yerde tutmamak için. Mekan slug'ı gerektiği için URL kurma bu modülde:
+ * bileşenlerin elinde yalnız ürün slug'ı var.
+ */
+const photoSrc = (venueSlug: string, itemSlug: string): string =>
+  `${raw.cdn}/${raw.tenant}/${venueSlug}/${itemSlug}.webp`;
+
+const toItem = (r: RawItem, vat: 10 | 20 | null, venueSlug: string): MenuItem => {
   const badges = r.badges ?? [];
   const desc = tOpt(r.description);
   return {
@@ -241,7 +268,11 @@ const toItem = (r: RawItem, vat: 10 | 20 | null): MenuItem => {
     name: t(r.name),
     ...(desc ? { desc } : {}),
     price: r.price,
-    leoPick: badges.includes('leo-pick'),
+    ...(r.unit ? { unit: r.unit } : {}),
+    photo: r.photo ? { ...r.photo, src: photoSrc(venueSlug, r.slug) } : null,
+    // Rozet sözlüğü kiracıdan bağımsız: eskiden 'leo-pick'ti, sekiz
+    // müşterinin ortak sözlüğünde kiracı adı geçemez.
+    leoPick: badges.includes('imza'),
     badges,
     vat,
   };
@@ -265,7 +296,7 @@ function buildVenue(v: RawVenue): Venue {
       for (const sub of sec.subsections) {
         for (const entry of sub.items) {
           if (isRef(entry)) continue;
-          defined.set(entry.slug, toItem(entry, sec.vat));
+          defined.set(entry.slug, toItem(entry, sec.vat, v.slug));
         }
       }
     }
@@ -278,7 +309,7 @@ function buildVenue(v: RawVenue): Venue {
         ...(sub.icon ? { icon: sub.icon } : {}),
         extras: extrasFor(sub.slug),
         items: sub.items
-          .map((entry) => (isRef(entry) ? defined.get(entry) : toItem(entry, sec.vat)))
+          .map((entry) => (isRef(entry) ? defined.get(entry) : toItem(entry, sec.vat, v.slug)))
           /* Çözülemeyen referans sessizce düşer: menu.json'dan bir ürün
              silinirse sayfa kırılmaz, yalnız o satır görünmez. */
           .filter((i): i is MenuItem => i !== undefined),
@@ -325,6 +356,17 @@ export const ALL_ITEMS: MenuItem[] = ALL_SECTIONS.flatMap((s) =>
 
 export const itemBySlug = (slug: string): MenuItem | undefined =>
   ALL_ITEMS.find((i) => i.slug === slug);
+
+/**
+ * Ürünün fotoğrafı — yoksa null.
+ *
+ * Eskiden bu bilgi `lib/photos.ts` içinde build zamanında `public/foto/`
+ * klasörü okunarak bulunuyordu. Artık fotoğraflar R2'de ve panel hangi
+ * ürünün fotoğrafı olduğunu menu.json'da bildiriyor; klasör okumaya
+ * gerek kalmadı.
+ */
+export const photoOf = (slug: string): MenuItem['photo'] =>
+  itemBySlug(slug)?.photo ?? null;
 
 /**
  * Ürünün GÖRSEL DÜZEN GRUBU — fotoğraflı mı tipografik mi kararının

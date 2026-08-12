@@ -23,7 +23,7 @@
 
    `eager`: hero kartı ve şeridin ilk karesi için. Gerisi lazy.
    ============================================================ */
-import { FOTO_EXT, isSquarePhoto } from '../lib/config';
+import { photoOf } from '../data/menu';
 
 interface Props {
   slug: string;
@@ -40,18 +40,25 @@ const {
   slug, name, eager = false, trigger = false, decorative = false, class: cls = '',
 } = Astro.props;
 
+/* Ölçü ve adres artık menu.json'dan geliyor. Genişlik/yükseklik sabit
+   1200×800 yazılıydı; gerçek dosyalar hepsi tam o oran değil (ör. 1200×801),
+   yani tarayıcıya biraz yanlış oran bildiriliyordu. Artık dosyanın kendi
+   ölçüsü basılıyor — düzen sıçraması payı da doğru hesaplanıyor. */
+const photo = photoOf(slug);
+const square = photo !== null && photo.w === photo.h;
+
 const Tag = trigger ? 'button' : 'div';
 const extra = trigger
   ? { type: 'button' as const, 'data-lb': slug, 'aria-label': `${name} — görseli büyüt` }
   : {};
 ---
 
-<Tag class:list={['shot', isSquarePhoto(slug) && 'shot-sq', cls]} {...extra}>
+<Tag class:list={['shot', square && 'shot-sq', cls]} {...extra}>
   <img
-    src={`/foto/${slug}.${FOTO_EXT}`}
+    src={photo?.src}
     alt={trigger || decorative ? '' : name}
-    width="1200"
-    height={isSquarePhoto(slug) ? '1200' : '800'}
+    width={photo?.w ?? 1200}
+    height={photo?.h ?? 800}
     loading={eager ? 'eager' : 'lazy'}
     fetchpriority={eager ? 'high' : 'auto'}
     decoding="async"

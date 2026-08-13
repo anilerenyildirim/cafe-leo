@@ -116,7 +116,10 @@
                   "description": {
                     "tr": "Piliç sosis, omlet, tereyağlı kruvasan, mantar, roka, fırın cherry domates, rende kaşar"
                   },
-                  "photo": null,
+                  "photo": {
+                    "w": 1200,
+                    "h": 801
+                  },
                   "note": "fix: \"sosıs\" → sosis"
                 },
                 {

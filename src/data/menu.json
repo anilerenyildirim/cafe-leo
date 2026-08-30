@@ -159,7 +159,10 @@
                   "description": {
                     "tr": "2 köy yumurtası, mantar, roka, cherry domates"
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "4-peynirli-tost",
@@ -246,7 +249,7 @@
                   "name": {
                     "tr": "Patates Kızartması"
                   },
-                  "price": 30000,
+                  "price": 35000,
                   "photo": {
                     "w": 1200,
                     "h": 800
@@ -394,7 +397,10 @@
                   "description": {
                     "tr": "140 g dana köfte, 20 g Leo sos, 5 g turşu ve 20 g domates ile hazırlanır. 120 g patates ile servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "cheese-burger",
@@ -521,7 +527,10 @@
                   "description": {
                     "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella, 40 g roquefort peyniri, 40 g cheddar peyniri ve 20 g parmesan peyniri ile hazırlanır."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "akdeniz-pizza",
@@ -532,7 +541,10 @@
                   "description": {
                     "tr": "350 g pizza hamuru, 70 g pizza sosu, 150 g mozzarella, 100 g ricotta peyniri, 60 g patlıcan ve 30 g cherry domates ile hazırlanır."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "margarita-pizza",
@@ -611,7 +623,10 @@
                   "description": {
                     "tr": "Kremalı sos ile hazırlanan 200 g fettuccine, 40 g porçini mantarı, 40 g istiridye mantarı ve 40 g kültür mantarı ile servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "bolonez-soslu-spagetti",
@@ -661,7 +676,10 @@
                   "description": {
                     "tr": "200 g özel Leo köfte, 120 g pirinç pilavı, 120 g patates püresi, 15 g közlenmiş biber ve 20 g közlenmiş domates ile servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "tavuk-snitzel",
@@ -701,7 +719,10 @@
                   "description": {
                     "tr": "200-210 g antrikot, 100 g mantar mix ve 120 g patates püresi ile servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "izgara-karides",
@@ -712,7 +733,10 @@
                   "description": {
                     "tr": "333 g karides, 120 g patates kızartması ve 20 g sweet chili ile servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 }
               ]
             },
@@ -732,7 +756,10 @@
                   "description": {
                     "tr": "120 g karides, 120 g patates ve 20 g sweet chili ile hazırlanır."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "bonfile-bowl",
@@ -743,7 +770,10 @@
                   "description": {
                     "tr": "20 g Akdeniz yeşilliği, 80 g siyah pirinç, 50 g dilimlenmiş avokado, 50 g brokoli, 20 g cherry domates, 60 g mantar mix ve 120 g et bonfile ile hazırlanır."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "tavuk-bowl",
@@ -754,7 +784,10 @@
                   "description": {
                     "tr": "20 g Akdeniz yeşilliği, 80 g siyah pirinç, 50 g dilimlenmiş avokado, 50 g brokoli, 20 g cherry domates, 60 g mantar mix ve 120 g tavuk ile hazırlanır."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 }
               ]
             },
@@ -774,7 +807,10 @@
                   "description": {
                     "tr": "120 g sushi pirinci ve 1 adet nori, 60 g tempuralı karides, 10 g Philadelphia peyniri, 15 g avokado, 10 g salatalık, 15 g kibrit patates ve 10 g trüflü mayonez ile hazırlanır."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 }
               ]
             },
@@ -794,7 +830,10 @@
                   "description": {
                     "tr": "30 g Akdeniz yeşilliği, 30 g cherry domates, 30 g salatalık, 20 g incir, 20 g kayısı, 20 g ceviz ve 200 g burrata peyniri ile hazırlanır. Üzerine 5 g pesto sos eklenerek servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "deniz-mahsullu-salata",
@@ -835,7 +874,10 @@
                   "description": {
                     "tr": "120 g Akdeniz yeşilliği, 20 g salatalık, 30 g cherry domates, 20 g siyah zeytin ve 100 g kızarmış hellim ile hazırlanır. 10 ml zeytinyağlı limon sos ile servis edilir."
                   },
-                  "photo": null
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
                 },
                 {
                   "slug": "akdeniz-peynirli-salata",
@@ -873,10 +915,7 @@
                     "tr": "Türk Kahvesi"
                   },
                   "price": 17500,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "double-turk-kahvesi",
@@ -892,10 +931,7 @@
                     "tr": "Espresso"
                   },
                   "price": 17500,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "double-espresso",
@@ -903,10 +939,7 @@
                     "tr": "Double Espresso"
                   },
                   "price": 20000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "cortado",
@@ -914,10 +947,7 @@
                     "tr": "Cortado"
                   },
                   "price": 18000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "americano",
@@ -925,10 +955,7 @@
                     "tr": "Americano"
                   },
                   "price": 22000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "filtre-kahve",
@@ -936,10 +963,7 @@
                     "tr": "Filtre Kahve"
                   },
                   "price": 19000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "misto",
@@ -947,10 +971,7 @@
                     "tr": "Misto"
                   },
                   "price": 22000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "flat-white",
@@ -966,10 +987,7 @@
                     "tr": "Latte"
                   },
                   "price": 24000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "cappuccino",
@@ -977,10 +995,7 @@
                     "tr": "Cappuccino"
                   },
                   "price": 24000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "mocha",
@@ -1020,10 +1035,7 @@
                     "tr": "Caramel Macchiato"
                   },
                   "price": 25000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  },
+                  "photo": null,
                   "note": "fix: \"CARAMEL MACCIHATO\" → Macchiato"
                 },
                 {
@@ -1032,10 +1044,7 @@
                     "tr": "Çay"
                   },
                   "price": 8500,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "buyuk-cay",
@@ -1043,10 +1052,7 @@
                     "tr": "Büyük Çay"
                   },
                   "price": 9500,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "kupa-cay",
@@ -1054,10 +1060,7 @@
                     "tr": "Kupa Çay"
                   },
                   "price": 11500,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "bitki-cayi",
@@ -1065,10 +1068,7 @@
                     "tr": "Bitki Çayı"
                   },
                   "price": 22000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "sicak-cikolata",
@@ -1076,10 +1076,7 @@
                     "tr": "Sıcak Çikolata"
                   },
                   "price": 24000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "salep",
@@ -1087,10 +1084,7 @@
                     "tr": "Salep"
                   },
                   "price": 25000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "portakalli-salep",
@@ -1098,10 +1092,7 @@
                     "tr": "Portakallı Salep"
                   },
                   "price": 26000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 },
                 {
                   "slug": "balli-sut",
@@ -1109,10 +1100,7 @@
                     "tr": "Ballı Süt"
                   },
                   "price": 24000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
+                  "photo": null
                 }
               ]
             }
@@ -1602,7 +1590,10 @@
                     "tr": "Pink Dream"
                   },
                   "price": 17500,
-                  "photo": null,
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  },
                   "badges": [
                     "imza"
                   ]

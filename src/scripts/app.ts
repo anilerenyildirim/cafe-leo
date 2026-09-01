@@ -155,10 +155,14 @@ function status(): void {
    ============================================================ */
 
 function shotNet(): void {
-  for (const img of document.querySelectorAll<HTMLImageElement>('.shot img')) {
+  /* `.cc-media` kategori kartının görsel kutusu (kart ızgaralı menü).
+     Aynı ağa bağlanıyor çünkü aynı riski taşıyor — üstelik orada
+     kanıtlandı: menu.json sıcak içeceklerin fotoğrafı VAR diyor, R2'de
+     dosya yok. Kart kırık ikon göstermek yerine tipografik kalıyor. */
+  for (const img of document.querySelectorAll<HTMLImageElement>('.shot img, .cc-media img')) {
     const fail = () => {
-      img.closest('.item, .pick-card, .reco-card')?.classList.add('shot-failed');
-      img.closest('.shot')?.remove();
+      img.closest('.item, .pick-card, .reco-card, .cat-card')?.classList.add('shot-failed');
+      img.closest('.shot, .cc-media')?.remove();
     };
     if (img.complete && img.naturalWidth === 0) fail();
     else img.addEventListener('error', fail, { once: true });
@@ -364,8 +368,9 @@ function reveal(): void {
 /* ============================================================
    6 — ÖNERİ ŞERİDİ (§7)
 
-   Masaüstünde akış CSS animasyonu (hover'da duraklar, odak girince
-   sıfırlanır) — burada iş yok. Dokunmatikte animasyon kapalı ve akış
+   Masaüstünde akışı CSS animasyonu sürüyor; buradaki iş onu
+   DURDURMAK değil, YERİNDE dondurmak (aşağıda freeze/thaw).
+   Dokunmatikte animasyon kapalı ve akış
    rAF ile scrollLeft üzerinden sürülüyor: transform + native scroll
    bileşimi uçlarda boşluk gösteriyor, scrollLeft göstermiyor.
 
@@ -421,11 +426,79 @@ function recoFlow(): void {
       paused = false;
     }, 2000);
   };
+  /* ---- masaüstü: akışı YERİNDE dondurma ----
+
+     Şerit eskiden odak girince başa sarıyordu: global.css'teki
+     `:focus-within .reco-track { animation: none }` transform'u
+     anında sıfıra düşürüyordu. Kart mousedown ile mouseup arasında
+     imlecin altından kayınca click olayı hiç doğmuyor, büyük görünüm
+     de açılmıyordu (kartlar [data-lb] üzerine doğrudan dinleyici
+     alıyor, § 8).
+
+     Doğrusu animasyonun geldiği noktayı KAYBETMEMEK: o anki
+     translateX okunup scrollLeft'e devrediliyor, `.reco-held` de
+     animasyonu ancak ondan sonra kaldırıyor. İkisi aynı görevde
+     olduğu için tarayıcı bir kez boyuyor — sıçrama görünmüyor, kart
+     imlecin altında kalıyor.
+
+     Bırakırken ters yön: scrollLeft'teki ilerleme negatif
+     animation-delay'e çevriliyor, yani akış durduğu kareden devam
+     ediyor, baştan başlamıyor. */
+  const CYCLE = 60; // sn — global.css → @keyframes reco-slide ile aynı
+  let over = false;
+
+  const freeze = () => {
+    if (COARSE.matches || RM.matches) return;
+    if (view.classList.contains('reco-held')) return;
+    const t = getComputedStyle(track).transform;
+    const at = t && t !== 'none' ? -new DOMMatrixReadOnly(t).m41 : 0;
+    view.classList.add('reco-held'); // scrollLeft ancak taşma açıkken yazılabilir
+    view.scrollLeft = at;
+  };
+
+  const thaw = () => {
+    if (!view.classList.contains('reco-held')) return;
+    if (over || view.contains(document.activeElement)) return;
+    const half = track.scrollWidth / 2;
+    if (half) {
+      const at = ((view.scrollLeft % half) + half) % half;
+      track.style.animationDelay = `-${((at / half) * CYCLE).toFixed(3)}s`;
+    }
+    view.scrollLeft = 0;
+    view.classList.remove('reco-held');
+  };
+
+  const onEnter = () => {
+    over = true;
+    freeze();
+  };
+  const onLeave = () => {
+    over = false;
+    thaw();
+  };
+  /* focusout'ta activeElement daha body: bir sonraki odağı
+     relatedTarget söylüyor, şeridin içindeyse çözülmüyor */
+  const onFocusOut = (e: FocusEvent) => {
+    if (view.contains(e.relatedTarget as Node | null)) return;
+    thaw();
+  };
+
   const onMode = () => {
     stop();
+    /* dokunmatiğe ya da azaltılmış harekete geçilirse dondurma
+       anlamsız: sınıf da gecikme de sıfırlanıyor */
+    if (COARSE.matches || RM.matches) {
+      over = false;
+      view.classList.remove('reco-held');
+      track.style.animationDelay = '';
+    }
     start();
   };
 
+  view.addEventListener('pointerenter', onEnter);
+  view.addEventListener('pointerleave', onLeave);
+  view.addEventListener('focusin', freeze);
+  view.addEventListener('focusout', onFocusOut);
   view.addEventListener('pointerdown', hold);
   view.addEventListener('pointerup', resume);
   view.addEventListener('pointercancel', resume);
@@ -438,6 +511,11 @@ function recoFlow(): void {
   onTeardown(() => {
     stop();
     clearTimeout(resumeT);
+    view.removeEventListener('pointerenter', onEnter);
+    view.removeEventListener('pointerleave', onLeave);
+    view.removeEventListener('focusin', freeze);
+    view.removeEventListener('focusout', onFocusOut);
+    view.classList.remove('reco-held');
     view.removeEventListener('pointerdown', hold);
     view.removeEventListener('pointerup', resume);
     view.removeEventListener('pointercancel', resume);
@@ -515,7 +593,20 @@ function lightbox(): void {
   let curSec = '';
   let closing = 0;
 
-  const fill = (s: string, secId: string, fallbackSrc?: string): boolean => {
+  /* İKİNCİ VERİ YOLU — satırı olmayan tetikler için.
+
+     Kaynak hâlâ DOM ama satır DEĞİL, tetiğin kendisi: kart ad, fiyat,
+     açıklama, rozet ve fotoğrafın oranını `data-*` üzerinde taşıyor
+     (components/RecoStrip.astro). Kart ızgaralı menünün ana sayfasında
+     ürün listesi hiç basılmıyor — orada büyük görünüm bu yoldan
+     doluyor. Menü sayfalarında satır bulunduğu için bu dal hiç
+     çalışmıyor; oradaki davranış değişmedi. */
+  const fill = (
+    s: string,
+    secId: string,
+    fallbackSrc?: string,
+    meta?: DOMStringMap,
+  ): boolean => {
     const row = rows.get(key(secId, s)) ?? anyRow.get(s);
     const src =
       row?.querySelector<HTMLImageElement>('.shot img')?.getAttribute('src') ?? fallbackSrc;
@@ -534,32 +625,38 @@ function lightbox(): void {
        değişmez. */
     const shotEl = row?.querySelector<HTMLElement>('.shot');
     const ar = shotEl ? getComputedStyle(shotEl).aspectRatio : '';
-    lb.style.setProperty('--shot-ar', ar && ar !== 'auto' ? ar : '3 / 2');
+    /* Tetiğin KENDİ kutusu okunmuyor, `data-ar` okunuyor: şeritte kutu
+       4:5'e kırpılı, dosya 3:2. Kırpılmış oran büyütülseydi kart
+       hâlindeyken tam görünen tabak, büyük hâlinde kesik gelirdi. */
+    lb.style.setProperty(
+      '--shot-ar',
+      ar && ar !== 'auto' ? ar : (meta?.['ar'] ?? '3 / 2'),
+    );
 
     curSec = secId;
 
     slug = s;
     img.src = src;
-    const name = row?.querySelector('.name')?.textContent?.trim() ?? '';
+    const name = row?.querySelector('.name')?.textContent?.trim() ?? meta?.['name'] ?? '';
     img.alt = name;
     nameEl.textContent = name;
 
-    const price = row?.querySelector('.price')?.textContent?.trim() ?? '';
+    const price = row?.querySelector('.price')?.textContent?.trim() ?? meta?.['price'] ?? '';
     priceEl.textContent = price;
     priceEl.hidden = !price;
 
-    const desc = row?.querySelector('.desc')?.textContent?.trim() ?? '';
+    const desc = row?.querySelector('.desc')?.textContent?.trim() ?? meta?.['desc'] ?? '';
     descEl.textContent = desc;
     descEl.hidden = !desc;
 
-    pickEl.hidden = !picks.has(s);
+    pickEl.hidden = !(picks.has(s) || meta?.['pick'] === '1');
     return true;
   };
 
   const open = (trigger: HTMLElement) => {
     const s = trigger.dataset['lb']!;
     const src = trigger.querySelector<HTMLImageElement>('img')?.getAttribute('src') ?? undefined;
-    if (!fill(s, secOf(trigger, s), src)) return;
+    if (!fill(s, secOf(trigger, s), src, trigger.dataset)) return;
 
     opener = trigger;
     clearTimeout(closing);

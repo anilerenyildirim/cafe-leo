@@ -1,0 +1,54 @@
+---
+/* ============================================================
+   /menu-v2 — KART IZGARALI menü (müşterinin Canva çalışmasının
+   gerçeğe çevrilmiş hâli).
+
+   CANLIYA DOKUNULMADI: /menu ve altındaki bileşenler olduğu gibi
+   duruyor. Bu sayfa ve /menu-v2/[cat] yeni dosyalar, ortak olan
+   yalnız Base, Bar, Shot, Section ve global.css.
+
+   NE KALDIRILDI (müşteri isteği):
+   · Masthead — "Cafe Leo Teras" başlığı
+   · Hero — açık/kapalı rozeti, menü/konum/hakkımızda aksiyon satırı
+   · FeatureCard — "haftanın ürünü" kartı
+   · Rail — yapışkan kategori şeridi (ızgara zaten kategori gezinmesi)
+   · Bölüm listeleri — ürünler artık kategori sayfalarında
+
+   NE KALDI: öneri şeridi → "Menü" başlığı → dokuz kart → krem alt
+   bant. Canva çalışmasındaki sıranın aynısı.
+
+   YAYINA ALIRKEN: bu klasör `menu/` olarak yeniden adlandırılıp
+   mevcut `menu.astro` kaldırıldığında (ya da /liste'ye taşındığında)
+   adres /menu olur. CatCard ve RecoStrip içindeki `/menu-v2/`
+   önekleri o anda `/menu/` olacak — başka değişiklik gerekmiyor.
+   ============================================================ */
+import Base from '../../layouts/Base.astro';
+import Bar from '../../components/Bar.astro';
+import RecoStrip from '../../components/RecoStrip.astro';
+import CatGrid from '../../components/CatGrid.astro';
+import FootV2 from '../../components/FootV2.astro';
+import { VENUES } from '../../data/menu';
+import '../../styles/menu-v2.css';
+
+const venue = VENUES.find((v) => v.key === 'cafe')!;
+---
+
+<Base
+  venue="cafe"
+  title={`${venue.name} — Menü`}
+  description={`${venue.name}, Sinanoba Büyükçekmece. Kahve, tatlı, mutfak — güncel menü.`}
+>
+  <Bar venue="cafe" switcher={false} />
+
+  <h1 class="sr-only">{venue.name} menüsü</h1>
+
+  <div class="wrap mv2 mv2-home">
+    <RecoStrip slugs={venue.featured} />
+
+    <main>
+      <CatGrid />
+    </main>
+
+    <FootV2 />
+  </div>
+</Base>

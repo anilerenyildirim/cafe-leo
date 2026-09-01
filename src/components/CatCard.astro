@@ -1,0 +1,55 @@
+---
+/* ============================================================
+   Kategori kartı (§ yeni menü ızgarası).
+
+   Sistemdeki tek yuvarlaklık fotoğraf kutusunun kenarındaydı
+   (global.css → --shot-r). Bu kart o kuralın devamı: kartın kendisi
+   bir fotoğraf kutusu, adı da kutunun içinde duran krem bir bant.
+   Tipografi, çizgiler ve kare nokta hâlâ kare — yuvarlaklık yine
+   yalnız görselin kenarında.
+
+   Kart bir <a>: kategori sayfasına götürüyor. Öneri şeridindeki
+   kartlar gibi büyük görünüm açmıyor — burada iş gezinme.
+
+   FOTOĞRAFSIZ KART kırılmıyor, DÖNÜŞÜYOR: görsel kutusu hiç
+   basılmaz, yerine krem bir yüzey üzerinde kategori adı büyür ve
+   ortalanır (.no-shot). Bowl ve Sushi'nin fotoğrafı henüz yok;
+   panelden yüklendiği an kart kendiliğinden görselleşiyor.
+   ============================================================ */
+import { cardPhoto, type MenuCard } from '../lib/menuCards';
+
+interface Props {
+  card: MenuCard;
+  /** ilk satır kartları — katlamanın üstünde, lazy beklemesin */
+  eager?: boolean;
+  /** ızgaradaki sırası — belirmenin basamaklanması CSS'te bundan
+      hesaplanıyor (menu-v2.css → --cc-i) */
+  index?: number;
+}
+
+const { card, eager = false, index = 0 } = Astro.props;
+const photo = cardPhoto(card);
+---
+
+<a
+  class:list={['cat-card', !photo && 'no-shot']}
+  href={`/menu-v2/${card.key}`}
+  style={`--cc-i: ${index}`}
+>
+  {photo && (
+    <span class="cc-media">
+      {/* alt BOŞ: erişilebilir adı bağlantının kendi metni taşıyor,
+          ekran okuyucu kategoriyi iki kez okumasın */}
+      <img
+        src={photo.src}
+        alt=""
+        width={photo.w}
+        height={photo.h}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+      />
+    </span>
+  )}
+  <span class="cc-name">{card.title}</span>
+</a>

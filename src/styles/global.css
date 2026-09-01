@@ -690,14 +690,30 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 @media (hover: hover) and (pointer: fine) {
   .reco-track { animation: reco-slide 60s linear infinite; }
   .reco-view:hover .reco-track { animation-play-state: paused; }
-  /* Klavye odağı: duraklatmak yetmez — kaymış transform'da odaklanan
-     kart clip'in dışında (görünmez) kalır. Odak girince animasyon
-     sıfırlanır, şerit kaydırılabilir olur, tarayıcı kartı görünüme
-     getirir; kopya da odak sırasından tamamen düşer. */
-  .reco-view:focus-within { overflow-x: auto; scrollbar-width: none; }
-  .reco-view:focus-within::-webkit-scrollbar { display: none; }
-  .reco-view:focus-within .reco-track { animation: none; }
-  .reco-view:focus-within .reco-dup { display: none; }
+  /* Odak ya da işaretçi şeride girince akış DURUR ama SIFIRLANMAZ.
+
+     Eskiden burada `animation: none` vardı ve iş görmüyordu: kural
+     düştüğü anda transform sıfıra iniyor, şerit başa sarıyor, kart
+     mousedown ile mouseup arasında imlecin altından kayıyordu —
+     click olayı hiç doğmadığı için öneri kartı büyük görünümü
+     açmıyordu (kartlar [data-lb] üzerine doğrudan dinleyici alıyor,
+     app.ts § 8).
+
+     Dondurma artık YERİNDE: app.ts § 6 o anki translateX'i
+     scrollLeft'e devredip `.reco-held`i koyuyor. İkisi aynı görevde
+     olduğu için tek boyama var, sıçrama yok. Şerit dondurulmuşken
+     elle kaydırılabilir kalıyor; klavye odağı da kaymış kartı
+     görünüme getirebiliyor, yani clip'in dışında kaybolmuyor.
+     Kopya artık gizlenmiyor: zaten aria-hidden + tabindex=-1, odak
+     sırasında yok; gizlemek dondurulmuş şeridin sağını boşaltırdı.
+
+     JS düşerse alttaki duraklatma tek başına yeter — transform'a
+     dokunmadığı için sıçrama yine olmuyor, yalnız kaymış kart
+     görünüme getirilemiyor. */
+  .reco-view:focus-within .reco-track { animation-play-state: paused; }
+  .reco-view.reco-held { overflow-x: auto; scrollbar-width: none; }
+  .reco-view.reco-held::-webkit-scrollbar { display: none; }
+  .reco-view.reco-held .reco-track { animation: none; transform: none; }
 }
 @keyframes reco-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 

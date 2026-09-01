@@ -256,8 +256,13 @@ const isRef = (e: RawEntry): e is string => typeof e === 'string';
  * Fotoğraf adresi ŞEMADAN DEĞİL slug'dan türetilir — aynı gerçeği iki
  * yerde tutmamak için. Mekan slug'ı gerektiği için URL kurma bu modülde:
  * bileşenlerin elinde yalnız ürün slug'ı var.
+ *
+ * DIŞARI AÇIK, çünkü menu.json'un `photo` alanı R2'nin GERİSİNDE
+ * kalabiliyor: dosya yüklenmiş ama şemada hâlâ null görünüyor
+ * (bkz. lib/menuCards.ts → `cover`). O durumda adres yine tek bir
+ * yerden kuruluyor; ikinci bir URL şablonu yazılmıyor.
  */
-const photoSrc = (venueSlug: string, itemSlug: string): string =>
+export const photoSrc = (venueSlug: string, itemSlug: string): string =>
   `${raw.cdn}/${raw.tenant}/${venueSlug}/${itemSlug}.webp`;
 
 const toItem = (r: RawItem, vat: 10 | 20 | null, venueSlug: string): MenuItem => {

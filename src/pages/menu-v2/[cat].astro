@@ -1,0 +1,72 @@
+---
+/* ============================================================
+   /menu-v2/<kategori> — bir kartın açtığı ürün listesi.
+
+   Dokuz sayfa da build zamanında basılıyor (getStaticPaths);
+   çalışma anında yönlendirme yok, QR'dan gelen telefon statik HTML
+   indiriyor.
+
+   LİSTE YENİDEN YAZILMADI: Section.astro olduğu gibi kullanılıyor —
+   fotoğraflı/tipografik düzen, alt kategori çipleri, ekstra şeridi,
+   "Leo'nun tercihi" rozeti ve büyük görünüm (§8) burada da aynen
+   çalışıyor. Sayfaya gelen `sec`, kartın kapsadığı alt grupların
+   birleştirilmiş hâli (lib/menuCards.ts → cardSection).
+
+   RAY YOK. Kategoriler arası gezinme artık ızgaranın işi; yapışkan
+   şerit bir de burada dursaydı aynı işi iki yerde yapardı. app.ts
+   ray yokken --rail-h'i 0 ölçüyor, başlıkların scroll-margin'i
+   kendiliğinden doğru kalıyor.
+
+   GERİ DÖNÜŞ tek yer: başlığın üstündeki "Menü" bağlantısı. Üst
+   bardaki logo ana sayfaya gider (kart ızgarasına değil), o yüzden
+   ayrı bir dönüş yolu gerekiyor.
+   ============================================================ */
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Bar from '../../components/Bar.astro';
+import Section from '../../components/Section.astro';
+import FootV2 from '../../components/FootV2.astro';
+import { VENUES } from '../../data/menu';
+import { MENU_CARDS, cardSection } from '../../lib/menuCards';
+import '../../styles/menu-v2.css';
+
+export const getStaticPaths = (() =>
+  MENU_CARDS.map((card) => ({
+    params: { cat: card.key },
+    props: { card },
+  }))) satisfies GetStaticPaths;
+
+const { card } = Astro.props;
+const venue = VENUES.find((v) => v.key === 'cafe')!;
+const sec = cardSection(card);
+---
+
+<Base
+  venue="cafe"
+  title={`${card.title} — ${venue.name}`}
+  description={`${venue.name} menüsü — ${card.title}.`}
+>
+  <Bar venue="cafe" switcher={false} />
+
+  <h1 class="sr-only">{card.title} — {venue.name}</h1>
+
+  <div class="wrap mv2 mv2-cat">
+    <nav class="mv2-back" aria-label="Menüye dön">
+      <a href="/menu-v2">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="1.6"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>Menü</span>
+      </a>
+    </nav>
+
+    <main id="menu">
+      {sec
+        ? <Section sec={sec} />
+        : <p class="mv2-empty">Bu kategori henüz hazırlanıyor.</p>}
+    </main>
+
+    <FootV2 />
+  </div>
+</Base>

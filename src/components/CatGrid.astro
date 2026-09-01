@@ -1,0 +1,37 @@
+---
+/* ============================================================
+   Menü ızgarası — 3 sütun × 3 satır, dokuz kart.
+
+   BOYUT KARARI CSS'te (global-v2.css → .cat-grid): satır yüksekliği
+   svh'den türüyor, çünkü müşterinin istediği şey bir en-boy oranı
+   değil BİR EKRAN: başlık bandı + dokuz kart telefonda kaydırmasız
+   görünsün. Sabit oran verilseydi uzun ekranda boşluk, kısa ekranda
+   taşma olurdu.
+
+   Başlık kendi stilini üretmiyor — sayfadaki tek başlık dili
+   .cat-head (bant + sol altın kenar), "Leo'nun Önerdikleri" ile
+   aynısı. Canva çalışmasında "Menü" çıplak duruyordu; orada eksik
+   olan şey donanım değil zamandı, sistemin kendi başlığı kullanıldı.
+
+   İlk üç kart eager: ızgaranın üst satırı ilk ekranda.
+
+   BELİRME (§9c) IZGARAYA BAĞLI, KARTA DEĞİL: `data-reveal` tek bir
+   düğümde durduğu için app.ts § 5 dokuz yerine bir hedef gözlüyor ve
+   ilk kesişmede onu bırakıyor. Sıra kartların üzerinde `--cc-i`
+   olarak taşınıyor, gecikmeyi CSS hesaplıyor — kaydırma sırasında
+   çalışan JS yok.
+   ============================================================ */
+import CatCard from './CatCard.astro';
+import { MENU_CARDS } from '../lib/menuCards';
+---
+
+<section class="cats" aria-labelledby="catsTitle">
+  <div class="cat-head">
+    <h2 id="catsTitle">Menü</h2>
+    <span class="rule" aria-hidden="true"></span>
+  </div>
+
+  <div class="cat-grid" data-reveal>
+    {MENU_CARDS.map((card, i) => <CatCard card={card} eager={i < 3} index={i} />)}
+  </div>
+</section>

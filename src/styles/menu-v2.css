@@ -1,0 +1,389 @@
+/* ============================================================
+   KART IZGARALI MENÜ — /menu-v2 ve /menu-v2/<kategori>
+
+   AYRI DOSYA, BİLEREK. global.css canlı /menu'yü boyuyor; oraya
+   yazılan her kural iki sayfayı birden etkilerdi. Buradaki her
+   şey `.mv2` altında yaşıyor — bu iki sayfa dışında hiçbir yere
+   dokunmuyor.
+
+   Sistem dili aynen devam ediyor: renkler, tipografi, gölge ve
+   bant başlıkları global.css'ten geliyor. Yeni olan tek şey
+   IZGARANIN GEOMETRİSİ.
+   ============================================================ */
+
+/* Alt bant sayfanın en dibine otursun: global.css gövdeye 72px
+   alt dolgu veriyor (uzun menü sayfasının nefes payı), burada
+   footer'ın altında boş bir şerit bırakırdı. */
+body:has(.mv2) { padding-bottom: 0; }
+
+/* Şerit sayfanın ilk öğesi — bar'ın hemen altında. Canlı menüde
+   üstünde masthead ve hero vardı, 46px oradaki mesafeydi. */
+.mv2 .reco { margin-top: 12px; }
+
+/* ============================================================
+   BAŞLIK ŞERİDİ — SAYFADA TEK DİL
+
+   global.css'te iki farklı başlık yüzeyi var: öneri şeridinin
+   içindeki `.reco .cat-head` AÇIK bir plaka (kahve zeminden
+   yükseltilmiş, gölgeli), menünün içindeki çıplak `.cat-head` ise
+   düz kahve bir bant. Canlı /menu'de bu ayrım işe yarıyordu —
+   ikisi farklı zeminlerin üzerinde duruyor.
+
+   Bu sayfada yaramıyor: "Leo'nun Önerdikleri" beyaz plaka,
+   hemen altındaki "Menü" düz bant olunca iki başlık aynı şeyi
+   söylemesine rağmen farklı görünüyordu.
+
+   Çözüm plakayı bütün .mv2 başlıklarına vermek — kategori
+   sayfalarının başlığı dahil. Sol altın kenar ve tipografi
+   değişmiyor, değişen yalnız yüzey. global.css'e dokunulmuyor:
+   canlı /menu'deki ayrım yerinde duruyor. */
+.mv2 .cat-head {
+  background:
+    linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+    linear-gradient(158deg,
+      var(--bg) 0%,
+      color-mix(in oklch, var(--bg) 80%, transparent) 100%);
+  box-shadow:
+    0 1px 2px rgba(60, 44, 12, .05),
+    0 10px 28px -12px rgba(60, 44, 12, .20);
+}
+:root[data-venue="lounge"] .mv2 .cat-head {
+  background:
+    linear-gradient(90deg, var(--gold-leaf) 0 3px, rgba(0, 0, 0, 0) 3px),
+    linear-gradient(158deg,
+      color-mix(in oklch, #C9A03C 22%, var(--bg)) 0%,
+      color-mix(in oklch, #C9A03C 10%, var(--bg)) 100%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, .35),
+    0 10px 28px -12px rgba(0, 0, 0, .8);
+}
+
+/* ============================================================
+   IZGARA
+
+   İSTENEN ŞEY BİR ORAN DEĞİL, BİR EKRAN: başlık bandı + dokuz
+   kart telefonda kaydırmadan görünsün. Bu yüzden satır yüksekliği
+   svh'den türüyor, kartın kendi oranından değil.
+
+   `--cc-fit` ekranda ızgaraya kalan yüksekliği üçe bölüyor.
+   Düşülen 123px: başlık bandı (51) + alt boşluğu (18) + bölüm üst
+   dolgusu (14) + iki satır arası boşluk (20) + dipte nefes (20).
+   `--bar-h` sabit yazılmıyor, çalışma anında ölçülüyor
+   (scripts/app.ts § ölçüm) — font yüklenince bar büyüyor.
+
+   svh (small viewport height) BİLEREK: dvh kullanılsaydı mobil
+   tarayıcının adres çubuğu kaydırırken açılıp kapandıkça bütün
+   ızgara nefes alır gibi oynardı. svh çubuk AÇIKKEN kalan yükseklik
+   — yani "her hâlükârda sığar" garantisi.
+
+   clamp'in iki ucu kartı örnekteki orana bağlıyor: uzun ekranda
+   kartlar sonsuza kadar uzamıyor, kısa ekranda ezilmiyor.
+
+   Kart genişliği `cqw` ile okunuyor: `.cats` bir inline-size
+   konteyneri, yani 100cqw ızgaranın kendi genişliği. Yüzde
+   kullanılamazdı — grid-auto-rows içindeki % yüksekliğe çözülür,
+   genişliğe değil.
+   ============================================================ */
+
+.cats {
+  padding: 14px var(--pad) 0;
+  container-type: inline-size;
+}
+
+/* Kart ızgarası sayfası masaüstünde de TELEFON ÖLÇÜSÜNDE kalıyor.
+   global.css sayfayı 900px'ten sonra 1080px'e açıyor — orada üç
+   sütun 330px'e çıkardı, kartlar kategori kutusu olmaktan çıkıp
+   afişe dönerdi. Üstelik ızgarayı tek başına daraltmak yetmezdi:
+   öneri şeridi 1080px kalır, iki bandın kenarı tutmazdı. Bu yüzden
+   sınır SAYFANIN kendisine konuyor. Bu sayfanın birincil bağlamı
+   zaten masadaki QR; masaüstü onun önizlemesi.
+
+   Kategori sayfalarına (.mv2-cat) uygulanmıyor: orada ürün listesi
+   var ve global.css geniş ekranda çok sütuna açıyor. */
+.mv2-home { max-width: 560px; }
+
+.cat-grid {
+  --cc-gap: 10px;
+  /* konteynerin kendi genişliğinden türeyen sütun ölçüsü */
+  --cc-w: calc((100cqw - 2 * var(--cc-gap)) / 3);
+  --cc-fit: calc((100svh - var(--bar-h) - 123px) / 3);
+
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--cc-gap);
+  /* Üst sınır müşterinin çalışmasındaki oran: kart neredeyse KARE.
+     Daha uzun bir kart ekranı daha çok doldururdu ama örnekteki
+     kutu okuması bozulurdu — burada belirleyici olan şey oran.
+     Alt sınır kareyi koruyor; --cc-fit ise ancak alçak bir ekranda
+     (yatay tutulan telefon) devreye giren emniyet ağı. */
+  grid-auto-rows: clamp(var(--cc-w), var(--cc-fit), calc(var(--cc-w) * 1.2));
+}
+
+/* ---------- kart ----------
+   Kartın kendisi bir fotoğraf kutusu: yuvarlaklık sistemde yalnız
+   burada (global.css → --shot-r ile aynı aile, biraz daha yumuşak
+   çünkü kutu küçük). Gölge öneri şeridindeki plakayla aynı reçete —
+   iki katmanlı: yakın ve sıkı bir kenar, uzak ve yayvan bir düşüş. */
+.cat-card {
+  position: relative;
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--surf);
+  color: inherit;
+  text-decoration: none;
+  box-shadow:
+    0 1px 2px rgba(60, 44, 12, .07),
+    0 10px 26px -16px rgba(60, 44, 12, .45);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+:root[data-venue="lounge"] .cat-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, .4),
+    0 10px 26px -16px rgba(0, 0, 0, .9);
+}
+
+.cc-media { position: absolute; inset: 0; display: block; border-radius: inherit; }
+.cc-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- adın altındaki gölge ----------
+   Burada önce KREM BİR BANT vardı: opak zemin + üst hairline + blur.
+   İki sorunu birden getiriyordu.
+
+   (1) Bandın kenarı DÜZ, kartın kenarı YUVARLAK. Alt köşelerde düz
+   kenar eğrinin dışına taşıyor, kartın kırpması onu kenar
+   yumuşatmasıyla kesiyor ve koyu fotoğraflarda 1px'lik siyah bir
+   bozunum kalıyordu. Bandı 1px taşırmak da kapatmadı — sorun taşma
+   değil, ÜST ÜSTE BİNEN İKİ FARKLI ŞEKİLDİ.
+
+   (2) `backdrop-filter` her kartı ayrı bir katmana çıkarıp arkasını
+   kare kare bulanıklaştırıyordu; dokuz kartta kaydırmayı ağırlaştıran
+   şey de oydu.
+
+   Gölge artık ayrı bir kutu değil, fotoğrafın KENDİ kutusunun üstünde
+   ve `border-radius: inherit` ile kartla AYNI şekli alıyor:
+   örtüşecek iki kenar yok, kırpılacak düz köşe yok, bulanıklık yok.
+   Üste doğru tamamen şeffaflaştığı için de "bant" okunmuyor — ad
+   fotoğrafın kendi karanlığından çıkıyor.
+
+   Kartın kendi kırpmasına yaslanmıyor ama onunla çelişmiyor da:
+   .cc-media fotoğrafla birlikte silinen eleman (app.ts § 3), yani
+   fotoğraf çözülemezse gölge de kendiliğinden düşüyor — .no-shot ve
+   .shot-failed için ayrıca kural yazmak gerekmiyor. */
+.cc-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top,
+    rgba(23, 20, 15, .82) 0%,
+    rgba(23, 20, 15, .64) 11%,
+    rgba(23, 20, 15, .31) 24%,
+    rgba(23, 20, 15, .09) 36%,
+    rgba(23, 20, 15, 0) 48%);
+  pointer-events: none;
+}
+
+/* Ad bandı fotoğrafın ÜSTÜNE biniyor, altına değil: kartın bütün
+   yüksekliği görsele kalıyor ve müşterinin çalışmasındaki krem
+   şerit okuması korunuyor. Bulanıklık destekleyen tarayıcıda
+   yazının arkasını sakinleştiriyor; desteklemeyen tarayıcıda
+   zeminin opaklığı (%90) tek başına yetiyor. */
+/* Adın kendi zemini yok; okunurluğu üstteki gölge taşıyor. Yazı
+   gölgenin ÜSTÜNDE kalıyor: ikisi de konumlandırılmış ve z-index'siz,
+   sıralamayı DOM belirliyor — .cc-media (gölgesiyle birlikte) adın
+   öncesinde basılıyor. İki mekânda da açık krem: gölge zaten her
+   fotoğrafı yeterince karartıyor, tema başına ayrı renk gerekmiyor. */
+.cc-name {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 10px 9px 11px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: clamp(11px, 3.2vw, 15px);
+  line-height: 1.22;
+  color: #F7F3EB;
+  /* açık fotoğraflarda (kruvasan, salata) gölge tek başına yetmiyor;
+     harfin kendi kenarı da bir tık ayrılıyor */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, .55);
+  /* "Atıştırmalıklar" gibi uzun adlar bölünmesin, gerekirse
+     ikinci satıra insin */
+  hyphens: none;
+  text-wrap: balance;
+}
+
+/* ---------- fotoğrafı olmayan kart ----------
+   İki yoldan buraya düşülüyor ve ikisi de aynı görünüyor:
+   · .no-shot     — build zamanı: ortada bildirilmiş bir fotoğraf yok
+   · .shot-failed — çalışma anı: adres var ama dosya çözülemedi
+                    (scripts/app.ts § 3). Bugün Sıcak İçecekler bu
+                    yoldan geliyor: menu.json fotoğraf var diyor,
+                    R2'de yok.
+
+   Kart boş bir kutu olarak kalmıyor: krem bir yüzey üzerinde ad
+   büyüyor ve ortalanıyor. Fotoğraf geldiği an ikisi de düşüyor,
+   koda dokunulmuyor. */
+.cat-card.no-shot,
+.cat-card.shot-failed {
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background:
+    linear-gradient(158deg,
+      color-mix(in oklch, #8B6F47 13%, var(--bg)) 0%,
+      color-mix(in oklch, #8B6F47 4%, var(--bg)) 100%);
+}
+:root[data-venue="lounge"] .cat-card.no-shot,
+:root[data-venue="lounge"] .cat-card.shot-failed {
+  background:
+    linear-gradient(158deg,
+      color-mix(in oklch, #C9A03C 20%, var(--bg)) 0%,
+      color-mix(in oklch, #C9A03C 6%, var(--bg)) 100%);
+}
+/* Gölge fotoğrafla birlikte düştüğü için ad krem yüzeyde kalıyor:
+   rengi ve gölgesi buradan geri alınıyor, yoksa açık zeminde açık
+   yazı olurdu. */
+.cat-card.no-shot .cc-name,
+.cat-card.shot-failed .cc-name {
+  position: static;
+  padding: 0;
+  color: var(--text);
+  text-shadow: none;
+  font-size: clamp(12.5px, 3.8vw, 17px);
+}
+
+/* Dokunuşta kart hafifçe basılıyor — telefonda tek geri bildirim bu,
+   :hover yok. */
+.cat-card:active { transform: scale(.985); }
+
+@media (hover: hover) and (pointer: fine) {
+  .cat-card .cc-media img { transition: transform .35s ease; }
+  .cat-card:hover .cc-media img { transform: scale(1.045); }
+  .cat-card:hover {
+    box-shadow:
+      0 2px 4px rgba(60, 44, 12, .09),
+      0 16px 34px -18px rgba(60, 44, 12, .55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-card, .cat-card .cc-media img { transition: none; }
+  .cat-card:active { transform: none; }
+}
+
+/* ---------- ızgaranın belirmesi ----------
+   Sistemin kendi belirme dili: `[data-reveal]` + `html.rv` + tek
+   seferlik IntersectionObserver (app.ts § 5). Yeni bir motor yok,
+   yalnız hedef değişiyor.
+
+   KONTEYNERİN KENDİ BELİRMESİ İPTAL (ilk kural): global.css
+   [data-reveal] bloklarını topluca soldurup kaydırıyor; ızgarada
+   hareketin kartlarda olması gerekiyor, iki solma üst üste binerse
+   ikisi de bulanık okunur.
+
+   KAYDIRMAYI AĞIRLAŞTIRMAYAN ÜÇ KARAR:
+   · yalnız `opacity` ve `transform` canlanıyor — ikisi de düzen ya
+     da yeniden boyama istemiyor, iş kompozitörde kalıyor;
+   · animasyon TEK SEFER çalışıyor ve `backwards` ile bitiyor: geriye
+     kalıcı bir kural bırakmadığı için `:active`in kendi ölçeği ve
+     `:hover`in geçişi sonrasında yerinde duruyor (`both`/`forwards`
+     olsaydı `transform: none` kartın üstünde kilitli kalırdı);
+   · `will-change` bilerek YOK — dokuz kart için katman ayırmanın
+     bedeli kazancından büyük, üstelik ayrılan katman animasyon
+     bittikten sonra da bellekte kalırdı.
+
+   Gecikme kartın kendi `--cc-i`sinden geliyor (CatGrid.astro):
+   45ms × sıra, yani ızgara sol üstten sağ alta doğru açılıyor,
+   toplam gecikme 360ms'yi geçmiyor. */
+@media (prefers-reduced-motion: no-preference) {
+  html.rv .cat-grid[data-reveal] { opacity: 1; transform: none; }
+  html.rv .cat-grid[data-reveal] .cat-card { opacity: 0; }
+  html.rv .cat-grid[data-reveal].rv-in .cat-card {
+    opacity: 1;
+    animation: cc-in .44s cubic-bezier(.22, .61, .36, 1) backwards;
+    animation-delay: calc(var(--cc-i, 0) * 45ms);
+  }
+}
+@keyframes cc-in {
+  from { opacity: 0; transform: translateY(12px) scale(.99); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   KATEGORİ SAYFASI
+   ============================================================ */
+
+/* Geri dönüş. Üst bardaki logo ana sayfaya gidiyor, ızgaraya değil —
+   o yüzden ayrı bir yol gerekiyor.
+
+   İlk hâli çerçevesiz bir metin linkiydi (rayın çip dilinden) ve
+   müşteri fark etmediğini söyledi. Bu sayfada ondan çıkan TEK yol o:
+   fark edilmezse ziyaretçi kategoride kapalı kalıyor. Artık gerçek
+   bir kontrol — mekan anahtarındaki kapsülün aynısı: dolgulu yüzey,
+   hairline kenar, ok işareti. Ton altın DEĞİL: altın kapsül sayfada
+   "buradasın" demek için ayrılmış (rail/seg), burada iş çıkmak.
+
+   Dokunma alanı 44px; ok ile metin arasındaki boşluk ok'un kendi
+   optik ağırlığına göre. */
+.mv2-back { padding: 12px var(--pad) 2px; }
+.mv2-back a {
+  display: inline-flex; align-items: center; gap: 7px;
+  min-height: 40px; padding: 0 15px 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in oklch, #8B6F47 9%, var(--bg));
+  font-size: 11.5px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+  box-shadow: 0 1px 2px rgba(60, 44, 12, .06);
+  transition: background .18s ease, box-shadow .18s ease;
+}
+:root[data-venue="lounge"] .mv2-back a {
+  background: color-mix(in oklch, #C9A03C 12%, var(--bg));
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .4);
+}
+.mv2-back svg { width: 16px; height: 16px; flex: none; color: var(--gold-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .mv2-back a:hover {
+    background: color-mix(in oklch, #8B6F47 15%, var(--bg));
+    box-shadow: 0 2px 6px rgba(60, 44, 12, .12);
+  }
+}
+@media (prefers-reduced-motion: reduce) { .mv2-back a { transition: none; } }
+
+/* Bölüm başlığı geri linkinin hemen altında — 50px'lik bölüm üst
+   dolgusu burada boşluk değil kopukluk olurdu. */
+.mv2-cat main > .sec { padding-top: 10px; }
+
+.mv2-empty {
+  padding: 40px var(--pad);
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ============================================================
+   ALT BANT
+
+   "Krem tonda, çok göze batmasın." Ton öneri şeridinin zeminiyle
+   aynı aileden (#8B6F47) ama daha alçak sesle. global.css'teki
+   `footer` kuralının üst çizgisi ve mesafesi burada sıfırlanıyor:
+   bant zaten kendi başına bir yüzey, üstüne bir de hairline
+   koymak iki kez ayırmak olurdu.
+   ============================================================ */
+
+.foot-v2 {
+  margin-top: 30px;
+  padding: 20px var(--pad) calc(20px + env(safe-area-inset-bottom, 0px));
+  border-top: 0;
+  background: color-mix(in oklch, #8B6F47 7%, transparent);
+  text-align: center;
+}
+:root[data-venue="lounge"] .foot-v2 {
+  background: color-mix(in oklch, #C9A03C 7%, transparent);
+}
+.foot-v2 p {
+  font-size: 11.5px;
+  line-height: 1.7;
+  letter-spacing: .04em;
+  color: var(--muted);
+}

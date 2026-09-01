@@ -1,0 +1,96 @@
+---
+/* ============================================================
+   "Leo'nun Önerdikleri" şeridi — KART IZGARALI menü sürümü.
+
+   Featured.astro'nun kardeşi, canlı /menu'ye dokunmamak için ayrı
+   dosya. Görünüm ve sınıflar birebir aynı (global.css → .reco*),
+   akış motoru da aynı (scripts/app.ts → #recoTrack).
+
+   TEK FARK: KART KENDİ VERİSİNİ TAŞIYOR.
+
+   Büyük görünüm normalde ad/fiyat/açıklamayı menü satırlarının
+   DOM'undan okuyor (app.ts § 8, `main .sec`). Bu sayfada ürün
+   listesi yok — kart tıklanınca fotoğraf gelir, adı ve fiyatı boş
+   kalırdı. Bir ara kartlar kategori sayfasına götürsün diye
+   bağlantıya çevrildi; müşteri ürünün kendisini görmek istediğini
+   söyledi, doğrusu da o: şerit bir vitrin, vitrindeki şeye
+   dokununca o şey büyür.
+
+   Çözüm ikinci bir JSON basmak değil: kart ad, fiyat, açıklama,
+   rozet ve fotoğrafın oranını `data-*` olarak kendi üzerinde
+   taşıyor. Büyük görünüm satır bulamazsa buradan okuyor. Gerçek
+   yine tek yerde (menu.json), yalnız taşıyıcısı değişiyor.
+
+   ORAN AYRICA TAŞINIYOR (`data-ar`): kutu şeritte 4:5'e kırpılıyor
+   ama dosya 3:2. Oran karttan okunsaydı büyük görünüm kırpılmış
+   hâli gösterirdi; `data-ar` fotoğrafın KENDİ oranı.
+
+   SARMA DİKİŞİ Featured ile aynı: liste iki kez basılıyor, ikinci
+   kopya aria-hidden + tabindex=-1.
+   ============================================================ */
+import Shot from './Shot.astro';
+import { formatPrice, itemBySlug } from '../data/menu';
+import { hasPhoto } from '../lib/config';
+
+interface Props {
+  slugs: string[];
+}
+
+const { slugs } = Astro.props;
+
+const cards = slugs
+  .map((s) => {
+    const item = itemBySlug(s);
+    return item ? { item, photo: hasPhoto(item.slug) } : null;
+  })
+  .filter((x): x is NonNullable<typeof x> => x !== null);
+
+const passes = [false, true] as const;
+---
+
+{cards.length > 0 && (
+  <section class="reco" aria-labelledby="recoTitle">
+    <div class="cat-head">
+      <h2 id="recoTitle">Leo'nun Önerdikleri</h2>
+      <span class="rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="reco-view">
+      <div class="reco-track" id="recoTrack">
+        {passes.map((dup) =>
+          cards.map(({ item, photo }, i) => {
+            /* görselsiz kart tıklanabilir olmamalı: açılacak bir şey yok */
+            const Tag = photo ? 'button' : 'div';
+            const extra = photo
+              ? {
+                  type: 'button' as const,
+                  'data-lb': item.slug,
+                  /* Büyük görünümün, satır bulamadığında okuyacağı veri.
+                     Fiyat BİÇİMLENDİRİLMİŞ basılıyor: satırdan okunan yol
+                     da ekrandaki metni okuyor, iki yol aynı sonucu vermeli. */
+                  'data-name': item.name,
+                  'data-price': formatPrice(item.price),
+                  ...(item.desc ? { 'data-desc': item.desc } : {}),
+                  ...(item.leoPick ? { 'data-pick': '1' } : {}),
+                  ...(item.photo ? { 'data-ar': `${item.photo.w} / ${item.photo.h}` } : {}),
+                }
+              : {};
+            return (
+              <Tag
+                class:list={['reco-card', dup && 'reco-dup', !photo && 'no-shot']}
+                aria-hidden={dup ? 'true' : undefined}
+                tabindex={dup && photo ? -1 : undefined}
+                {...extra}
+              >
+                {photo && (
+                  <Shot slug={item.slug} name={item.name} decorative eager={!dup && i < 2} />
+                )}
+                <span class="rn">{item.name}</span>
+              </Tag>
+            );
+          }),
+        )}
+      </div>
+    </div>
+  </section>
+)}

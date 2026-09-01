@@ -22,9 +22,21 @@ import { VENUES } from '../data/menu';
 
 interface Props {
   venue: 'cafe' | 'lounge';
+  /**
+   * Mekan anahtarı basılsın mı?
+   *
+   * Kart ızgaralı menüde KAPALI (müşteri isteği). Orada barın tek işi
+   * markayı taşımak; kategori gezinmesini ızgaranın kendisi yapıyor
+   * ve Lounge'ın henüz menüsü yok — iki kapsül ekranın en üstünde
+   * cevabı olmayan bir soru soruyordu.
+   *
+   * Varsayılan AÇIK: canlı /menu ve /lounge bu propu hiç geçmiyor,
+   * davranışları değişmiyor.
+   */
+  switcher?: boolean;
 }
 
-const { venue } = Astro.props;
+const { venue, switcher = true } = Astro.props;
 const href: Record<'cafe' | 'lounge', string> = { cafe: '/menu', lounge: '/lounge' };
 const label: Record<'cafe' | 'lounge', string> = { cafe: 'Cafe', lounge: 'Lounge' };
 ---
@@ -35,14 +47,16 @@ const label: Record<'cafe' | 'lounge', string> = { cafe: 'Cafe', lounge: 'Lounge
       <Logo size="sm" />
     </a>
 
-    <nav class="seg" aria-label="Mekan seç">
-      {/* Kare nokta ayracı kalktı: iki kapsül arasında ayıracak bir
-          şey yok, nokta yalnız gürültü olurdu. */}
-      {VENUES.map((v) => (
-        <a href={href[v.key]} aria-current={v.key === venue ? 'page' : undefined}>
-          <span class="seg-t">{label[v.key]}</span>
-        </a>
-      ))}
-    </nav>
+    {switcher && (
+      <nav class="seg" aria-label="Mekan seç">
+        {/* Kare nokta ayracı kalktı: iki kapsül arasında ayıracak bir
+            şey yok, nokta yalnız gürültü olurdu. */}
+        {VENUES.map((v) => (
+          <a href={href[v.key]} aria-current={v.key === venue ? 'page' : undefined}>
+            <span class="seg-t">{label[v.key]}</span>
+          </a>
+        ))}
+      </nav>
+    )}
   </div>
 </header>

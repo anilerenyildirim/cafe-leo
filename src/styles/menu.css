@@ -116,10 +116,12 @@ body:has(.mpage) { padding-bottom: 0; }
    ad fotoğrafın DIŞINA, kendi kâğıdının üzerine çıkıyor: kontrast
    artık fotoğrafa bağlı değil, her kartta aynı.
 
-   YUVARLAKLIK YALNIZ DIŞ KÖŞEDE. Kâğıdın köşeleri yuvarlak, içindeki
-   fotoğraf kutusu neredeyse kare (3px) — polaroidin okuması bu. İç
-   kutuya da dış köşenin yarıçapı verilseydi iki eş merkezli yuvarlak
-   üst üste biner, kart bir "buton" gibi görünürdü.
+   İKİ YARIÇAP, BİRİ ÖTEKİNDEN KÜÇÜK. Kâğıt 14px, içindeki fotoğraf
+   kutusu 8px. İç kutuya dış köşenin yarıçapı verilseydi iki eş
+   merkezli yuvarlak üst üste biner, kart bir "buton" gibi görünürdü;
+   sıfır verilseydi (bir tur öyleydi) yuvarlak kâğıdın içinde keskin
+   bir kare durur, ikisi birbirini yalanlardı. 8px ikisinin arası:
+   fotoğrafın kenarı yumuşuyor ama kâğıdın köşesiyle yarışmıyor.
 
    KÂĞIT TAM BEYAZ DEĞİL. Sayfa zemini #FCFBF9; kart ondan bir tık
    daha SICAK ve daha koyu bir krem. Beyaz verilseydi kart sayfadan
@@ -160,18 +162,26 @@ body:has(.mpage) { padding-bottom: 0; }
     0 16px 30px -18px rgba(0, 0, 0, .95);
 }
 
-/* Fotoğraf kutusu KARE. Kaynaklar 3:2 (1200×800), yani `cover`
-   soldan sağdan değil ÜSTTEN ALTTAN kırpıyor — tabak fotoğraflarında
-   yemek zaten karenin ortasında duruyor.
+/* Fotoğraf kutusu 4:3 — ORAN BİR KIRPMA KARARI.
 
-   Kare seçildi çünkü ızgaradaki ritmi kartın adı bozuyor: bir kartta
-   ad tek satır, komşusunda iki satır. Fotoğraf kutusu her kartta
-   AYNI yükseklikte olunca göz fotoğrafların alt kenarını tek çizgi
-   olarak okuyor, adın kaç satır sürdüğü ikinci planda kalıyor. */
+   Kaynakların tamamı 3:2 (1200×800). Kutu bir tur KARE denendi ve
+   müşteri "sağdan soldan çok kırpılıyor" dedi; haklı, sayı da onu
+   söylüyor: `cover` yüksekliği tutturmak için ölçekliyor, 1:1'de
+   genişliğin %33'ü kesiliyor. Tabağın kenarı, bardağın sapı, garnitür
+   — hepsi karenin dışında kalıyordu.
+
+   4:3'te aynı hesap %11'e düşüyor. 3:2'ye kadar açılsaydı hiç kırpma
+   olmazdı ama kart o zaman geniş ve basık bir afişe dönerdi;
+   polaroidin okuması fotoğrafın DİKEYE yakın durmasına bağlı.
+   %11, kompozisyonun kenarını değil yalnız payını yiyor.
+
+   Ölçünün her kartta AYNI olması ayrıca ızgaranın ritmini tutuyor:
+   bir kartta ad tek satır, komşusunda iki satır olabilir; fotoğrafın
+   alt kenarı tek çizgi olarak okununca o fark ikinci plana düşüyor. */
 .cc-media {
   display: block;
-  aspect-ratio: 1 / 1;
-  border-radius: 3px;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
   overflow: hidden;
   /* fotoğrafın kendi kenarı: açık zeminli karelerde (kruvasan,
      salata) kâğıt ile fotoğraf birbirine karışmasın */
@@ -226,8 +236,8 @@ body:has(.mpage) { padding-bottom: 0; }
 .cat-card.shot-failed::before {
   content: '';
   display: block;
-  aspect-ratio: 1 / 1;
-  border-radius: 3px;
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
   background:
     linear-gradient(158deg,
       var(--cc-well) 0%,

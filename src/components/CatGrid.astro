@@ -1,23 +1,27 @@
 ---
 /* ============================================================
-   Menü ızgarası — 3 sütun × 3 satır, dokuz kart.
+   Menü ızgarası — on altı polaroid kart.
 
-   BOYUT KARARI CSS'te (global-v2.css → .cat-grid): satır yüksekliği
-   svh'den türüyor, çünkü müşterinin istediği şey bir en-boy oranı
-   değil BİR EKRAN: başlık bandı + dokuz kart telefonda kaydırmasız
-   görünsün. Sabit oran verilseydi uzun ekranda boşluk, kısa ekranda
-   taşma olurdu.
+   BOYUT KARARI CSS'te (menu.css → .cat-grid). Sütun sayısı
+   yazılmıyor, TABAN GENİŞLİK yazılıyor (`auto-fill` +
+   `minmax(148px, 1fr)`): telefonda iki, masaüstü kapağında üç
+   sütun. Kart yüksekliği kendi içeriğinden geliyor.
+
+   Dokuz kart varken satır yüksekliği `svh`den türüyordu — hedef
+   "başlık + kartlar tek ekranda" idi. On altı kategoride o hedef
+   fizik olarak imkânsız ve peşinden gitmek adları yeniden
+   okunmaz hâle getirirdi; ızgara artık kaydırılıyor.
 
    Başlık kendi stilini üretmiyor — sayfadaki tek başlık dili
    .cat-head (bant + sol altın kenar), "Leo'nun Önerdikleri" ile
-   aynısı. Canva çalışmasında "Menü" çıplak duruyordu; orada eksik
-   olan şey donanım değil zamandı, sistemin kendi başlığı kullanıldı.
+   aynısı.
 
-   İlk üç kart eager: ızgaranın üst satırı ilk ekranda.
+   İLK ALTI KART EAGER: telefonda ilk ekranda iki sütun × üç satır
+   görünüyor. Eskiden üçtü, çünkü ızgara üç sütunluydu.
 
    BELİRME (§9c) IZGARAYA BAĞLI, KARTA DEĞİL: `data-reveal` tek bir
-   düğümde durduğu için app.ts § 5 dokuz yerine bir hedef gözlüyor ve
-   ilk kesişmede onu bırakıyor. Sıra kartların üzerinde `--cc-i`
+   düğümde durduğu için app.ts § 5 on altı yerine bir hedef gözlüyor
+   ve ilk kesişmede onu bırakıyor. Sıra kartların üzerinde `--cc-i`
    olarak taşınıyor, gecikmeyi CSS hesaplıyor — kaydırma sırasında
    çalışan JS yok.
    ============================================================ */
@@ -32,6 +36,6 @@ import { MENU_CARDS } from '../lib/menuCards';
   </div>
 
   <div class="cat-grid" data-reveal>
-    {MENU_CARDS.map((card, i) => <CatCard card={card} eager={i < 3} index={i} />)}
+    {MENU_CARDS.map((card, i) => <CatCard card={card} eager={i < 6} index={i} />)}
   </div>
 </section>

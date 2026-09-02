@@ -256,6 +256,24 @@
                   }
                 },
                 {
+                  "slug": "curly-patates-kizartmasi",
+                  "name": {
+                    "tr": "Curly Patates Kızartması"
+                  },
+                  "price": null,
+                  "photo": null,
+                  "note": "FİYAT TEYİT BEKLİYOR — 2 Eylül 2026'da müşteri listesinden eklendi, fiyat verilmedi"
+                },
+                {
+                  "slug": "chicken-fingers",
+                  "name": {
+                    "tr": "Chicken Fingers"
+                  },
+                  "price": null,
+                  "photo": null,
+                  "note": "FİYAT TEYİT BEKLİYOR — 2 Eylül 2026'da müşteri listesinden eklendi, fiyat verilmedi"
+                },
+                {
                   "slug": "kruvasan",
                   "name": {
                     "tr": "Kruvasan"
@@ -378,6 +396,15 @@
                     "w": 1200,
                     "h": 800
                   }
+                },
+                {
+                  "slug": "aperatif-tabagi-2-kisilik",
+                  "name": {
+                    "tr": "Aperatif Tabağı (2 Kişilik)"
+                  },
+                  "price": null,
+                  "photo": null,
+                  "note": "FİYAT TEYİT BEKLİYOR — 2 Eylül 2026'da müşteri listesinden eklendi, fiyat verilmedi"
                 }
               ]
             },

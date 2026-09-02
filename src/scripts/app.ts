@@ -17,6 +17,7 @@
      6  şerit      — öneri şeridinin akışı (§7)
      7  büyük görünüm — fotoğrafa tıklayınca (§8)
      8  morph      — mekan anahtarının paleti (§6)
+     9  geri tuşu  — kategoriye doğrudan girildiğinde geçmişe menüyü koy
 
    HAREKET KURALI: sayfada aynı anda en fazla üç hareket türü.
    `prefers-reduced-motion: reduce` her modülde AYRICA karşılanıyor;
@@ -161,7 +162,7 @@ function shotNet(): void {
      dosya yok. Kart kırık ikon göstermek yerine tipografik kalıyor. */
   for (const img of document.querySelectorAll<HTMLImageElement>('.shot img, .cc-media img')) {
     const fail = () => {
-      img.closest('.item, .pick-card, .reco-card, .cat-card')?.classList.add('shot-failed');
+      img.closest('.item, .reco-card, .cat-card')?.classList.add('shot-failed');
       img.closest('.shot, .cc-media')?.remove();
     };
     if (img.complete && img.naturalWidth === 0) fail();
@@ -804,6 +805,60 @@ function morph(): void {
 }
 
 /* ============================================================
+   9 — GERİ TUŞU KATEGORİDEN MENÜYE DÖNSÜN
+
+   ŞİKÂYET: kategoriye girip tarayıcının geri tuşuna basan ziyaretçi
+   siteden çıkıyor.
+
+   SEBEP GEZİNMEDE DEĞİL, GİRİŞTE. Izgaradan bir kart tıklandığında
+   ClientRouter geçmişe düzgün bir kayıt yazıyor; o yoldan gelen geri
+   tuşu zaten ızgaraya dönüyor (tarayıcıda doğrulandı). Sorun sayfaya
+   DOĞRUDAN girildiğinde çıkıyor — masadaki QR, paylaşılan bağlantı,
+   arama sonucu, sekmede açılmış eski bir adres. O anda geçmişte tek
+   bir kayıt var: kategori sayfasının kendisi. Altında site yok, geri
+   tuşunun gidebileceği tek yer siteden dışarısı.
+
+   ÇÖZÜM: altına bir kayıt KOYMAK. Bulunduğumuz kaydın adresini menü
+   ızgarasıyla değiştirip (replaceState) kategoriyi üstüne yeniden
+   basıyoruz (pushState). Sayfa yeniden yüklenmiyor, ekranda hiçbir
+   şey oynamıyor; değişen yalnız geçmiş yığını.
+
+   YALNIZ İLK YÜKLEMEDE. `init` her takasta yeniden çalışıyor; ikinci
+   ve sonraki çağrılarda altımızda gerçek bir kayıt var, ikinci bir
+   menü kaydı koymak geri tuşunu iki basışa çıkarırdı.
+
+   REFERRER KAPISI: tam sayfa yenilemesiyle site içinden gelindiyse
+   (JS kapalı, ClientRouter devre dışı) altımızda zaten menü var.
+
+   CLIENTROUTER'IN DURUM ŞEKLİ KORUNUYOR: `{index, scrollX, scrollY}`.
+   popstate dinleyicisi `state === null` görürse HİÇBİR ŞEY yapmıyor
+   (router.js) — çıplak bir pushState geri tuşunu tamamen ölü
+   bırakırdı. index'i bir artırmak da yönü ('back'/'forward') doğru
+   okutuyor.
+   ============================================================ */
+
+let freshDocument = true;
+
+function backGuard(): void {
+  const first = freshDocument;
+  freshDocument = false;
+  if (!first) return;
+
+  const home = document.querySelector<HTMLElement>('[data-back]')?.dataset['back'];
+  if (!home) return;
+
+  /* site içinden tam sayfa gezinmesiyle gelindi — altımızda kayıt var */
+  if (document.referrer && new URL(document.referrer).origin === location.origin) return;
+
+  const st = (history.state ?? {}) as { index?: number };
+  const index = st.index ?? 0;
+  const here = location.href;
+
+  history.replaceState({ ...st, index, scrollX: 0, scrollY: 0 }, '', home);
+  history.pushState({ ...st, index: index + 1, scrollX: 0, scrollY: 0 }, '', here);
+}
+
+/* ============================================================
    KURULUM
    ============================================================ */
 
@@ -819,6 +874,7 @@ function init(): void {
   reveal();
   recoFlow();
   lightbox();
+  backGuard();
 }
 
 function teardown(): void {

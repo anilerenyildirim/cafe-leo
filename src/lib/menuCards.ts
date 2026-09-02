@@ -1,24 +1,42 @@
 /* ============================================================
-   MENÜ KARTLARI — /menu-v2 kategori ızgarasının tek kaynağı
+   MENÜ KARTLARI — /menu kategori ızgarasının tek kaynağı
 
-   Müşterinin Canva çalışmasında dokuz kart var ve o dokuz kart
-   menu.json'un iki seviyeli ağacıyla BİREBİR ÖRTÜŞMÜYOR: Kahvaltı,
-   Bowl, Atıştırmalıklar ve Salatalar aslında "Yiyecekler"in ALT
-   kategorileri. Müşteri ızgarayı gördüğü gibi onayladı, yani karar
-   şu: ızgara veriyi yeniden düzenlemiyor, verinin ÜZERİNE bir
-   SUNUM HARİTASI koyuyor.
+   Müşterinin gördüğü kategori listesi menu.json'un iki seviyeli
+   ağacıyla BİREBİR ÖRTÜŞMÜYOR ve örtüşmesi de gerekmiyor. Panelin
+   yazdığı ağaç bir DEPOLAMA düzeni (Yiyecekler → burgerler,
+   kahvalti, atistirmaliklar…); müşterinin istediği liste bir
+   OKUMA düzeni (Kruvasan Sandviçler, Ekmek Üstü Lezzetler,
+   Tostlar & Sandviçler…). Burası ikincisini birincinin ÜZERİNE
+   koyan sunum haritası.
 
-   Bu yüzden burada yeni veri yok — yalnız eşleme var. Fiyat, ürün,
-   fotoğraf hâlâ tek yerden (menu.json) geliyor; panelden bir ürün
-   eklenince kart sayfası kendiliğinden güncelleniyor.
+   BU AYRIM BİLEREK KORUNUYOR. menu.json'u müşterinin listesine
+   göre yeniden bölmek daha temiz görünürdü ama panel o dosyayı
+   HER menü güncellemesinde baştan yazıyor ("menü güncellendi
+   (panel)" commit'leri) — elle yapılan her bölme bir sonraki
+   güncellemede silinirdi. Harita burada durduğu sürece panel
+   ürün ekleyip fiyat değiştirebiliyor, kategori okuması yerinde
+   kalıyor.
 
-   "Yiyecekler" kartı, kendi altından çekilen dört grubun GERİ
-   KALANIDIR (burger, pizza, makarna, ana yemek, sushi). Aynı grup
-   iki kartta görünmüyor — ızgara menünün tamamını bir kez kaplıyor.
+   İKİ EŞLEME BİÇİMİ VAR ve ikisi de aynı işi yapmıyor:
+
+   · `subs`  — alt kategori slug'ları. Grup verideki hâliyle
+               taşınıyor; panel o gruba ürün eklerse kart
+               sayfası kendiliğinden güncelleniyor.
+   · `items` — ürün slug'ları. Grup verideki sınırı KESİYOR:
+               "Tostlar & Sandviçler" beş tostu kahvaltıdan,
+               club sandviçi burgerlerden alıyor. Panelden
+               eklenen yeni ürün BURAYA YAZILMADIKÇA görünmez —
+               bedeli bu, ve müşterinin listesi için kaçınılmaz.
+
+   `items` kartında NO_PHOTO'ya dikkat: sentetik grubun slug'ı
+   kartın kendi anahtarı oluyor (aşağıda), yani düzen kararı
+   (lib/config.ts) o anahtara bakıyor. Bugünkü on altı kartın
+   hiçbiri tipografik grup değil; tipografik bir grubu `items`
+   ile bölecek olan, anahtarı NO_PHOTO'ya da eklemeli.
 
    FOTOĞRAFI OLMAYAN KART kırılmıyor, dönüşüyor: `cardPhoto` bir şey
    bulamazsa kart tipografik basılıyor (bkz. CatCard.astro →
-   .no-shot). Bugün hiçbir kart bu durumda değil.
+   .no-shot).
 
    SICAK İÇECEKLER'İN KAPAĞI YEREL BİR DOSYA. menu.json bu ürünlerin
    fotoğrafı olduğunu söylüyor ama R2'de on sekizinin de hiçbiri yok
@@ -35,7 +53,7 @@
 import { VENUES, photoOf, photoSrc, type MenuItem, type Section, type Subsection } from '../data/menu';
 
 export interface MenuCard {
-  /** URL parçası: /menu-v2/<key> */
+  /** URL parçası: /menu/<key> */
   key: string;
   /** kart üzerinde ve kategori sayfasının başlığında yazan ad */
   title: string;
@@ -79,20 +97,157 @@ export interface MenuCard {
    * TAMAMI. Sıra verideki sıradır, burada yeniden sıralanmıyor.
    */
   subs?: string[];
+  /**
+   * Bu karta girecek ÜRÜNLER — alt kategori sınırını kesen kartlar
+   * için. `subs` ile birlikte verilmez; verilirse bu kazanır.
+   * Sıra BURADAKİ sıradır (müşterinin listesindeki sıra).
+   */
+  items?: string[];
 }
 
-/** Canva çalışmasındaki sıra: soldan sağa, yukarıdan aşağıya. */
+/** Müşterinin 2 Eylül 2026 listesindeki sıra. */
 export const MENU_CARDS: MenuCard[] = [
-  { key: 'imza-urunler',   title: 'İmza Ürünler',    photo: 'leo-pizza',            sectionSlug: 'imza-urunler' },
-  { key: 'kahvalti',       title: 'Kahvaltı',        photo: 'kahvalti-tabagi',      sectionSlug: 'yiyecekler', subs: ['kahvalti'] },
-  { key: 'yiyecekler',     title: 'Yiyecekler',      photo: 'cheese-burger',        sectionSlug: 'yiyecekler', subs: ['burgerler', 'pizzalar', 'makarnalar', 'ana-yemekler', 'sushi'] },
-  { key: 'bowl',           title: 'Bowl Çeşitleri',  photo: 'bonfile-bowl',         cover: 'bonfile-bowl', sectionSlug: 'yiyecekler', subs: ['bowl'] },
-  { key: 'atistirmaliklar', title: 'Atıştırmalıklar', photo: 'kruvasan-dana-jambon', sectionSlug: 'yiyecekler', subs: ['atistirmaliklar'] },
-  { key: 'salatalar',      title: 'Salatalar',       photo: 'sezar-salata',         sectionSlug: 'yiyecekler', subs: ['salatalar'] },
-  /* kapak R2'de değil, yerelde — yukarıdaki başlık notuna bakın */
-  { key: 'sicak-icecekler', title: 'Sıcak İçecekler', photo: 'latte',               cover: '/foto/latte.webp', sectionSlug: 'sicak-icecekler' },
-  { key: 'tatlilar',       title: 'Tatlılar',        photo: 'leo-waffle',           sectionSlug: 'tatlilar' },
-  { key: 'soguk-icecekler', title: 'Soğuk İçecekler', photo: 'hibiskus',            sectionSlug: 'soguk-icecekler' },
+  {
+    key: 'imza-urunler',
+    title: 'İmza Ürünler',
+    photo: 'leo-pizza',
+    sectionSlug: 'imza-urunler',
+  },
+  {
+    /* Tostlar "Tostlar & Sandviçler"e taşındı; kahvaltıda tabak ve
+       omletler kaldı. */
+    key: 'kahvaltilar',
+    title: 'Kahvaltılar',
+    photo: 'kahvalti-tabagi',
+    sectionSlug: 'yiyecekler',
+    items: ['kahvalti-tabagi', 'omlet', 'kasarli-omlet', 'mantarli-omlet'],
+  },
+  {
+    /* Club Sandviç "Tostlar & Sandviçler"e geçti. Hot Dog burada
+       kaldı: müşterinin listesinde ayrıca geçmiyor ve burger
+       tezgâhının ürünü. */
+    key: 'burgerler',
+    title: 'Burgerler',
+    photo: 'cheese-burger',
+    sectionSlug: 'yiyecekler',
+    items: ['klasik-burger', 'cheese-burger', 'sarkuteri-burger', 'hot-dog'],
+  },
+  {
+    key: 'pizzalar',
+    title: 'Pizzalar',
+    /* leo-pizza İmza Ürünler'in kapağı — iki kart aynı kareyi
+       taşımasın diye ikinci pizza. */
+    photo: 'burrata-peynirli-pizza',
+    sectionSlug: 'yiyecekler',
+    subs: ['pizzalar'],
+  },
+  {
+    key: 'makarnalar',
+    title: 'Makarnalar',
+    photo: 'karidesli-fettuccine',
+    sectionSlug: 'yiyecekler',
+    subs: ['makarnalar'],
+  },
+  {
+    key: 'sushi',
+    title: 'Sushi',
+    /* şema `photo: null` diyor, R2'de dosya duruyor — kaçış kapısı */
+    photo: 'leo-sushi',
+    cover: 'leo-sushi',
+    sectionSlug: 'yiyecekler',
+    subs: ['sushi'],
+  },
+  {
+    key: 'kruvasan-sandvicler',
+    title: 'Kruvasan Sandviçler',
+    photo: 'kruvasan-dana-jambon',
+    sectionSlug: 'yiyecekler',
+    items: ['kruvasan', 'kruvasan-dana-jambon', 'kruvasan-hindi-fume', 'kruvasan-mozzarella'],
+  },
+  {
+    key: 'ekmek-ustu-lezzetler',
+    title: 'Ekmek Üstü Lezzetler',
+    photo: 'yumurtali-somon-fume-eksi-maya',
+    sectionSlug: 'yiyecekler',
+    items: [
+      'yumurtali-somon-fume-eksi-maya',
+      'somon-fume-labne-eksi-maya',
+      'yumurtali-pastirma-eksi-maya',
+      'mozzarella-eksi-maya',
+    ],
+  },
+  {
+    key: 'tostlar-sandvicler',
+    title: 'Tostlar & Sandviçler',
+    photo: 'club-sandvic',
+    sectionSlug: 'yiyecekler',
+    items: [
+      'club-sandvic',
+      '4-peynirli-tost',
+      'kasarli-tost',
+      'karisik-tost',
+      'kavurmali-kasarli-tost',
+      'bazlama-tost',
+    ],
+  },
+  {
+    key: 'leo-bowl',
+    title: 'Leo Bowl Çeşitleri',
+    photo: 'bonfile-bowl',
+    cover: 'bonfile-bowl',
+    sectionSlug: 'yiyecekler',
+    subs: ['bowl'],
+  },
+  {
+    key: 'salatalar',
+    title: 'Salatalar',
+    photo: 'sezar-salata',
+    sectionSlug: 'yiyecekler',
+    subs: ['salatalar'],
+  },
+  {
+    key: 'ana-yemekler',
+    title: 'Ana Yemekler',
+    photo: 'bonfile',
+    sectionSlug: 'yiyecekler',
+    subs: ['ana-yemekler'],
+  },
+  {
+    /* Kruvasanlar ve ekşi mayalar kendi kartlarına çıktı; geriye
+       tabaklar ve kızartmalar kaldı. Üçü 2 Eylül 2026'da eklendi,
+       fotoğrafları ve fiyatları henüz yok. */
+    key: 'atistirmaliklar',
+    title: 'Atıştırmalıklar',
+    photo: 'patates-kizartmasi',
+    sectionSlug: 'yiyecekler',
+    items: [
+      'patates-kizartmasi',
+      'curly-patates-kizartmasi',
+      'chicken-fingers',
+      'frankfurter-tabagi',
+      'aperatif-tabagi-2-kisilik',
+    ],
+  },
+  {
+    /* kapak R2'de değil, yerelde — yukarıdaki başlık notuna bakın */
+    key: 'sicak-icecekler',
+    title: 'Sıcak İçecekler',
+    photo: 'latte',
+    cover: '/foto/latte.webp',
+    sectionSlug: 'sicak-icecekler',
+  },
+  {
+    key: 'tatlilar',
+    title: 'Tatlılar',
+    photo: 'leo-waffle',
+    sectionSlug: 'tatlilar',
+  },
+  {
+    key: 'soguk-icecekler',
+    title: 'Soğuk İçecekler',
+    photo: 'hibiskus',
+    sectionSlug: 'soguk-icecekler',
+  },
 ];
 
 const cafe = VENUES.find((v) => v.key === 'cafe')!;
@@ -103,7 +258,7 @@ const SECTIONS: Section[] = cafe.sections ?? [];
  * indirgenmiş hâli.
  *
  * Tek alt gruplu kartta grubun BAŞLIĞI DÜŞÜRÜLÜYOR (title: null).
- * Sayfanın kendi başlığı zaten "Kahvaltı" diyor; hemen altında
+ * Sayfanın kendi başlığı zaten "Kahvaltılar" diyor; hemen altında
  * ikinci bir "Kahvaltı" ara başlığı aynı şeyi iki kez söylerdi.
  * Section.astro tek gruplu bölümde çip satırını da basmıyor.
  */
@@ -111,14 +266,28 @@ export function cardSection(card: MenuCard): Section | null {
   const src = SECTIONS.find((s) => s.slug === card.sectionSlug);
   if (!src) return null;
 
-  const wanted = card.subs;
-  const subs: Subsection[] = wanted
-    ? /* sıra KARTIN listesinden, verinin sırasından değil: "Yiyecekler"
-         kartında burger→pizza→makarna okunuşu müşterinin sırası */
-      wanted
-        .map((slug) => src.subs.find((sub) => sub.slug === slug))
-        .filter((s): s is Subsection => s !== undefined)
-    : src.subs;
+  const subs: Subsection[] = card.items
+    ? /* ÜRÜN LİSTESİ — grup sınırını kesen kart. Bölümün bütün
+         ürünleri tek havuzda aranıyor: "Tostlar & Sandviçler"in
+         altı ürünü iki farklı gruptan geliyor. Çözülemeyen slug
+         sessizce düşüyor (panelden bir ürün silinirse sayfa
+         kırılmasın), sıra KARTIN listesindeki sıra. */
+      [
+        {
+          slug: card.key,
+          title: null,
+          extras: [],
+          items: card.items
+            .map((slug) => src.subs.flatMap((sub) => sub.items).find((i) => i.slug === slug))
+            .filter((i): i is MenuItem => i !== undefined),
+        },
+      ].filter((sub) => sub.items.length > 0)
+    : card.subs
+      ? /* sıra KARTIN listesinden, verinin sırasından değil */
+        card.subs
+          .map((slug) => src.subs.find((sub) => sub.slug === slug))
+          .filter((s): s is Subsection => s !== undefined)
+      : src.subs;
 
   if (subs.length === 0) return null;
 
@@ -127,7 +296,7 @@ export function cardSection(card: MenuCard): Section | null {
   return {
     ...src,
     /* Kartın slug'ı bölümün slug'ı oluyor: kategori sayfasında
-       #imza-urunler yerine #kahvalti gibi kartla aynı ad. */
+       #imza-urunler yerine #kahvaltilar gibi kartla aynı ad. */
     slug: card.key,
     title: card.title,
     subs: flat,

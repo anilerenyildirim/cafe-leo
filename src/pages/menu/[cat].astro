@@ -1,8 +1,8 @@
 ---
 /* ============================================================
-   /menu-v2/<kategori> — bir kartın açtığı ürün listesi.
+   /menu/<kategori> — bir kartın açtığı ürün listesi.
 
-   Dokuz sayfa da build zamanında basılıyor (getStaticPaths);
+   On altı sayfa da build zamanında basılıyor (getStaticPaths);
    çalışma anında yönlendirme yok, QR'dan gelen telefon statik HTML
    indiriyor.
 
@@ -17,18 +17,25 @@
    ray yokken --rail-h'i 0 ölçüyor, başlıkların scroll-margin'i
    kendiliğinden doğru kalıyor.
 
-   GERİ DÖNÜŞ tek yer: başlığın üstündeki "Menü" bağlantısı. Üst
-   bardaki logo ana sayfaya gider (kart ızgarasına değil), o yüzden
-   ayrı bir dönüş yolu gerekiyor.
+   GERİ DÖNÜŞ İKİ YOL. Görünen yol başlığın üstündeki "Menü"
+   bağlantısı — üst bardaki logo ana sayfaya gider (kart ızgarasına
+   değil), o yüzden ayrı bir dönüş yolu gerekiyor.
+
+   Görünmeyen yol TARAYICININ GERİ TUŞU: sayfa doğrudan açıldığında
+   (QR, paylaşılan bağlantı, arama sonucu) altında bir geçmiş kaydı
+   olmadığı için geri tuşu siteden ÇIKARIYORDU. `data-back` bunu
+   app.ts § 9'a bildiriyor; orada ızgara sayfası geçmişe
+   yerleştiriliyor. Öznitelik değeri dönülecek adres — yol burada
+   bir kez yazılıyor, JS'te ikinci kez değil.
    ============================================================ */
 import type { GetStaticPaths } from 'astro';
 import Base from '../../layouts/Base.astro';
 import Bar from '../../components/Bar.astro';
 import Section from '../../components/Section.astro';
-import FootV2 from '../../components/FootV2.astro';
+import MenuFoot from '../../components/MenuFoot.astro';
 import { VENUES } from '../../data/menu';
 import { MENU_CARDS, cardSection } from '../../lib/menuCards';
-import '../../styles/menu-v2.css';
+import '../../styles/menu.css';
 
 export const getStaticPaths = (() =>
   MENU_CARDS.map((card) => ({
@@ -50,9 +57,9 @@ const sec = cardSection(card);
 
   <h1 class="sr-only">{card.title} — {venue.name}</h1>
 
-  <div class="wrap mv2 mv2-cat">
-    <nav class="mv2-back" aria-label="Menüye dön">
-      <a href="/menu-v2">
+  <div class="wrap mpage mpage-cat" data-back="/menu">
+    <nav class="mpage-back" aria-label="Menüye dön">
+      <a href="/menu">
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="1.6"
             stroke-linecap="round" stroke-linejoin="round" />
@@ -64,9 +71,9 @@ const sec = cardSection(card);
     <main id="menu">
       {sec
         ? <Section sec={sec} />
-        : <p class="mv2-empty">Bu kategori henüz hazırlanıyor.</p>}
+        : <p class="mpage-empty">Bu kategori henüz hazırlanıyor.</p>}
     </main>
 
-    <FootV2 />
+    <MenuFoot />
   </div>
 </Base>

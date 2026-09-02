@@ -1,29 +1,36 @@
 ---
 /* ============================================================
-   Kategori kartı (§ yeni menü ızgarası).
-
-   Sistemdeki tek yuvarlaklık fotoğraf kutusunun kenarındaydı
-   (global.css → --shot-r). Bu kart o kuralın devamı: kartın kendisi
-   bir fotoğraf kutusu, adı da kutunun içinde duran krem bir bant.
-   Tipografi, çizgiler ve kare nokta hâlâ kare — yuvarlaklık yine
-   yalnız görselin kenarında.
+   Kategori kartı — POLAROİD.
 
    Kart bir <a>: kategori sayfasına götürüyor. Öneri şeridindeki
    kartlar gibi büyük görünüm açmıyor — burada iş gezinme.
 
+   BİÇİM: kâğıt bir çerçeve, içinde kare bir fotoğraf, altında adı.
+   Ad fotoğrafın ÜSTÜNE binmiyor — eskiden biniyordu ve okunurluğu
+   fotoğrafın kendi karanlığına bağlıydı; açık kareli kategorilerde
+   (kruvasan, salata, patates) yazının altına konan gradyan hem
+   yetmiyor hem de fotoğrafın alt üçte birini yiyordu. Ad kâğıda
+   çıkınca kontrast her kartta aynı oldu. Ölçüler menu.css →
+   `.cat-card` / `.cc-name`.
+
+   DOM SIRASI = OKUMA SIRASI: görsel, sonra ad. Eskiden ikisi
+   üst üsteydi ve sıralamayı z-index yerine DOM tutuyordu; artık
+   ikisi de akışta, sıra kendiliğinden doğru.
+
    FOTOĞRAFSIZ KART kırılmıyor, DÖNÜŞÜYOR: görsel kutusu hiç
-   basılmaz, yerine krem bir yüzey üzerinde kategori adı büyür ve
-   ortalanır (.no-shot). Bowl ve Sushi'nin fotoğrafı henüz yok;
-   panelden yüklendiği an kart kendiliğinden görselleşiyor.
+   basılmaz, yerini kartın kendi `::before` yüzeyi alır (.no-shot)
+   — çerçeve ve ölçü yerinde kalır, yalnız kutunun içi boş krem
+   olur. Panelden fotoğraf yüklendiği an kart kendiliğinden
+   görselleşiyor.
    ============================================================ */
 import { cardPhoto, type MenuCard } from '../lib/menuCards';
 
 interface Props {
   card: MenuCard;
-  /** ilk satır kartları — katlamanın üstünde, lazy beklemesin */
+  /** ilk satırlar — katlamanın üstünde, lazy beklemesin */
   eager?: boolean;
   /** ızgaradaki sırası — belirmenin basamaklanması CSS'te bundan
-      hesaplanıyor (menu-v2.css → --cc-i) */
+      hesaplanıyor (menu.css → --cc-i) */
   index?: number;
 }
 
@@ -33,7 +40,7 @@ const photo = cardPhoto(card);
 
 <a
   class:list={['cat-card', !photo && 'no-shot']}
-  href={`/menu-v2/${card.key}`}
+  href={`/menu/${card.key}`}
   style={`--cc-i: ${index}`}
 >
   {photo && (

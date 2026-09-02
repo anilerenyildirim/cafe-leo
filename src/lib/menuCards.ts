@@ -38,9 +38,9 @@
    bulamazsa kart tipografik basılıyor (bkz. CatCard.astro →
    .no-shot).
 
-   SICAK İÇECEKLER'İN KAPAĞI YEREL BİR DOSYA. menu.json bu ürünlerin
-   fotoğrafı olduğunu söylüyor ama R2'de on sekizinin de hiçbiri yok
-   (tek tek denendi, hepsi 404). Kare aslında çekilmişti: `public/foto/`
+   SICAK İÇECEKLER'İN KAPAĞI YEREL BİR DOSYA. Yirmi dört sıcak içeceğin
+   hiçbirinin R2'de karesi yok (tek tek denendi, hepsi 404) ve menu.json
+   da bunu doğru söylüyor. Kare aslında çekilmişti: `public/foto/`
    klasöründe duruyordu, 13 Ağustos'ta "kaynağı R2" gerekçesiyle
    kaldırıldı (703c43a) ve R2'den de silinince ortada kalmadı. Git
    geçmişinden geri alındı — yalnız o tek dosya, klasörün tamamı
@@ -64,17 +64,19 @@ export interface MenuCard {
    */
   photo: string;
   /**
-   * KAÇIŞ KAPISI — menu.json ile R2 birbirini tutmadığında.
+   * KAPAK, ÜRÜNÜN FOTOĞRAFI YERİNE. `photo`dan ÖNCE gelir.
    *
-   * ŞEMADAN ÖNCE GELİR, çünkü bu alanın tek anlamı "menu.json burada
-   * yanılıyor". İki yönde de yanılabiliyor:
-   *   · şema yok diyor, dosya var — Bowl ürünleri (bonfile-bowl,
-   *     karides-bowl, tavuk-bowl, leo-sushi, pink-dream) R2'de duruyor
-   *     ama menu.json onlara hâlâ `photo: null` diyor;
-   *   · şema var diyor, dosya yok — sıcak içeceklerin on sekiz karesi
-   *     menu.json'da bildirilmiş, R2'de hiçbiri yok.
-   * İkincisinde `photo`ya öncelik verilseydi kart 404'e gidip
-   * tipografiye düşerdi, yani kapak hiç görünmezdi.
+   * Bir tur menu.json ile R2 birbirini tutmadığı için vardı ve iki
+   * yönde birden kullanılıyordu (şema yok diyor dosya var / şema var
+   * diyor dosya yok). 2 Eylül 2026'da 127 ürünün tamamı tek tek R2'ye
+   * soruldu: ARTIK UYUŞUYORLAR, panel senkronu gelmiş. O iki kaçış
+   * kapısı (leo-sushi, bonfile-bowl) silindi.
+   *
+   * GERİYE TEK MEŞRU KULLANIM KALDI: kartın kapsadığı hiçbir ürünün
+   * fotoğrafı YOKKEN karta yine de bir kapak vermek. Sıcak İçecekler
+   * böyle — yirmi dört ürünün hiçbirinin R2'de karesi yok (hepsi 404,
+   * tek tek denendi) ve menu.json da bunu doğru söylüyor, yani
+   * `photo` zinciri boş dönüyor.
    *
    * İKİ BİÇİM ALIYOR:
    *   · slug            → adres data/menu.ts → photoSrc ile R2'den
@@ -85,9 +87,6 @@ export interface MenuCard {
    * Dosya gerçekten yoksa kart kırık ikon göstermiyor: çalışma
    * anındaki emniyet ağı onu tipografik karta düşürüyor
    * (scripts/app.ts § 3).
-   *
-   * PANEL SENKRONU GELİNCE BU ALAN SİLİNMELİ — o an `photo` zaten
-   * doğru cevabı veriyor olacak ve burası ölü kod olarak kalır.
    */
   cover?: string;
   /** kaynak ana kategori (menu.json → section.slug) */
@@ -151,9 +150,7 @@ export const MENU_CARDS: MenuCard[] = [
   {
     key: 'sushi',
     title: 'Sushi',
-    /* şema `photo: null` diyor, R2'de dosya duruyor — kaçış kapısı */
     photo: 'leo-sushi',
-    cover: 'leo-sushi',
     sectionSlug: 'yiyecekler',
     subs: ['sushi'],
   },
@@ -194,7 +191,6 @@ export const MENU_CARDS: MenuCard[] = [
     key: 'leo-bowl',
     title: 'Leo Bowl Çeşitleri',
     photo: 'bonfile-bowl',
-    cover: 'bonfile-bowl',
     sectionSlug: 'yiyecekler',
     subs: ['bowl'],
   },

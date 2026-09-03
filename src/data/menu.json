@@ -1682,7 +1682,11 @@
                   "name": {
                     "tr": "Testürün"
                   },
-                  "price": null,
+                  "price": 1550,
+                  "description": {
+                    "tr": "Bu ürün bir test ürünüdür"
+                  },
+                  "unit": "adet",
                   "photo": null
                 }
               ]

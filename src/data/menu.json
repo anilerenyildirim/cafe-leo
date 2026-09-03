@@ -1665,6 +1665,29 @@
               ]
             }
           ]
+        },
+        {
+          "slug": "test",
+          "name": {
+            "tr": "test"
+          },
+          "vat": null,
+          "subsections": [
+            {
+              "slug": "test",
+              "name": null,
+              "items": [
+                {
+                  "slug": "testurun",
+                  "name": {
+                    "tr": "Testürün"
+                  },
+                  "price": null,
+                  "photo": null
+                }
+              ]
+            }
+          ]
         }
       ],
       "extras": [

@@ -1665,33 +1665,6 @@
               ]
             }
           ]
-        },
-        {
-          "slug": "test",
-          "name": {
-            "tr": "test"
-          },
-          "vat": null,
-          "subsections": [
-            {
-              "slug": "test",
-              "name": null,
-              "items": [
-                {
-                  "slug": "testurun",
-                  "name": {
-                    "tr": "Testürün"
-                  },
-                  "price": 1550,
-                  "description": {
-                    "tr": "Bu ürün bir test ürünüdür"
-                  },
-                  "unit": "adet",
-                  "photo": null
-                }
-              ]
-            }
-          ]
         }
       ],
       "extras": [

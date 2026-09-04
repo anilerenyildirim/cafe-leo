@@ -112,7 +112,7 @@
                   "name": {
                     "tr": "Kahvaltı Tabağı"
                   },
-                  "price": 55000,
+                  "price": 60000,
                   "description": {
                     "tr": "Piliç sosis, omlet, tereyağlı kruvasan, mantar, roka, fırın cherry domates, rende kaşar"
                   },
@@ -378,6 +378,30 @@
                     "w": 1200,
                     "h": 800
                   }
+                },
+                {
+                  "slug": "aperatif-tabagi-2-kisilik",
+                  "name": {
+                    "tr": "Aperatif Tabağı (2 Kişilik)"
+                  },
+                  "price": 35000,
+                  "photo": null
+                },
+                {
+                  "slug": "chicken-fingers",
+                  "name": {
+                    "tr": "Chicken Fingers"
+                  },
+                  "price": 28000,
+                  "photo": null
+                },
+                {
+                  "slug": "curly-patates-kizartmasi",
+                  "name": {
+                    "tr": "Curly Patates Kızartması"
+                  },
+                  "price": 38000,
+                  "photo": null
                 }
               ]
             },
@@ -574,7 +598,7 @@
                   "name": {
                     "tr": "Karidesli Fettuccine"
                   },
-                  "price": 82500,
+                  "price": 87500,
                   "description": {
                     "tr": "Özel domates sosuyla harmanlanan 200 g fettuccine, 100-110 g karides eşliğinde servis edilir."
                   },
@@ -589,7 +613,7 @@
                   "name": {
                     "tr": "Alfredo Etli"
                   },
-                  "price": 77000,
+                  "price": 85000,
                   "description": {
                     "tr": "Kremalı sos ile hazırlanan 200 g fettuccine; 120 g bonfile, 20 g soğan ve 20 g mantar ile servis edilir."
                   },
@@ -604,7 +628,7 @@
                   "name": {
                     "tr": "Alfredo Tavuklu"
                   },
-                  "price": 72000,
+                  "price": 75000,
                   "description": {
                     "tr": "Kremalı sos ile hazırlanan 200 g fettuccine; 120 g tavuk, 20 g kapya biber, 20 g çarliston biber ve 20 g mantar ile servis edilir."
                   },
@@ -633,7 +657,7 @@
                   "name": {
                     "tr": "Bolonez Soslu Spagetti"
                   },
-                  "price": 64000,
+                  "price": 67000,
                   "description": {
                     "tr": "Özel domates sosuyla hazırlanan 200 g spaghetti; 100 g dana kıyma ve 60 g domates sos ile servis edilir."
                   },
@@ -648,7 +672,7 @@
                   "name": {
                     "tr": "Penne Arabiata"
                   },
-                  "price": 50000,
+                  "price": 60000,
                   "description": {
                     "tr": "Özel domates sosuyla hazırlanan 200 g penne; 20 g siyah zeytin ve 60 g domates sos ile servis edilir."
                   },
@@ -752,7 +776,7 @@
                   "name": {
                     "tr": "Karides Bowl"
                   },
-                  "price": 85000,
+                  "price": 92000,
                   "description": {
                     "tr": "120 g karides, 120 g patates ve 20 g sweet chili ile hazırlanır."
                   },
@@ -766,7 +790,7 @@
                   "name": {
                     "tr": "Bonfile Bowl"
                   },
-                  "price": 77000,
+                  "price": 82000,
                   "description": {
                     "tr": "20 g Akdeniz yeşilliği, 80 g siyah pirinç, 50 g dilimlenmiş avokado, 50 g brokoli, 20 g cherry domates, 60 g mantar mix ve 120 g et bonfile ile hazırlanır."
                   },
@@ -780,7 +804,7 @@
                   "name": {
                     "tr": "Tavuk Bowl"
                   },
-                  "price": 68000,
+                  "price": 74000,
                   "description": {
                     "tr": "20 g Akdeniz yeşilliği, 80 g siyah pirinç, 50 g dilimlenmiş avokado, 50 g brokoli, 20 g cherry domates, 60 g mantar mix ve 120 g tavuk ile hazırlanır."
                   },
@@ -855,7 +879,7 @@
                   "name": {
                     "tr": "Sezar Salata"
                   },
-                  "price": 65000,
+                  "price": 67000,
                   "description": {
                     "tr": "120 g marul, 120 g kızarmış tavuk, 60 g Sezar sos, 20 g cherry domates ve 10 g kruton ekmek ile hazırlanır."
                   },
@@ -870,7 +894,7 @@
                   "name": {
                     "tr": "Hellim Salata"
                   },
-                  "price": 55000,
+                  "price": 59000,
                   "description": {
                     "tr": "120 g Akdeniz yeşilliği, 20 g salatalık, 30 g cherry domates, 20 g siyah zeytin ve 100 g kızarmış hellim ile hazırlanır. 10 ml zeytinyağlı limon sos ile servis edilir."
                   },
@@ -884,7 +908,7 @@
                   "name": {
                     "tr": "Akdeniz Salata"
                   },
-                  "price": 52000,
+                  "price": 57000,
                   "description": {
                     "tr": "120 g Akdeniz yeşilliği, 30 g köz biber, 20 g siyah zeytin, 100 g beyaz peynir ve 20 g cherry domates ile hazırlanır. Kekik ve pul biber ile servis edilir."
                   },

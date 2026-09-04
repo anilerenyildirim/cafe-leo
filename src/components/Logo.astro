@@ -2,28 +2,31 @@
 /* ============================================================
    LEO logosu — TEK DEĞİŞTİRME NOKTASI.
 
-   Şu an TİPOGRAFİK YER TUTUCU: gerçek logo (public/brand/leologo.jpg)
-   opak beyaz zeminli bir JPG, loş temada beyaz kutu olarak durur.
-   Yerine şimdilik Marcellus ile dizilmiş "leo" yazısı duruyor.
+   Artık yer tutucu değil: gerçek marka işareti (public/brand/
+   leo-logo.svg). Kaynak JPEG vektöre trace edildi, C2PA metadata
+   blob'u (8 KB base64) atıldı; kalan yalnız path. Varlık
+   `fill="currentColor"` — tek başına bir <img>'de siyah çizer,
+   kullanım yeri mask (aşağı bak). Marka rengi gömülü SVG ve PNG
+   türevleri reference/logos/ altında — o klasör .gitignore'da,
+   yalnız yerelde duruyor; siteye giren tek varlık bu.
 
-   GERÇEK LOGOYA GEÇİŞ tek dosyada, üç satırda olur:
-     1. aşağıdaki <span class="logo-mark">leo</span> yerine
-        <img src="/brand/leo.svg" alt="" />
-     2. global.css → .logo { --logo-ar: … }  değerini varlığın
-        gerçek en/boy oranına çek
-     3. başka hiçbir yere dokunma
-
-   Yerleşim kaymaması için kutu ŞİMDİDEN sabit: yüksekliği `--logo-h`,
-   genişliği `--logo-h * --logo-ar`. İçerik ne olursa olsun kutu aynı
-   yeri kaplar; metinden görsele geçişte sayfa oynamaz.
+   RENK CSS'TEN GELİYOR. Görsel <img> değil, `currentColor` üzerine
+   kurulu bir CSS mask (global.css § LOGO KUTUSU). Sebep: paletin
+   /menu ↔ /lounge geçişinde 0.7s morph etmesi (§6). Sabit renkli bir
+   <img> o morph'un dışında kalır, iki temada da aynı sarıda donardı.
+   Mask ile logo da --gold-leaf ile birlikte dönüyor.
 
    Erişilebilir ad BURADA DEĞİL: logo her zaman kendisini saran
    öğenin (bar'daki <a>, ana sayfadaki sr-only <h1>) adının içinde
    kalır. İki kez okunmasın diye burası aria-hidden.
+
+   İşaret DİKEY ve ince (en/boy 0.5946): uzun "l" gövdesi, dibinde
+   ayrık kare nokta, altta "eo". Sitenin .stem ve .sq motifleri zaten
+   buradan türemişti — logo geldiğinde dil tutarlı kaldı.
    ============================================================ */
 
 interface Props {
-  /** lg: ana sayfa hero'su · sm: üst bar */
+  /** lg: ana sayfa hero'su · sm: üst bar ve imza */
   size?: 'lg' | 'sm';
   class?: string;
 }
@@ -32,5 +35,5 @@ const { size = 'sm', class: cls = '' } = Astro.props;
 ---
 
 <span class:list={['logo', `logo-${size}`, cls]} aria-hidden="true">
-  <span class="logo-mark">leo</span>
+  <span class="logo-mark"></span>
 </span>

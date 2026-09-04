@@ -44,8 +44,13 @@ const lounge = VENUES.find((v) => v.key === 'lounge')!;
   <div class="wrap home">
     <div class="home-brand">
       <Logo size="lg" />
+      {/* Tek semt kaldı: "Büyükçekmece" çıktı (müşteri isteği). Kare
+          nokta artık AYRAÇ DEĞİL, işaret: iki şeyi ayırmıyor, tek
+          satırın başına duruyor. Nokta + yazı bir bütün olarak
+          ortalanıyor — .home-brand .eyebrow'daki justify-content
+          bunu zaten yapıyor, satır tek öğeye düşünce de tutuyor. */}
       <p class="eyebrow">
-        <span>Sinanoba</span><span class="sq" aria-hidden="true"></span><span>Büyükçekmece</span>
+        <span class="sq" aria-hidden="true"></span><span>Sinanoba</span>
       </p>
     </div>
 

@@ -3,7 +3,7 @@
 /* ============================================================
    LEO — token katmanı + bileşen CSS'i
 
-   TASARIM DİLİ logodan türetildi (public/brand/leologo.jpg):
+   TASARIM DİLİ logodan türetildi (public/brand/leo-logo.svg):
      a) uzun, çıplak, ince dikey çubuk  → bölüm işareti, "stem"
      b) ayrık KARE nokta                → sistemin tek ayraç karakteri
      c) oyulmuş, düşük kontrastlı serif → Marcellus (müşteri seçimi)
@@ -266,10 +266,15 @@ button { font: inherit; color: inherit; background: none; border: 0; }
      · alt hairline --line-soft değil --line
      · sayfa kaydırıldığında (.is-stuck, scripts/app.ts) gölge biniyor
    Gölge tepede YOK: orada bar bir katman değil, sayfanın kendi başı. */
+/* Dikey dolgu 11px → 8px: logo kutusu 30px'ten 40px'e çıktı (gerçek
+   işaret dikey, bkz. § LOGO KUTUSU) ve bar dolgu aynı kalsaydı
+   54px'ten 62px'e büyürdü. Dolgu kısılınca bar 56px'te kalıyor,
+   yapışkan ray ve bütün scroll-margin'ler oynamıyor. İnce, uzun bir
+   işaretin yanlarında zaten hava var; kaybedilen 3px görünmüyor. */
 .bar {
   position: sticky; top: 0; z-index: 30;
-  padding: 11px 0;
-  padding-top: max(11px, env(safe-area-inset-top));
+  padding: 8px 0;
+  padding-top: max(8px, env(safe-area-inset-top));
   background: color-mix(in srgb, var(--surf) 92%, transparent);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
@@ -280,40 +285,52 @@ button { font: inherit; color: inherit; background: none; border: 0; }
 .bar-in {
   max-width: var(--page); margin: 0 auto;
   padding-inline: var(--pad);
-  display: flex; align-items: center; gap: 12px; min-height: 32px;
+  display: flex; align-items: center; gap: 12px; min-height: 40px;
 }
 
 /* ---------- LOGO KUTUSU (A1) ----------
-   Logo tek bileşende (components/Logo.astro) ve SABİT KUTUDA.
+   Logo tek bileşende (components/Logo.astro) ve SABİT KUTUDA:
+   yüksekliği --logo-h, genişliği --logo-h * --logo-ar. Ölçüyü
+   yalnızca yükseklik belirler, genişlik ondan türer.
 
-   Buradaki "leo" YER TUTUCU. Gerçek logo geldiğinde bu yazının
-   yerini görsel alacak (bkz. components/Logo.astro) — bu yüzden
-   tipografik eşdeğer aramaya devam edilmiyor, Marcellus'un düz
-   hâli kullanılıyor. leologo.jpg opak beyaz zeminli JPG olduğu için
-   loş temada beyaz kutu olarak durur; şeffaf SVG gelince görsele
-   döneriz.
+   --logo-ar ARTIK GERÇEK VARLIĞIN ORANI: 458 / 770.25 = .5946.
+   Yer tutucu "leo" yazısı YATAY bir kutuydu (1.35); işaret DİKEY.
+   Oran tersine döndüğü için yükseklikler de yeniden seçildi —
+   aynı --logo-h'de dikey işaret yatay yazının yarısı kadar yer
+   kaplar ve "eo" okunmaz hale gelirdi:
+     · bar   30px → 40px   (genişlik 24px)
+     · imza  24px → 32px
+     · hero  106px → 168px tavan
+   Alt sınır 40px: altına inince "eo" heceleri kapanıyor.
 
-   O gün geldiğinde yerleşim OYNAMASIN diye kutu şimdiden ölçülü:
-   yüksekliği --logo-h, genişliği --logo-h * --logo-ar. İçerik metinden
-   görsele dönerken kutu aynı yeri kaplar. Değişecek tek sayı --logo-ar
-   (yeni varlığın en/boy oranı). */
+   RENK: mask + currentColor, <img> değil. Bir <img> sabit sarıda
+   donar ve /menu ↔ /lounge palet morph'unun (§6) dışında kalırdı;
+   mask ile işaret --gold-leaf ile birlikte 0.7s'te dönüyor.
+
+   --gold-ink DEĞİL --gold-leaf, her üç boyutta da. Paletin kuralı
+   "gold-leaf yalnız dolgu, açık zeminde metin için yetersiz" (bkz.
+   § palet) — logo o kuralın DIŞINDA, çünkü markanın kendi rengi o
+   ve WCAG hem 1.4.3 hem 1.4.11 logotype'ı açıkça muaf tutuyor.
+   Erişilebilir ad zaten işaretin üstünde değil, saran <a>'nın
+   aria-label'ında; kontrast okunurluğun taşıyıcısı değil. Denendi:
+   gold-ink daha tok duruyor ama işareti kahverengiye çekiyor ve
+   ana sayfa hero'su ile bar'ı iki farklı sarıya bölüyordu. */
 .logo {
-  --logo-ar: 1.35;
-  display: grid; place-items: center;
+  --logo-ar: .5946;
+  display: block;
   width: calc(var(--logo-h) * var(--logo-ar));
   height: var(--logo-h);
 }
-.logo-sm { --logo-h: 30px; place-items: center start; }
-.logo-lg { --logo-h: clamp(64px, 21vw, 106px); }
+.logo-sm { --logo-h: 40px; }
+.logo-lg { --logo-h: clamp(104px, 30vw, 168px); }
 
 .logo-mark {
-  font-family: var(--font-display); font-weight: 500;
-  font-size: calc(var(--logo-h) * .9); line-height: 1;
-  color: var(--text);
+  width: 100%; height: 100%; display: block;
+  background: currentColor;
+  color: var(--gold-leaf);
+  -webkit-mask: url('/brand/leo-logo.svg') no-repeat center / contain;
+  mask: url('/brand/leo-logo.svg') no-repeat center / contain;
 }
-
-/* Görsele geçişte gereken tek kural — şimdiden burada duruyor. */
-.logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
 .mark { display: inline-flex; align-items: center; text-decoration: none; }
 
@@ -1356,7 +1373,7 @@ footer {
   border-top: 1px solid var(--line-soft);
 }
 /* İmza da logo kutusunun kendisi (Logo.astro), yalnız daha küçük. */
-footer .sig { --logo-h: 24px; margin-bottom: 14px; }
+footer .sig { --logo-h: 32px; margin-bottom: 14px; }
 footer p { font-size: 12px; color: var(--muted); line-height: 1.8; }
 footer .note { margin-top: 12px; }
 

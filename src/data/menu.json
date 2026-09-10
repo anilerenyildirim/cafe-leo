@@ -93,18 +93,15 @@
           ]
         },
         {
-          "slug": "yiyecekler",
+          "slug": "kahvaltilar",
           "name": {
-            "tr": "Yiyecekler"
+            "tr": "Kahvaltılar"
           },
           "vat": 20,
-          "highlight": true,
           "subsections": [
             {
-              "slug": "kahvalti",
-              "name": {
-                "tr": "Kahvaltı"
-              },
+              "slug": "kahvaltilar-liste",
+              "name": null,
               "icon": "kahvalti-tabagi",
               "items": [
                 {
@@ -163,253 +160,21 @@
                     "w": 1200,
                     "h": 800
                   }
-                },
-                {
-                  "slug": "4-peynirli-tost",
-                  "name": {
-                    "tr": "4 Peynirli Tost"
-                  },
-                  "price": 35000,
-                  "description": {
-                    "tr": "Kaşar, çedar, beyaz peynir, parmesan, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  },
-                  "note": "fix: \"maydonoz\" → maydanoz (6 üründe), \"pulbiberli\" → pul biberli"
-                },
-                {
-                  "slug": "kasarli-tost",
-                  "name": {
-                    "tr": "Kaşarlı Tost"
-                  },
-                  "price": 32000,
-                  "description": {
-                    "tr": "Dilim kaşar, salatalık, cherry domates, maydanoz, kekikli pul biberli karışık zeytin"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "karisik-tost",
-                  "name": {
-                    "tr": "Karışık Tost"
-                  },
-                  "price": 35000,
-                  "description": {
-                    "tr": "Sucuk, dilim kaşar, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "kavurmali-kasarli-tost",
-                  "name": {
-                    "tr": "Kavurmalı Kaşarlı Tost"
-                  },
-                  "price": 42000,
-                  "description": {
-                    "tr": "Kavurma, dilim kaşar, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "bazlama-tost",
-                  "name": {
-                    "tr": "Bazlama Tost"
-                  },
-                  "price": 37000,
-                  "description": {
-                    "tr": "Sucuk, dilim kaşar, pesto sos, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
                 }
               ]
-            },
-            {
-              "slug": "atistirmaliklar",
-              "name": {
-                "tr": "Atıştırmalıklar"
-              },
-              "icon": "kruvasan-mozzarella",
-              "items": [
-                {
-                  "slug": "patates-kizartmasi",
-                  "name": {
-                    "tr": "Patates Kızartması"
-                  },
-                  "price": 35000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "kruvasan",
-                  "name": {
-                    "tr": "Kruvasan"
-                  },
-                  "price": 24000,
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "kruvasan-dana-jambon",
-                  "name": {
-                    "tr": "Kruvasan · Dana Jambon"
-                  },
-                  "price": 58000,
-                  "description": {
-                    "tr": "Labne, roka, dana jambon, çedar, zeytinyağı"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  },
-                  "note": "fix: \"DANAJAMBON\" → Dana Jambon"
-                },
-                {
-                  "slug": "kruvasan-hindi-fume",
-                  "name": {
-                    "tr": "Kruvasan · Hindi Füme"
-                  },
-                  "price": 56000,
-                  "description": {
-                    "tr": "Labne, leo sos, marul, hindi füme, domates, çedar, rende kaşar, zeytinyağı"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "kruvasan-mozzarella",
-                  "name": {
-                    "tr": "Kruvasan · Mozzarella"
-                  },
-                  "price": 53000,
-                  "description": {
-                    "tr": "Pesto sos, roka, mozzarella, domates, zeytinyağı"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "yumurtali-somon-fume-eksi-maya",
-                  "name": {
-                    "tr": "Yumurtalı Somon Füme · Ekşi Maya"
-                  },
-                  "price": 47000,
-                  "description": {
-                    "tr": "Avokado, somon füme, göz yumurta, kızarmış ekşi maya ekmek, Akdeniz yeşillikleri, salatalık, domates, mısır, siyah zeytin, zeytinyağlı limon sos"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "somon-fume-labne-eksi-maya",
-                  "name": {
-                    "tr": "Somon Füme & Labne · Ekşi Maya"
-                  },
-                  "price": 45000,
-                  "description": {
-                    "tr": "Avokado, somon füme, labne, göz yumurta, kızarmış ekşi maya ekmek, Akdeniz yeşillikleri, salatalık, cherry domates, siyah zeytin, mısır, zeytinyağlı limon sos"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "yumurtali-pastirma-eksi-maya",
-                  "name": {
-                    "tr": "Yumurtalı Pastırma · Ekşi Maya"
-                  },
-                  "price": 42000,
-                  "description": {
-                    "tr": "Avokado, kızarmış ekşi maya ekmek, göz yumurta, zeytinyağlı pastırma, roka, salatalık, cherry domates, siyah zeytin, mısır, zeytinyağlı limon sos"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "mozzarella-eksi-maya",
-                  "name": {
-                    "tr": "Mozzarella · Ekşi Maya"
-                  },
-                  "price": 36000,
-                  "description": {
-                    "tr": "Suda mozzarella, roka, domates, kızarmış ekşi maya ekmek, pesto sos, Akdeniz yeşillikleri, salatalık, cherry domates, mısır, siyah zeytin, zeytinyağlı limon sos"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "frankfurter-tabagi",
-                  "name": {
-                    "tr": "Frankfurter Tabağı"
-                  },
-                  "price": 55000,
-                  "description": {
-                    "tr": "2 piliç sosis, patates, çedarlı mantar, roka, cherry domates, rende kaşar"
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "aperatif-tabagi-2-kisilik",
-                  "name": {
-                    "tr": "Aperatif Tabağı (2 Kişilik)"
-                  },
-                  "price": 35000,
-                  "photo": null
-                },
-                {
-                  "slug": "chicken-fingers",
-                  "name": {
-                    "tr": "Chicken Fingers"
-                  },
-                  "price": 28000,
-                  "photo": null
-                },
-                {
-                  "slug": "curly-patates-kizartmasi",
-                  "name": {
-                    "tr": "Curly Patates Kızartması"
-                  },
-                  "price": 38000,
-                  "photo": null
-                }
-              ]
-            },
+            }
+          ]
+        },
+        {
+          "slug": "burgerler",
+          "name": {
+            "tr": "Burgerler"
+          },
+          "vat": 20,
+          "subsections": [
             {
               "slug": "burgerler",
-              "name": {
-                "tr": "Burgerler"
-              },
+              "name": null,
               "icon": "cheese-burger",
               "items": [
                 {
@@ -470,29 +235,21 @@
                     "w": 1200,
                     "h": 800
                   }
-                },
-                {
-                  "slug": "club-sandvic",
-                  "name": {
-                    "tr": "Club Sandviç"
-                  },
-                  "price": 55000,
-                  "description": {
-                    "tr": "Üç dilim tost ekmeği; 120 g tavuk, 10 g domates, 20 g iceberg marul, 20 g dana füme, 20 g mayonez ve 5 g turşu ile hazırlanır. 120 g patates ile servis edilir."
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  },
-                  "note": "kaynak \"CLUP\" → Club. Atıştırmalıklar'dan Burgerler'e taşındı (müşteri fiyat listesi)."
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "slug": "pizzalar",
+          "name": {
+            "tr": "Pizzalar"
+          },
+          "vat": 20,
+          "subsections": [
             {
               "slug": "pizzalar",
-              "name": {
-                "tr": "Pizzalar"
-              },
+              "name": null,
               "icon": "leo-pizza",
               "items": [
                 {
@@ -585,12 +342,19 @@
                   }
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "slug": "makarnalar",
+          "name": {
+            "tr": "Makarnalar"
+          },
+          "vat": 20,
+          "subsections": [
             {
               "slug": "makarnalar",
-              "name": {
-                "tr": "Makarnalar"
-              },
+              "name": null,
               "icon": "karidesli-fettuccine",
               "items": [
                 {
@@ -683,79 +447,29 @@
                   "note": "kaynak \"ARABİATA\"; önce Arrabbiata'ya çevrilmişti, müşteri Arabiata istedi. Slug eski hâlinde bırakıldı (foto dosyası)."
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "slug": "sushi",
+          "name": {
+            "tr": "Sushi"
+          },
+          "vat": 20,
+          "subsections": [
             {
-              "slug": "ana-yemekler",
-              "name": {
-                "tr": "Ana Yemekler"
-              },
-              "icon": "bonfile",
+              "slug": "sushi",
+              "name": null,
+              "icon": "leo-sushi",
               "items": [
                 {
-                  "slug": "izgara-kofte",
+                  "slug": "leo-sushi",
                   "name": {
-                    "tr": "Izgara Köfte"
+                    "tr": "Leo Sushi"
                   },
-                  "price": 85000,
+                  "price": 87000,
                   "description": {
-                    "tr": "200 g özel Leo köfte, 120 g pirinç pilavı, 120 g patates püresi, 15 g közlenmiş biber ve 20 g közlenmiş domates ile servis edilir."
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "tavuk-snitzel",
-                  "name": {
-                    "tr": "Tavuk Şnitzel"
-                  },
-                  "price": 77000,
-                  "description": {
-                    "tr": "140 g özel panko pane şnitzel, 10 g tereyağı ve 15 g lime limon ile servis edilir. 140 g kızarmış patates eşlik eder."
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  },
-                  "note": "kaynak \"ŞİNİTZEL\", sonra \"Schnitzel\" yazıldı; menüde Şnitzel tutuldu"
-                },
-                {
-                  "slug": "bonfile",
-                  "name": {
-                    "tr": "Bonfile"
-                  },
-                  "price": 149000,
-                  "description": {
-                    "tr": "160 g et bonfile, 120 g patates püresi ve 100 g mantar mix ile servis edilir."
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "antrikot",
-                  "name": {
-                    "tr": "Antrikot"
-                  },
-                  "price": 135000,
-                  "description": {
-                    "tr": "200-210 g antrikot, 100 g mantar mix ve 120 g patates püresi ile servis edilir."
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                },
-                {
-                  "slug": "izgara-karides",
-                  "name": {
-                    "tr": "Izgara Karides"
-                  },
-                  "price": 150000,
-                  "description": {
-                    "tr": "333 g karides, 120 g patates kızartması ve 20 g sweet chili ile servis edilir."
+                    "tr": "120 g sushi pirinci ve 1 adet nori, 60 g tempuralı karides, 10 g Philadelphia peyniri, 15 g avokado, 10 g salatalık, 15 g kibrit patates ve 10 g trüflü mayonez ile hazırlanır."
                   },
                   "photo": {
                     "w": 1200,
@@ -763,12 +477,263 @@
                   }
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "slug": "kruvasan-sandvicler",
+          "name": {
+            "tr": "Kruvasan Sandviçler"
+          },
+          "vat": 20,
+          "subsections": [
             {
-              "slug": "bowl",
-              "name": {
-                "tr": "Bowl"
-              },
+              "slug": "kruvasan-sandvicler-liste",
+              "name": null,
+              "icon": "kruvasan-mozzarella",
+              "items": [
+                {
+                  "slug": "kruvasan",
+                  "name": {
+                    "tr": "Kruvasan"
+                  },
+                  "price": 24000,
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "kruvasan-dana-jambon",
+                  "name": {
+                    "tr": "Kruvasan · Dana Jambon"
+                  },
+                  "price": 58000,
+                  "description": {
+                    "tr": "Labne, roka, dana jambon, çedar, zeytinyağı"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  },
+                  "note": "fix: \"DANAJAMBON\" → Dana Jambon"
+                },
+                {
+                  "slug": "kruvasan-hindi-fume",
+                  "name": {
+                    "tr": "Kruvasan · Hindi Füme"
+                  },
+                  "price": 56000,
+                  "description": {
+                    "tr": "Labne, leo sos, marul, hindi füme, domates, çedar, rende kaşar, zeytinyağı"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "kruvasan-mozzarella",
+                  "name": {
+                    "tr": "Kruvasan · Mozzarella"
+                  },
+                  "price": 53000,
+                  "description": {
+                    "tr": "Pesto sos, roka, mozzarella, domates, zeytinyağı"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "ekmek-ustu-lezzetler",
+          "name": {
+            "tr": "Ekmek Üstü Lezzetler"
+          },
+          "vat": 20,
+          "subsections": [
+            {
+              "slug": "ekmek-ustu-lezzetler-liste",
+              "name": null,
+              "icon": "yumurtali-somon-fume-eksi-maya",
+              "items": [
+                {
+                  "slug": "yumurtali-somon-fume-eksi-maya",
+                  "name": {
+                    "tr": "Yumurtalı Somon Füme · Ekşi Maya"
+                  },
+                  "price": 47000,
+                  "description": {
+                    "tr": "Avokado, somon füme, göz yumurta, kızarmış ekşi maya ekmek, Akdeniz yeşillikleri, salatalık, domates, mısır, siyah zeytin, zeytinyağlı limon sos"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "somon-fume-labne-eksi-maya",
+                  "name": {
+                    "tr": "Somon Füme & Labne · Ekşi Maya"
+                  },
+                  "price": 45000,
+                  "description": {
+                    "tr": "Avokado, somon füme, labne, göz yumurta, kızarmış ekşi maya ekmek, Akdeniz yeşillikleri, salatalık, cherry domates, siyah zeytin, mısır, zeytinyağlı limon sos"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "yumurtali-pastirma-eksi-maya",
+                  "name": {
+                    "tr": "Yumurtalı Pastırma · Ekşi Maya"
+                  },
+                  "price": 42000,
+                  "description": {
+                    "tr": "Avokado, kızarmış ekşi maya ekmek, göz yumurta, zeytinyağlı pastırma, roka, salatalık, cherry domates, siyah zeytin, mısır, zeytinyağlı limon sos"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "mozzarella-eksi-maya",
+                  "name": {
+                    "tr": "Mozzarella · Ekşi Maya"
+                  },
+                  "price": 36000,
+                  "description": {
+                    "tr": "Suda mozzarella, roka, domates, kızarmış ekşi maya ekmek, pesto sos, Akdeniz yeşillikleri, salatalık, cherry domates, mısır, siyah zeytin, zeytinyağlı limon sos"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "tostlar-sandvicler",
+          "name": {
+            "tr": "Tostlar & Sandviçler"
+          },
+          "vat": 20,
+          "subsections": [
+            {
+              "slug": "tostlar-sandvicler-liste",
+              "name": null,
+              "icon": "club-sandvic",
+              "items": [
+                {
+                  "slug": "4-peynirli-tost",
+                  "name": {
+                    "tr": "4 Peynirli Tost"
+                  },
+                  "price": 35000,
+                  "description": {
+                    "tr": "Kaşar, çedar, beyaz peynir, parmesan, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  },
+                  "note": "fix: \"maydonoz\" → maydanoz (6 üründe), \"pulbiberli\" → pul biberli"
+                },
+                {
+                  "slug": "kasarli-tost",
+                  "name": {
+                    "tr": "Kaşarlı Tost"
+                  },
+                  "price": 32000,
+                  "description": {
+                    "tr": "Dilim kaşar, salatalık, cherry domates, maydanoz, kekikli pul biberli karışık zeytin"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "karisik-tost",
+                  "name": {
+                    "tr": "Karışık Tost"
+                  },
+                  "price": 35000,
+                  "description": {
+                    "tr": "Sucuk, dilim kaşar, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "kavurmali-kasarli-tost",
+                  "name": {
+                    "tr": "Kavurmalı Kaşarlı Tost"
+                  },
+                  "price": 42000,
+                  "description": {
+                    "tr": "Kavurma, dilim kaşar, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "bazlama-tost",
+                  "name": {
+                    "tr": "Bazlama Tost"
+                  },
+                  "price": 37000,
+                  "description": {
+                    "tr": "Sucuk, dilim kaşar, pesto sos, cherry domates, salatalık, maydanoz, kekikli pul biberli karışık zeytin"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "club-sandvic",
+                  "name": {
+                    "tr": "Club Sandviç"
+                  },
+                  "price": 55000,
+                  "description": {
+                    "tr": "Üç dilim tost ekmeği; 120 g tavuk, 10 g domates, 20 g iceberg marul, 20 g dana füme, 20 g mayonez ve 5 g turşu ile hazırlanır. 120 g patates ile servis edilir."
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  },
+                  "note": "kaynak \"CLUP\" → Club. Atıştırmalıklar'dan Burgerler'e taşındı (müşteri fiyat listesi)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "leo-bowl",
+          "name": {
+            "tr": "Leo Bowl Çeşitleri"
+          },
+          "vat": 20,
+          "subsections": [
+            {
+              "slug": "leo-bowl-liste",
+              "name": null,
               "icon": "bonfile-bowl",
               "items": [
                 {
@@ -814,35 +779,19 @@
                   }
                 }
               ]
-            },
-            {
-              "slug": "sushi",
-              "name": {
-                "tr": "Sushi"
-              },
-              "icon": "leo-sushi",
-              "items": [
-                {
-                  "slug": "leo-sushi",
-                  "name": {
-                    "tr": "Leo Sushi"
-                  },
-                  "price": 87000,
-                  "description": {
-                    "tr": "120 g sushi pirinci ve 1 adet nori, 60 g tempuralı karides, 10 g Philadelphia peyniri, 15 g avokado, 10 g salatalık, 15 g kibrit patates ve 10 g trüflü mayonez ile hazırlanır."
-                  },
-                  "photo": {
-                    "w": 1200,
-                    "h": 800
-                  }
-                }
-              ]
-            },
+            }
+          ]
+        },
+        {
+          "slug": "salatalar",
+          "name": {
+            "tr": "Salatalar"
+          },
+          "vat": 20,
+          "subsections": [
             {
               "slug": "salatalar",
-              "name": {
-                "tr": "Salatalar"
-              },
+              "name": null,
               "icon": "sezar-salata",
               "items": [
                 {
@@ -917,6 +866,158 @@
                     "h": 800
                   },
                   "note": "ad \"Akdeniz Peynirli Salata\" → \"Akdeniz Salata\" (müşteri). Slug foto dosyasına bağlı, eski hâlinde."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "ana-yemekler",
+          "name": {
+            "tr": "Ana Yemekler"
+          },
+          "vat": 20,
+          "subsections": [
+            {
+              "slug": "ana-yemekler",
+              "name": null,
+              "icon": "bonfile",
+              "items": [
+                {
+                  "slug": "izgara-kofte",
+                  "name": {
+                    "tr": "Izgara Köfte"
+                  },
+                  "price": 85000,
+                  "description": {
+                    "tr": "200 g özel Leo köfte, 120 g pirinç pilavı, 120 g patates püresi, 15 g közlenmiş biber ve 20 g közlenmiş domates ile servis edilir."
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "tavuk-snitzel",
+                  "name": {
+                    "tr": "Tavuk Şnitzel"
+                  },
+                  "price": 77000,
+                  "description": {
+                    "tr": "140 g özel panko pane şnitzel, 10 g tereyağı ve 15 g lime limon ile servis edilir. 140 g kızarmış patates eşlik eder."
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  },
+                  "note": "kaynak \"ŞİNİTZEL\", sonra \"Schnitzel\" yazıldı; menüde Şnitzel tutuldu"
+                },
+                {
+                  "slug": "bonfile",
+                  "name": {
+                    "tr": "Bonfile"
+                  },
+                  "price": 149000,
+                  "description": {
+                    "tr": "160 g et bonfile, 120 g patates püresi ve 100 g mantar mix ile servis edilir."
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "antrikot",
+                  "name": {
+                    "tr": "Antrikot"
+                  },
+                  "price": 135000,
+                  "description": {
+                    "tr": "200-210 g antrikot, 100 g mantar mix ve 120 g patates püresi ile servis edilir."
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "izgara-karides",
+                  "name": {
+                    "tr": "Izgara Karides"
+                  },
+                  "price": 150000,
+                  "description": {
+                    "tr": "333 g karides, 120 g patates kızartması ve 20 g sweet chili ile servis edilir."
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "slug": "atistirmaliklar",
+          "name": {
+            "tr": "Atıştırmalıklar"
+          },
+          "vat": 20,
+          "subsections": [
+            {
+              "slug": "atistirmaliklar",
+              "name": null,
+              "icon": "patates-kizartmasi",
+              "items": [
+                {
+                  "slug": "patates-kizartmasi",
+                  "name": {
+                    "tr": "Patates Kızartması"
+                  },
+                  "price": 35000,
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "frankfurter-tabagi",
+                  "name": {
+                    "tr": "Frankfurter Tabağı"
+                  },
+                  "price": 55000,
+                  "description": {
+                    "tr": "2 piliç sosis, patates, çedarlı mantar, roka, cherry domates, rende kaşar"
+                  },
+                  "photo": {
+                    "w": 1200,
+                    "h": 800
+                  }
+                },
+                {
+                  "slug": "aperatif-tabagi-2-kisilik",
+                  "name": {
+                    "tr": "Aperatif Tabağı (2 Kişilik)"
+                  },
+                  "price": 35000,
+                  "photo": null
+                },
+                {
+                  "slug": "chicken-fingers",
+                  "name": {
+                    "tr": "Chicken Fingers"
+                  },
+                  "price": 28000,
+                  "photo": null
+                },
+                {
+                  "slug": "curly-patates-kizartmasi",
+                  "name": {
+                    "tr": "Curly Patates Kızartması"
+                  },
+                  "price": 38000,
+                  "photo": null
                 }
               ]
             }

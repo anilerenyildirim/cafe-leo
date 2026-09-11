@@ -1790,6 +1790,29 @@
               ]
             }
           ]
+        },
+        {
+          "slug": "test",
+          "name": {
+            "tr": "Test"
+          },
+          "vat": null,
+          "subsections": [
+            {
+              "slug": "test",
+              "name": null,
+              "items": [
+                {
+                  "slug": "urun-test",
+                  "name": {
+                    "tr": "ürün test"
+                  },
+                  "price": null,
+                  "photo": null
+                }
+              ]
+            }
+          ]
         }
       ],
       "extras": [

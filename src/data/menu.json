@@ -1790,6 +1790,33 @@
               ]
             }
           ]
+        },
+        {
+          "slug": "test-bolumu",
+          "name": {
+            "tr": "Test Bölümü"
+          },
+          "vat": null,
+          "subsections": [
+            {
+              "slug": "test-bolumu",
+              "name": null,
+              "items": [
+                {
+                  "slug": "test-urunu",
+                  "name": {
+                    "tr": "Test Ürünü"
+                  },
+                  "price": 25000,
+                  "description": {
+                    "tr": "Bölüm-ürün ekleme test"
+                  },
+                  "unit": "gram",
+                  "photo": null
+                }
+              ]
+            }
+          ]
         }
       ],
       "extras": [

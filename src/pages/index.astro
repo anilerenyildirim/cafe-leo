@@ -33,7 +33,14 @@ import Logo from '../components/Logo.astro';
 import { VENUES } from '../data/menu';
 
 const cafe = VENUES.find((v) => v.key === 'cafe')!;
-const lounge = VENUES.find((v) => v.key === 'lounge')!;
+/* Leo Lounge ayrı bir işletme, bu sitenin (ve panel kiracısının) mekanı
+   değil: kendi sitesi ve menüsü var (Demos/leo-lounge). Buradaki kart
+   yalnız bir davet; üç bilgisi veri dosyasından değil buradan geliyor. */
+const lounge = {
+  name: 'Leo Lounge',
+  tagline: 'Işık kısılır, gün üzerinden düşer.',
+  instagram: 'https://www.instagram.com/leolounge.ist/',
+};
 ---
 
 <Base
@@ -73,7 +80,7 @@ const lounge = VENUES.find((v) => v.key === 'lounge')!;
 
       <a
         class="home-venue card-off"
-        href={lounge.contact.instagram ?? cafe.contact.instagram ?? '#'}
+        href={lounge.instagram}
         target="_blank"
         rel="noopener"
       >

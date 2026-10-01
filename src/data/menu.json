@@ -1858,30 +1858,6 @@
           ]
         }
       ]
-    },
-    {
-      "slug": "lounge",
-      "name": {
-        "tr": "Leo Lounge"
-      },
-      "eyebrow": {
-        "tr": "Lounge · Ünlüsoy Caddesi"
-      },
-      "tagline": {
-        "tr": "Işık kısılır, gün üzerinden düşer."
-      },
-      "contact": {
-        "address": "Sinanoba, Ünlüsoy Cd., Büyükçekmece",
-        "phone": null,
-        "instagram": "https://www.instagram.com/leolounge.ist/",
-        "mapsUrl": "https://www.google.com/maps/search/?api=1&query=40.9985511,28.5438501&query_place_id=ChIJo3xPAABntRQRV_qZNT6yuG8"
-      },
-      "hours": null,
-      "hoursText": null,
-      "hero": null,
-      "featured": [],
-      "sections": null,
-      "extras": []
     }
   ]
 }
